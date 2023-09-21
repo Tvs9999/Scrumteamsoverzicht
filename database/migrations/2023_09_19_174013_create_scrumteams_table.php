@@ -11,18 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('scrumteams', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname')->nullable();
-            $table->string('lastname')->nullable();
-            $table->int('role');
-            $table->int('present');
             $table->unsignedBigInteger('class_id');
-            $table->string('email')->unique();
-            $table->string('activation_key')->unique();
-            $table->string('password')->nullable();
-            $table->rememberToken();
-
+            $table->string('name');
+            $table->int('status');
+            $table->timestamps();
+    
             // Define the foreign key constraint
             $table->foreign('class_id')->references('id')->on('classes');
         });
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('scrumteams');
     }
 };

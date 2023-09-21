@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('workshops', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname')->nullable();
-            $table->string('lastname')->nullable();
-            $table->int('role');
-            $table->int('present');
             $table->unsignedBigInteger('class_id');
-            $table->string('email')->unique();
-            $table->string('activation_key')->unique();
-            $table->string('password')->nullable();
-            $table->rememberToken();
+            $table->unsignedBigInteger('user_id');
+            $table->text('description')->nullable();
+            $table->dateTime('date');
+            $table->time('duration');
+            $table->int('min_pers');
+            $table->int('max_pers');
+            $table->string('location');
 
             // Define the foreign key constraint
             $table->foreign('class_id')->references('id')->on('classes');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('workshops');
     }
 };
