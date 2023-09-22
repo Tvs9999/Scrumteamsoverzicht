@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
-            $table->int('role');
-            $table->int('present');
+            $table->integer('role');
+            $table->integer('present');
             $table->unsignedBigInteger('class_id');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('activation_key')->unique();
             $table->string('password')->nullable();
             $table->rememberToken();

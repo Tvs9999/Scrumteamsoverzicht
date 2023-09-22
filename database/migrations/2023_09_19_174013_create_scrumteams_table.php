@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('class_id');
             $table->string('name');
-            $table->int('status');
+            $table->integer('status');
             $table->timestamps();
     
             // Define the foreign key constraint

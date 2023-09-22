@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->dateTime('date');
             $table->time('duration');
-            $table->int('min_pers');
-            $table->int('max_pers');
+            $table->integer('min_pers');
+            $table->integer('max_pers');
             $table->string('location');
 
             // Define the foreign key constraint

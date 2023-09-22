@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('question');
-            $table->int('status');
+            $table->integer('status');
 
             // Define the foreign key constraint
             $table->foreign('user_id')->references('id')->on('users');
