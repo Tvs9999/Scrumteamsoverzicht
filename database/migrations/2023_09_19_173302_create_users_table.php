@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('activation_key')->unique();
             $table->string('password')->nullable();
             $table->rememberToken();
+            $table->timestamps();
 
             // Define the foreign key constraint
             $table->foreign('class_id')->references('id')->on('classes');

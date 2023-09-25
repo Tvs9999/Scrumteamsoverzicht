@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('scrumteam_user', function (Blueprint $table) {
             $table->unsignedBigInteger('team_id');
             $table->unsignedBigInteger('user_id');
+            $table->timestamps();
 
             // Define the foreign key constraint
             $table->foreign('team_id')->references('id')->on('scrumteams');

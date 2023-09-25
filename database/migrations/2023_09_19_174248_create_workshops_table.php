@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('min_pers');
             $table->integer('max_pers');
             $table->string('location');
+            $table->timestamps();
 
             // Define the foreign key constraint
             $table->foreign('class_id')->references('id')->on('classes');

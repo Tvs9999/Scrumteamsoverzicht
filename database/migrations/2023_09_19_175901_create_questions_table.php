@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('question');
             $table->integer('status');
+            $table->timestamps();
 
             // Define the foreign key constraint
             $table->foreign('user_id')->references('id')->on('users');

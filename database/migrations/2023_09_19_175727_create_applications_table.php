@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->unsignedBigInteger('workshop_id');
             $table->unsignedBigInteger('user_id');
+            $table->timestamps();
 
             // Define the foreign key constraint
             $table->foreign('workshop_id')->references('id')->on('workshops');
