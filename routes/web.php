@@ -17,9 +17,10 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+// Routes for displaying the login form and handling the login request
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/register', [AuthController::class, 'registerPost'])->name('register');
@@ -30,7 +31,10 @@ Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('wo
 Route::get('/activateAcc', [AuthController::class, 'display_activationform'])->name('Activate account');
 Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('Activate account');
 
-Route::get('/dashboard-docent', [DashboardController::class, 'index']);
+Route::get('/dashboard-docent', [DashboardController::class, 'index'])->name('dashboard-docent');
+Route::get('/dashboard-student', [DashboardController::class, 'dashboardStudent'])->name('dashboard-student');
+
+
 
 
 
