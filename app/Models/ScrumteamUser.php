@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ScrumteamUser extends Model
 {
+    protected $table = 'scrumteam_user'; // Specify the correct table name here
+
     use HasFactory;
 
     protected $fillable = [

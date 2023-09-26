@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use PhpParser\Node\Expr\FuncCall;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +21,12 @@ Route::get('/', function () {
 });
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::get('/register', [AuthController::class, 'registerPost'])->name('register');
+Route::post('/register', [AuthController::class, 'registerPost'])->name('register');
+
+Route::get('/activateAcc', [AuthController::class, 'display_activationform'])->name('Activate account');
+Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('Activate account');
+
+Route::get('/dashboard-docent', [DashboardController::class, 'index']);
+
+
+
