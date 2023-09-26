@@ -90,9 +90,10 @@ class AuthController extends Controller
         // Check if the code exists in the database
         $user = User::where('activation_key', $activationCode)->first();
 
-        if (!$user) {
+        if (!$user || !empty($user->password)) {
             // Code not found, handle error (e.g., show an error message)
-            return view('registration.confirmation_failed');
+            
+            return;
         } else {
             return view('completeRegistration');
         }
@@ -116,7 +117,6 @@ class AuthController extends Controller
         $user->update([
             'firstname' => $request->input('first_name'),
             'lastname' => $request->input('last_name'),
-            'activation_key' => '',
             'password' => Hash::make($request->input('password')), // Hash the new password
         ]);
 

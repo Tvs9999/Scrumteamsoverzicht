@@ -31,10 +31,7 @@ Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('wo
 Route::get('/activateAcc', [AuthController::class, 'display_activationform'])->name('Activate account');
 Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('Activate account');
 
-Route::get('/dashboard-docent', [DashboardController::class, 'index'])->name('dashboard-docent');
-Route::get('/dashboard-student', [DashboardController::class, 'dashboardStudent'])->name('dashboard-student');
-
-
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
 
 
 
