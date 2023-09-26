@@ -24,11 +24,11 @@
                     @endif
                     <div class="mb-3">
                         <label for="email" class="form-label">E-mailadres</label>
-                        <input type="email" name="email" class="form-control" id="email" placeholder="name@example.com" required>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="name@example.com" minlength="10" maxlength="30" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Wachtwoord</label>
-                        <input type="password" name="password" class="form-control" id="password" required>
+                        <input type="password" name="password" class="form-control" id="password" minlength="6" maxlength="15" required>
                     </div>
                     <div class="mb-3">
                         <div class="d-grid">

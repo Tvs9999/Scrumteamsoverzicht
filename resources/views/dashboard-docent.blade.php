@@ -1,4 +1,6 @@
 <p>User Role: {{ $userRole }}</p>
+<p>userid: {{ $userid }}</p>
+<p>classid: {{ $studentclassid }}</p>
 <!doctype html>
 <html lang="en">
 
