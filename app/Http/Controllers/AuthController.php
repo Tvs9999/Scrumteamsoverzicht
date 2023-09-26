@@ -3,26 +3,91 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Classes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use SebastianBergmann\Type\NullType;
 
 class AuthController extends Controller
 {
     public function register()
     {
-        return view('register');
+        $classNumbers = Classes::pluck('name')->toArray(); // Assuming 'number' is the column name
+
+        return view('register', compact('classNumbers'));
     }
 
     public function registerPost(Request $request)
     {
-        $user = new User();
+        $guid = bin2hex(openssl_random_pseudo_bytes(16));
 
-        $user->firstname = $request->firstname;
+
+        $validatedData = $request->validate([
+            'email' => 'required|email|unique:users', // Example validation rules for email
+            'klas' => 'required',
+        ]);
+        $classNumber = $validatedData['klas'];
+        $class = Classes::firstOrNew(['name' => $classNumber]);
+        if (!$class->exists) {
+            $class->name = $request->new_class_number;
+            // The class doesn't exist, so save it
+            $class->save();
+        }
+        $user = new User([
+            'email' => $validatedData['email'],
+            'class_id' => $class->id,
+        ]);
+
         $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        $user->role = $request->rol;
+        $user->present = 0;
+        $user->class_id = $class->id;
+        $user->activation_key = $guid;
+        // $user->password = Hash::make($request->password);
 
         $user->save();
 
         return back()->with('succes', 'Register succesful');
+    }
+    public function display_activationform(Request $request)
+    {
+        // Get the activation code from the query parameters
+        $activationCode = $request->query('code');
+
+        // Check if the code exists in the database
+        $user = User::where('activation_key', $activationCode)->first();
+
+        if (!$user) {
+            // Code not found, handle error (e.g., show an error message)
+            return view('registration.confirmation_failed');
+        } else {
+            return view('completeRegistration');
+        }
+    }
+    public function activate_account(request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'password' => 'required|string|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/', // Example validation rule for password (minimum 8 characters)
+            // Add any other validation rules for your fields here
+        ], [
+            'password' => 'Het wachtwoord moet ten minste 8 tekens bevatten, waaronder minimaal 1 kleine letter, 1 hoofdletter, 1 cijfer en 1 speciaal teken',
+        ]);
+        // Get the activation code from the query parameters
+        $activationCode = $request->query('code');
+
+        // Check if the code exists in the database
+        $user = User::where('activation_key', $activationCode)->first();
+
+        $user->update([
+            'firstname' => $request->input('first_name'),
+            'lastname' => $request->input('last_name'),
+            'activation_key' => '',
+            'password' => Hash::make($request->input('password')), // Hash the new password
+        ]);
+
+        auth()->login($user);
     }
 }

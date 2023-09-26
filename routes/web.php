@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use PhpParser\Node\Expr\FuncCall;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WorkshopController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,11 @@ Route::get('/register', [AuthController::class, 'registerPost'])->name('register
 
 Route::get('/workshops', [WorkshopController::class, 'workshops'])->name('workshops');
 Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('workshops');
+
+Route::get('/activateAcc', [AuthController::class, 'display_activationform'])->name('Activate account');
+Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('Activate account');
+
+Route::get('/dashboard-docent', [DashboardController::class, 'index']);
+
+
+
