@@ -22,7 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::get('/register', [AuthController::class, 'registerPost'])->name('register');
+Route::post('/register', [AuthController::class, 'registerPost'])->name('register');
 
 Route::get('/workshops', [WorkshopController::class, 'workshops'])->name('workshops');
 Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('workshops');
@@ -30,7 +30,7 @@ Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('wo
 Route::get('/activateAcc', [AuthController::class, 'display_activationform'])->name('Activate account');
 Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('Activate account');
 
-Route::get('/dashboard-docent', [DashboardController::class, 'index']);
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
 
 
 
