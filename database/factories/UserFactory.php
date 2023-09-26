@@ -26,7 +26,7 @@ class UserFactory extends Factory
             'email' => fake()->safeEmail(),
             'role' => fake()->numberBetween(0, 1),
             'present' => fake()->numberBetween(0, 1),
-            'class_id' => fake()->numberBetween(1, Classes::count()),
+            'class_id' => 1,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
             'activation_key' => uuid_create(),

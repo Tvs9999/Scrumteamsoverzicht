@@ -23,7 +23,7 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::get('/register', [AuthController::class, 'registerPost'])->name('register');
+Route::post('/register', [AuthController::class, 'registerPost'])->name('register');
 
 Route::get('/workshops', [WorkshopController::class, 'workshops'])->name('workshops');
 Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('workshops');

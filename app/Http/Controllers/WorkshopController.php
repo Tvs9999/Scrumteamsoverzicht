@@ -10,8 +10,8 @@ class WorkshopController extends Controller
 {
     public function workshops()
     {
-    //     $userId = Auth::user()->id;
-    //     $workshops = $this->getWorkshops($userId);
+        $userId = Auth::user()->id;
+        $workshops = $this->getWorkshops($userId);
 
         return view('workshops');
     }
