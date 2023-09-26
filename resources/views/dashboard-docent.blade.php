@@ -1,3 +1,4 @@
+<p>User Role: {{ $userRole }}</p>
 <!doctype html>
 <html lang="en">
 
