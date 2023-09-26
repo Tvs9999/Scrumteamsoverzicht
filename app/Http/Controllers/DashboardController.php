@@ -10,6 +10,8 @@ use App\Models\ScrumteamUser;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 
 class DashboardController extends Controller
 {
@@ -23,7 +25,15 @@ class DashboardController extends Controller
 
         $students = User::whereIn('id', $scrumteamUserIds)->get();
 
+        $userRole = session('user_role'); // Retrieve 'user_role' from the session
 
         return view('dashboard', compact('classes', 'scrumteams', 'scrumteamUser', 'students', 'questions'));
     }
+
+    public function dashboardStudent()
+    {
+        $userRole = session('user_role'); // Retrieve 'user_role' from the session
+        return view('dashboard-student', ['userRole' => $userRole]);
+    }
+    
 }

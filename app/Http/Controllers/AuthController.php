@@ -8,9 +8,41 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use SebastianBergmann\Type\NullType;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
+    public function showLoginForm()
+    {   
+        return view('login');
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            // Login succes...
+            $user = Auth::user();
+            
+            Session::put('user_role', Auth::user()->role);
+
+            // Kijken naar userrol, 1=docent, 0=student
+            if ($user->role == '1') {
+                return redirect()->intended(route('dashboard-docent'));
+            } elseif ($user->role == '0') {
+                return redirect()->intended(route('dashboard-student'));
+            }
+        }
+        #error als de combinatie niet klopt
+        return redirect()->route('login')->with('error', 'Log in is mislukt.');
+    }
+
     public function register()
     {
         $classNumbers = Classes::pluck('name')->toArray(); // Assuming 'number' is the column name
