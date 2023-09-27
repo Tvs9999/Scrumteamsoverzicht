@@ -10,10 +10,21 @@ class WorkshopController extends Controller
 {
     public function workshops()
     {
-        $userId = Auth::user()->id;
-        $workshops = $this->getWorkshops($userId);
+        $workshops = [];
+        
+        if (empty(Auth::user())){
+            return redirect()->route('login');
+        }
+        
+        if (Auth::user()->role == 1){
+            $userId = Auth::user()->id;
+            $workshops = $this->getWorkshops($userId);
+        } 
+        elseif (Auth::user()->role == 0) {
+            $workshops = $this->getWorkshopsByClass(Auth::user()->class_id);
+        }
 
-        return view('workshops');
+        return view('workshops', compact('workshops'));
     }
 
     public function addWorkshop()
@@ -23,9 +34,21 @@ class WorkshopController extends Controller
 
     public function getWorkshops($userId)
     {
-        $workshops = Workshop::where('user_id' == $userId);
+        $workshops = Workshop::where("user_id", $userId)->get();
 
-        if ($workshops > 0)
+        if (!empty($workshops))
+        {
+            return $workshops;
+        }
+
+        return false;
+    }
+
+    public function getWorkshopsByClass($classId)
+    {
+        $workshops = Workshop::where('class_id', $classId);
+
+        if (!empty($workshops))
         {
             return $workshops;
         }

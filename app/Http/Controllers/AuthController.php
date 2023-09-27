@@ -31,13 +31,9 @@ class AuthController extends Controller
             $user = Auth::user();
             
             Session::put('user_role', Auth::user()->role);
+            Session::put('user_id', Auth::user()->id);
 
-            // Kijken naar userrol, 1=docent, 0=student
-            if ($user->role == '1') {
-                return redirect()->intended(route('dashboard-docent'));
-            } elseif ($user->role == '0') {
-                return redirect()->intended(route('dashboard-student'));
-            }
+            return redirect()->intended(route('Dashboard'));
         }
         #error als de combinatie niet klopt
         return redirect()->route('login')->with('error', 'Log in is mislukt.');

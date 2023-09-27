@@ -33,7 +33,7 @@ p, a, label, input, textarea, li, button, option, select{
 }
 
 @mixin content-header(){
-    height: 60px;
+    height: 70px;
     width: 100%;
     background-color: $primary-lighter;
     display: flex;
@@ -45,6 +45,7 @@ p, a, label, input, textarea, li, button, option, select{
         font-family: $font-header;
         font-size: 30px;
         font-weight: 500;
+        margin-bottom: 0;
     }
 }
 

@@ -9,4 +9,29 @@
     .add-workshop a{
         @include add-button();
     }
+
+    .workshops{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        padding: 30px;
+
+        .workshop{
+            background: $secondary;
+            border-radius: 10px;
+        }
+
+        .no-workshops{
+            height: calc(100vh - 80px);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+    
+            p{
+                color: $light-gray;
+                font-style: italic;
+            }
+        }
+    }
 }

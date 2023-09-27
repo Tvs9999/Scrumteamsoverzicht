@@ -18,7 +18,7 @@
             <ul>
                 <li class="logo"></li>
                 <li class="link"><a href=""><i class="fa-solid fa-table-columns"></i></a></li>
-                <li class="link"><a href=""><i class="fa-solid fa-chalkboard-user"></i></a></li>
+                <li class="link"><a href="/workshops"><i class="fa-solid fa-chalkboard-user"></i></a></li>
                 <li class="link"><a href=""><i class="fa-solid fa-user-group"></i></a></li>
                 <li class="link"><a href=""><i class="fa-solid fa-user"></i></a></li>
             </ul>
