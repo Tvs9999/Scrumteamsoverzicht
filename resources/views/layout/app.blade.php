@@ -18,7 +18,7 @@
                 <li class="logo"></li>
                 <li class="link"><a href=""><i class="fa-solid fa-table-columns"></i></a></li>
                 <li class="link"><a href="/workshops"><i class="fa-solid fa-chalkboard-user"></i></a></li>
-                <li class="link"><a href=""><i class="fa-solid fa-user-group"></i></a></li>
+                <li class="link"><a href="/addScrumteam"><i class="fa-solid fa-user-group"></i></a></li>
                 <li class="link"><a href=""><i class="fa-solid fa-user"></i></a></li>
             </ul>
             <a class="logout" href="{{ route('logout') }}"><i class="fa-solid fa-right-from-bracket"></i></a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Scrumteam;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ScrumteamController extends Controller
 {
@@ -13,9 +14,13 @@ class ScrumteamController extends Controller
         return view('scrumteams');
     }
 
-    public function addScrumteam()
+    public function addScrumteam(Request $request)
     {
-        return view('addScrumteam');
+        $classes = DB::table('classes')->get(); // Classesdata wordt uit de database gehaald
+        $users = DB::table('users')->get(); // usersdata wordt uit de database gehaald 
+        
+
+        return view('addScrumteam',compact('classes','users'));
     }
 
     public function getScrumteams($userId)

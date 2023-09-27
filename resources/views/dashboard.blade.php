@@ -1,6 +1,6 @@
 @if(!isset($userid))
     <script>
-        window.location.href = '{{ route("login") }}'; // Redirect to the login page
+        window.location.href = '{{ route("login") }}'; // Stuur naar login pagina als de userid niet bestaat
     </script>
 @endif
 
