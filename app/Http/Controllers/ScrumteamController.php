@@ -19,6 +19,10 @@ class ScrumteamController extends Controller
         $classes = DB::table('classes')->get(); // Classesdata wordt uit de database gehaald
         $users = DB::table('users')->get(); // usersdata wordt uit de database gehaald 
         
+        $name = $request->name;
+        $class = $request->klas;
+        $students = $request->students;
+        
 
         return view('addScrumteam',compact('classes','users'));
     }

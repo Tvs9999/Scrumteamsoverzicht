@@ -24,7 +24,7 @@
                     </div>
                     <div class="mb-3" id="new-class-input" style="display: none;">
                         <label for="new_class_number">Nieuw Klas</label>
-                        <input type="text" name="new_class_number"id="new_class_number" placeholder="Vul hier een nieuwe klas">
+                        <input type="text" name="new_class"id="new_class" placeholder="Vul hier een nieuwe klas">
                     </div>
                     <div class="input">
                         <label for="students">Leerlingen</label>
