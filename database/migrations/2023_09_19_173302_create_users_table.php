@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('lastname')->nullable();
             $table->integer('role');
             $table->integer('present');
-            $table->unsignedBigInteger('class_id');
+            $table->unsignedBigInteger('class_id')->nullable();
             $table->string('email');
             $table->string('activation_key')->unique();
             $table->string('password')->nullable();

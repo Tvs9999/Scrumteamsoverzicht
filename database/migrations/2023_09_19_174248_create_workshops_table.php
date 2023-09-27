@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('user_id');
+            $table->sting('name');
             $table->text('description')->nullable();
             $table->dateTime('date');
-            $table->time('duration');
+            $table->sting('duration');
             $table->integer('min_pers');
             $table->integer('max_pers');
             $table->string('location');
