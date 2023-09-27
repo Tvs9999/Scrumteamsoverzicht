@@ -26,14 +26,10 @@ class DashboardController extends Controller
         $students = User::whereIn('id', $scrumteamUserIds)->get();
 
         $userRole = session('user_role'); // Retrieve 'user_role' from the session
+        $userid = session('userid'); // Retrieve 'user_role' from the session
+        $studentclassid = session('studentclassid'); // Retrieve 'user_role' from the session
 
-        return view('dashboard', compact('classes', 'scrumteams', 'scrumteamUser', 'students', 'questions'));
-    }
-
-    public function dashboardStudent()
-    {
-        $userRole = session('user_role'); // Retrieve 'user_role' from the session
-        return view('dashboard-student', ['userRole' => $userRole]);
+        return view('dashboard', compact('classes', 'scrumteams', 'scrumteamUser', 'students', 'questions'),['userRole' => $userRole, 'userid' => $userid, 'studentclassid' => $studentclassid]);
     }
     
 }

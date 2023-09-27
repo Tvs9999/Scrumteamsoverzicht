@@ -31,7 +31,8 @@ class AuthController extends Controller
             $user = Auth::user();
             
             Session::put('user_role', Auth::user()->role);
-            Session::put('user_id', Auth::user()->id);
+            Session::put('userid', Auth::user()->id);
+            Session::put('studentclassid', Auth::user()->class_id);
 
             return redirect()->intended(route('Dashboard'));
         }
@@ -117,5 +118,12 @@ class AuthController extends Controller
         ]);
 
         auth()->login($user);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        Session::flush();
+        return redirect('login'); // Redirect to the desired URL after logout
     }
 }

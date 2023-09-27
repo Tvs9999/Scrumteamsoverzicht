@@ -1,3 +1,13 @@
+@if(!isset($userid))
+    <script>
+        window.location.href = '{{ route("login") }}'; // Redirect to the login page
+    </script>
+@endif
+
+<p>User Role: {{ $userRole }}</p>
+<p>userid: {{ $userid }}</p>
+<p>classid: {{ $studentclassid }}</p>
+
 @extends('layout/app')
 
 @section('content')

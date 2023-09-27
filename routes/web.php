@@ -5,6 +5,7 @@ use PhpParser\Node\Expr\FuncCall;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WorkshopController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ScrumteamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ use App\Http\Controllers\DashboardController;
 // Routes for displaying the login form and handling the login request
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register');
@@ -32,6 +34,8 @@ Route::get('/activateAcc', [AuthController::class, 'display_activationform'])->n
 Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('Activate account');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
+
+Route::get('/addScrumteam', [ScrumteamController::class, 'addScrumteam'])->name('scrumteam');
 
 
 
