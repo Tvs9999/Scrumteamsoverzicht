@@ -1,7 +1,6 @@
 #sidebar{
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-between;
     padding: 30px 0;
     height: 100vh;
@@ -10,39 +9,197 @@
     left: 0;
     width: 80px;
     background: $secondary;
+    z-index: 9999;
+    transition: .5s ease;
+    overflow: hidden;
+
+    .scrumteamsoverzicht{
+        font-family: 'Poppins', sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1;
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        transition: .3s ease;
+        opacity: 0;
+    }
+
+    &.active{
+        width: 300px;
+
+        .scrumteamsoverzicht{
+            opacity: 1;
+        }
+
+        .logo{
+            left: 240px;
+            transform: rotate(180deg);
+
+            &:hover{
+                transform: rotate(205deg);
+            }
+        }
+
+        ul li .link span, .logout .link span{
+            opacity: 1;
+        }
+    }
+    
+    .logo{
+        position: relative;
+        height: 40px;
+        width: 40px;
+        left: 20px;
+        transition: .6s ease;
+
+        .top, .right, .bottom, .left{
+            background: $accent;
+            position: absolute;
+            transition: width 0.25s ease-in, height .25s ease-in 0.25s;
+        }
+
+        .top{
+            height: 7px;
+            width: 0;
+            top: 0;
+            right: 0;
+        }
+
+        .right{
+            width: 7px;
+            height: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .bottom{
+            height: 7px;
+            width: 40px;
+            bottom: 0;
+            left: 0;
+        }
+
+        .left{
+            height: 40px;
+            width: 7px;
+            top: 0;
+            left: 0;
+        }
+
+        &:hover{
+            transform: rotate(25deg);
+            cursor: pointer;
+
+            .top, .right, .bottom, .left{
+                transition: width 0.25s ease-in .25s, height .25s ease-in;
+            }
+
+            .top{
+                width: 40px;
+            }
+
+            .right{
+                height: 40px;
+            }
+        }
+    }
 
     ul{
         list-style: none;
         padding-left: 0;
-        width: 80px;
+        margin-top: 15px;
         align-items: center;
 
-        .logo{
-            background: $accent;
-            height: 40px;
-            width: 40px;
-        }
 
-        .link{
-            margin: 5px 0;
-            padding: 10px 0;
+        li{
+            width: 100%;
             display: flex;
-            justify-content: center;
-            align-items: center;
 
-            &.active{
-                background-color: $highlight;
-            }
+            .link{
+                margin: 5px 0;
+                padding: 10px 20px;
+                display: flex;
+                align-items: center;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 500;
+                font-size: 18px;
+                gap: 15px;
+                text-decoration: none;
+                width: 100%;
+                position: relative;
+                transition: .3s ease;
+    
+                &.active{
+                    background-color: $highlight;
 
-            a{
-                color: $white;
-                font-size: $nav-icons;
+                    &::after{
+                        content: '';
+                        height: 100%;
+                        width: 3px;
+                        background-color: $light-gray;
+                        right: 0;
+                        position: absolute;
+                    }
+                }
+
+                &:hover{
+                    background-color: $highlight;
+                }
+
+                i{
+                    min-width: 40px;
+                    display: flex;
+                    justify-content: center;
+                    font-size: $nav-icons;
+                }
+
+                span{
+                    opacity: 0;
+                    transition: .3s ease;
+                }
             }
         }
+
     }
 
     .logout{
-        color: $white;
-        font-size: $nav-icons;
+        width: 100%;
+            display: flex;
+
+            .link{
+                margin: 5px 0;
+                padding: 10px 20px;
+                display: flex;
+                align-items: center;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 500;
+                font-size: 18px;
+                gap: 15px;
+                text-decoration: none;
+                width: 100%;
+
+                i{
+                    min-width: 40px;
+                    display: flex;
+                    justify-content: center;
+                    font-size: $nav-icons;
+                }
+
+                span{
+                    opacity: 0;
+                    transition: .3s ease .2s;
+                }
+            }
     }
+}
+
+@keyframes in {
+    from   { transform: width(0deg); }
+    to { transform: rotate(360deg);}
+}
+
+@keyframes out {
+    0%   { -webkit-transform: rotate(360deg); }
+    100% { -webkit-transform: rotate(0deg); }
 }

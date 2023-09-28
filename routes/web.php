@@ -28,7 +28,9 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register');
 
 Route::get('/workshops', [WorkshopController::class, 'workshops'])->name('workshops');
-Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('workshops');
+Route::post('/workshops', [WorkshopController::class, 'signUp'])->name('workshops');
+Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('addWorkshop');
+Route::post('/addWorkshop', [WorkshopController::class, 'addWorkshopPost'])->name('addWorkshop');
 
 Route::get('/activateAcc', [AuthController::class, 'display_activationform'])->name('Activate account');
 Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('Activate account');
