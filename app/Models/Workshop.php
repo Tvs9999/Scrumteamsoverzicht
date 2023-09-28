@@ -13,12 +13,17 @@ class Workshop extends Model
     protected $fillable = [
         'class_id',
         'user_id',
+        'name',
         'description',
         'date',
         'duration',
         'min_pers',
         'max_pers',
         'location',
+    ];
+
+    protected $attributes = [
+        'applications' => [], 
     ];
 
     public function class(): BelongsTo 
@@ -29,5 +34,10 @@ class Workshop extends Model
     public function user(): BelongsTo 
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
     }
 }

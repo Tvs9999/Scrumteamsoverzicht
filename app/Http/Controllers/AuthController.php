@@ -23,7 +23,7 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-        ]);
+        ]); //Hij kijkt if de email/password wel geldig is
 
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
@@ -31,13 +31,10 @@ class AuthController extends Controller
             $user = Auth::user();
             
             Session::put('user_role', Auth::user()->role);
-
-            // Kijken naar userrol, 1=docent, 0=student
-            if ($user->role == '1') {
-                return redirect()->intended(route('dashboard-docent'));
-            } elseif ($user->role == '0') {
-                return redirect()->intended(route('dashboard-student'));
-            }
+            Session::put('userid', Auth::user()->id);
+            Session::put('studentclassid', Auth::user()->class_id);
+            //userrole/userid/classid wordt in de session toegevoegd
+            return redirect()->intended(route('Dashboard'));
         }
         #error als de combinatie niet klopt
         return redirect()->route('login')->with('error', 'Log in is mislukt.');
@@ -121,5 +118,13 @@ class AuthController extends Controller
         ]);
 
         auth()->login($user);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        Session::flush();
+        
+        return redirect('login'); // terugsturen naar login pagina
     }
 }

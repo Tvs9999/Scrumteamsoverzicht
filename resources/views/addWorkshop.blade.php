@@ -5,8 +5,18 @@
         <div class="content-header">
             <h1>Workshop toevoegen</h1>
         </div>
+        @if(Session::has('success'))
+            <div class="alert alert-success" role="alert">
+                {{ Session::get('success') }}
+            </div>
+        @endif
+
+        @error('name')
+            <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
         <div class="add-form">
-            <form action="">
+            <form action="{{ route('addWorkshop') }}" method="POST">
+                @csrf
                 <div class="input">
                     <label for="name">Naam</label>
                     <input type="text" id="name" name="name" placeholder="Vul hier de naam van de workshop in...">
@@ -19,7 +29,9 @@
                     <div class="input">
                         <label for="class">Klas</label>
                         <select id="class" name="class">
-                            <option value="">Klas 1</option>
+                            @foreach ($classNumbers as $class)
+                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="input">
