@@ -15,31 +15,42 @@
 <div id="activate-account">
     <div class="overlay">
         @if(Session::has('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ Session::get('success') }}
-                </div>
-                @endif
-                <form action="" method="POST">
-                    @csrf
-                    <div class="input-row">
-                        <div class="input">
-                            <label for="first_name" class="form-label">Voornaam</label>
-                            <input type="text" name="first_name" class="form-control" id="first_name" placeholder="Voornaam" required>
-                        </div>
-                        <div class="input">
-                            <label for="last_name" class="form-label">Achternaam</label>
-                            <input type="text" name="last_name" class="form-control" id="last_name" placeholder="Achternaam" required>
-                        </div>
+            <div class="alert alert-success" role="alert">
+                {{ Session::get('success') }}
+            </div>
+        @endif
+        <div class="logo-container">
+            <div class="logo">
+                <h2>Scrum<br>teams<br>overzicht</h2>
+                <div class="left"></div>
+                <div class="bottom"></div>
+            </div>
+        </div>
+        <div class="activate">
+            <h1>Account afmaken</h1>
+
+            <form action="" method="POST">
+                @csrf
+                <div class="input-row">
+                    <div class="input">
+                        <label for="first_name" class="form-label">Voornaam</label>
+                        <input type="text" name="first_name" class="form-control" id="first_name" placeholder="Voornaam" required>
                     </div>
                     <div class="input">
-                        <label for="password">Wachtwoord</label>
-                        <input type="password" name="password" id="password" placeholder="Vul hier je wachtwoord in..." required>
-                        @error('password')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        <label for="last_name" class="form-label">Achternaam</label>
+                        <input type="text" name="last_name" class="form-control" id="last_name" placeholder="Achternaam" required>
                     </div>
-                    <button class="btn btn-primary">Account activeren</button>
-                </form>
+                </div>
+                <div class="input">
+                    <label for="password">Wachtwoord</label>
+                    <input type="password" name="password" id="password" placeholder="Vul hier je wachtwoord in..." required>
+                    @error('password')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <button class="btn btn-primary">Account activeren</button>
+            </form>
+        </div>
     </div>
 </div>
 </body>
