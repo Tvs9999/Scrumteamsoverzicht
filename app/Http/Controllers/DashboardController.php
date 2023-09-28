@@ -15,21 +15,31 @@ use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
-    public function index(){
-        $classes = Classes::all(); //table with all classnames in it
-        $scrumteams = Scrumteam::all(); //table that holds the name of the scrumteam and the klas_id foreign key to know what class it belongs to
-        $scrumteamUser = ScrumteamUser::all(); //table that linkes a user to a scrumteam 
-        $questions = Question::whereIn('status', [0])->get();
+    public function index()
+    {
+        $classes = Classes::all()->toArray();
+        $scrumteams = Scrumteam::all()->toArray();
+        $scrumteamUser = ScrumteamUser::all()->toArray();
+        $questions = Question::whereIn('status', [0])->get()->toArray();
 
-        $scrumteamUserIds = ScrumteamUser::pluck('user_id')->toArray(); // Get an array of user_ids
+        $scrumteamUserIds = ScrumteamUser::pluck('user_id')->toArray();
+        $students = User::whereIn('id', $scrumteamUserIds)->get()->toArray();
 
-        $students = User::whereIn('id', $scrumteamUserIds)->get();
+        $classesJson = json_encode($classes);
+        $scrumteamsJson = json_encode($scrumteams);
+        $scrumteamUserJson = json_encode($scrumteamUser);
+        $studentsJson = json_encode($students);
 
+    
+        
+        return view('dashboard', compact('classesJson', 'scrumteamsJson', 'scrumteamUserJson', 'studentsJson'));
+    }
+    
+
+    public function dashboardStudent()
+    {
         $userRole = session('user_role'); // Retrieve 'user_role' from the session
-        $userid = session('userid'); // Retrieve 'user_role' from the session
-        $studentclassid = session('studentclassid'); // Retrieve 'user_role' from the session
-
-        return view('dashboard', compact('classes', 'scrumteams', 'scrumteamUser', 'students', 'questions'),['userRole' => $userRole, 'userid' => $userid, 'studentclassid' => $studentclassid]);
+        return view('dashboard-student', ['userRole' => $userRole]);
     }
     
 }
