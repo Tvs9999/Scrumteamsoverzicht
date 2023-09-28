@@ -24,7 +24,7 @@
                     <option value="1">Docent</option>
                 </select>
             </div>
-            <div class="input">
+            <div class="input" id="klasSelect">
                 <label for="klas">Klas</label>
                 <select name="klas" id="klas" required>
                     @foreach ($classNumbers as $class)
@@ -53,10 +53,25 @@
     //     });
     // });
 
+    const rol = $('#rol');
+    const klasSelect = $('#klasSelect');
     const klas = $('#klas');
     const klasInput = $('#new-class-input');
 
     $(document).ready(function () {
+        rol.on("change", function () {
+            if (rol.val() == 1){
+                klasSelect.addClass('d-none');
+                klasInput.addClass('d-none');
+            } else {
+                klasSelect.removeClass('d-none');
+
+                if (klas.val() == "new"){
+                    klasInput.removeClass('d-none')
+                }
+            }
+        })
+
         klas.on("change", function () {
             if (klas.val() === "new") {
                 klasInput.removeClass('d-none');
