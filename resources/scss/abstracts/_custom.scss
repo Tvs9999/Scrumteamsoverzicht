@@ -177,6 +177,7 @@ i{
 @mixin logo(){
     display: flex;
     justify-content: center;
+    transform: scale(.85);
 
     .logo{
         position: relative;
