@@ -29,6 +29,7 @@ Route::post('/register', [AuthController::class, 'registerPost'])->name('registe
 
 Route::get('/workshops', [WorkshopController::class, 'workshops'])->name('workshops');
 Route::post('/workshops', [WorkshopController::class, 'signUp'])->name('workshops');
+Route::get('/workshops/applications/{workshopId}', [WorkshopController::class, 'showApplications'])->name('showApplications');
 Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('addWorkshop');
 Route::post('/addWorkshop', [WorkshopController::class, 'addWorkshopPost'])->name('addWorkshop');
 

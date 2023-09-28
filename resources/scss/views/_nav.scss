@@ -10,7 +10,7 @@
     width: 80px;
     background: $secondary;
     z-index: 9999;
-    transition: .5s ease;
+    transition: .5s ease .1s;
     overflow: hidden;
 
     .scrumteamsoverzicht{
@@ -21,15 +21,17 @@
         position: absolute;
         top: 15px;
         left: 15px;
-        transition: .3s ease;
+        transition: .3s ease .1s;
         opacity: 0;
     }
 
     &.active{
         width: 300px;
+        transition: .5s ease;
 
         .scrumteamsoverzicht{
             opacity: 1;
+            transition: .3s;
         }
 
         .logo{
@@ -178,6 +180,11 @@
                 gap: 15px;
                 text-decoration: none;
                 width: 100%;
+                transition: .3s ease;
+
+                &:hover{
+                    background-color: $highlight;
+                }
 
                 i{
                     min-width: 40px;

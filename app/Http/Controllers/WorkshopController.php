@@ -30,15 +30,41 @@ class WorkshopController extends Controller
             $query->where('user_id', $userId)->with('applications');
         } elseif ($role == 0) {
             // Filter workshops for a student based on their class
-            $query->where('class_id', $classId)->with(['applications' => function ($query) {
-                $query->where('user_id', Auth::user()->id);
-            }]);
+            $query->where('class_id', $classId)->with('applications');
         }
 
         // Get the workshops
         $workshops = $query->get();
 
         return view('workshops', compact('workshops'));
+    }
+
+    public function showApplications($workshopId)
+    {
+        $workshop = Workshop::find($workshopId);
+
+        if (!$workshop) {
+            return response()->json(['error' => 'Workshop not found'], 404);
+        }
+
+        $workshopName = $workshop->name;
+
+        $applications = $workshop->applications->load('user.class');
+
+        $formattedApplications = $applications->map(function ($application) use ($workshop) {
+            return [
+                'first_name' => $application->user->firstname,
+                'last_name' => $application->user->lastname,
+                'class_name' => $application->user->class->name,
+            ];
+        });
+
+        $response = [
+            'workshop_name' => $workshopName,
+            'applications' => $formattedApplications,
+        ];
+
+        return response()->json($response);
     }
 
     public function addWorkshop()

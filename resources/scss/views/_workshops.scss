@@ -103,12 +103,18 @@
                 }
             }
             
-            .signed-up{
+            .signed-up, .no-applications{
                 @include button-empty();
             }
 
-            .sign-up, .applications{
+            .sign-up, .see-applications{
                 @include blue-button();
+            }
+
+            .full{
+                @include blue-button();
+                background-color: $light-gray;
+                pointer-events: none;
             }
         }
     }
@@ -130,7 +136,7 @@
 #workshop-modal{
     width: 100vw;
     height: 100vh;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.25);
@@ -144,12 +150,80 @@
     .applications-container{
         background: $secondary;
         padding: 30px;
-        height: 500px;
+        max-height: 500px;
         width: 600px;
         border-radius: 10px;
+        position: relative;
+
+        .close-applications{
+            position: absolute;
+            top: 15px;
+            right: 15px;
+
+            &:hover{
+                cursor: pointer;
+
+                i{
+                    color: $white;
+                }
+            }
+
+            i{
+                color: $light-gray;
+                font-size: 25px;
+                transition: .3s ease;
+            }
+        }
+        
+        h3{
+            text-align: center;
+            font-size: 25px;
+            font-weight: 300;
+            margin-bottom: 25px;
+        }
+        
+        .applications{
+            border: 3px solid $white;
+            border-radius: 10px;
+            padding: 15px 25px;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .application{
+                display: flex;
+                align-items: center;
+
+                .info-divider{
+                    height: 20px;
+                    width: 1px;
+                    background-color: $light-gray;
+                    margin: 0 10px;
+                }
+
+                .class{
+                    color: $light-gray;
+                }
+            }
+
+            .application-divider{
+                width: 90%;
+                height: 1px;
+                background-color: $light-gray;
+                margin: 10px auto;
+            }
+        }
     }
 }
 
-.no-overflow{
-    overflow: hidden;
+@media only screen and (max-width: 992px){
+    #workshops{
+        .workshops{
+            grid-template-columns: 1fr;
+        }
+    }
 }

@@ -48,28 +48,30 @@
                             </div>
                             <div class="blue-button">
                                 @if (Auth::user()->role === 1)
-                                    <button class="applications" data-applications="{{ $workshop->applications }}">Aanmeldingen</button>
+
                                     @if (count($workshop->applications) > 0)
-                                        @foreach ($workshop->applications as $application)
-                                            <p>Class: {{ $application->user->class->name }}</p>
-                                        @endforeach
+                                        <button class="see-applications" data-workshop-id="{{ $workshop->id }}">Aanmeldingen</button>    
                                     @else
-                                        <p>nope</p>
+                                        <button class="no-applications"><i class="fa-solid fa-xmark"></i> Geen aanmeldingen</button>
                                     @endif
                                 @elseif (Auth::user()->role === 0)
                                     @if (count($workshop->applications) > 0)
-                                        @foreach ($workshop->applications as $application)
-                                            @if ($application->user_id === Auth::user()->id)
-                                                <button class="signed-up"><i class="fa-solid fa-check"></i>Aangemeld</button>
-                                            @else
-                                                <form action="{{ route('signUp') }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="workshopId" value="{{ $workshop->id }}">
-                                                    <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
-                                                    <button class="sign-up" type="submit">Aanmelden</button>
-                                                </form>
-                                            @endif
-                                        @endforeach
+                                        @if (count($workshop->applications) == $workshop->max_pers)
+                                            <button class="full">Vol</button>
+                                        @else
+                                            @foreach ($workshop->applications as $application)
+                                                @if ($application->user_id === Auth::user()->id)
+                                                    <button class="signed-up"><i class="fa-solid fa-check"></i>Aangemeld</button>
+                                                @else
+                                                    <form action="{{ route('signUp') }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="workshopId" value="{{ $workshop->id }}">
+                                                        <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
+                                                        <button class="sign-up" type="submit">Aanmelden</button>
+                                                    </form>
+                                                @endif
+                                            @endforeach
+                                        @endif
                                     @else
                                         <form action="{{ route('workshops') }}" method="POST">
                                             @csrf
@@ -98,54 +100,70 @@
     </div>
     <div id="workshop-modal" class="d-none">
         <div class="applications-container">
-            <div class="application">
-                <p>Naam</p>
-                <div class="divider"></div>
-                <p>Klas</p>
+            <div class="modal-title"></div>
+            <div class="close-applications"><i class="fa-solid fa-xmark"></i></div>
+            <div class="applications">
+                
             </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    {{-- <script>
+    <script>
         $(document).ready(function () {
-            // Click event handler for loading workshop data
-            $('.applications').click(function () {
-                // Retrieve the data-workshop-id attribute
-                var applicationsData = $(this).data('applications');
-                var applications = JSON.parse(applicationsData);
+            $('.see-applications').click(function () {
+                var workshopId = $(this).data('workshop-id');
 
-                if (applicationsData.trim() !== '') {
-                    // Display the modal with applications data
-                    displayWorkshopModal(applicationsData);
-                } else {
-                    console.log('this one')
-                    // Handle the case when data is empty or not valid JSON
-                    $('#workshop-modal').removeClass('d-none');
-                }
+                $.ajax({
+                    url: '/workshops/applications/' + workshopId,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.applications.length > 0) {
+                            displayWorkshopModal(response);
+                        } else {
+                            console.log('No applications found');
+                            // Handle the case when no applications are found
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                        // Handle any errors that occur during the AJAX request
+                    }
+                });
             });
+
 
             // Function to display the modal with applications data
             function displayWorkshopModal(applicationsData) {
                 // Access and parse the JSON data
-                var applications = JSON.parse(applicationsData);
 
                 // Construct the HTML content for the modal using applications data
-                var modalContent = '<h2>Workshop Applications</h2>';
-                modalContent += '<ul>';
-                applications.forEach(function (application) {
-                    modalContent += '<li>';
-                    modalContent += 'User ID: ' + application.user_id + '<br>';
-                    modalContent += 'Additional Fields: ' + application.additional_fields; // Add more fields as needed
-                    modalContent += '</li>';
+                var modalHeader = '<h3>' + applicationsData.workshop_name + ' | Aanmeldingen</h3>';
+                var modalContent = '';
+                var i = 0;
+                applicationsData.applications.forEach(function (application) {
+                    if (i > 0){
+                        modalContent += '<div class="application-divider"></div>';
+                    };
+                    modalContent += '<div class="application">';
+                    modalContent += '<p>' + application.first_name + ' ' + application.last_name + '</p>';
+                    modalContent += '<div class="info-divider"></div>';
+                    modalContent += '<p class="class">' + application.class_name + '</p>';
+                    modalContent += '</div>';
+                    i++
                 });
-                modalContent += '</ul>';
 
                 // Display the modal content
-                $('#workshop-modal').html(modalContent);
+                $('.modal-title').html(modalHeader);
+                $('.applications').html(modalContent);
 
                 // Show the modal (you may need to implement your own modal display logic)
-                $('#workshop-modal').show();
+                $('#workshop-modal').removeClass('d-none');
             }
+
+            $('.close-applications').click(function (){
+                $('#workshop-modal').addClass('d-none')
+            })
         });
-    </script> --}}
+    </script>
 @endsection
