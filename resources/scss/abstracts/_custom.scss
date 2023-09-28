@@ -187,6 +187,7 @@ i{
             font-size: 40px;
             padding-bottom: 20px;
             padding-left: 20px;
+            font-weight: 600;
         }
 
         .bottom{
@@ -210,7 +211,7 @@ i{
 }
 
 @mixin image-bg(){
-    background: url("/resources/img/STO-bg.png") center center no-repeat;
+    background: url("/resources/img/STO-bg.svg") center center no-repeat;
     background-size: cover;
     height: 100vh;
     width: 100vw;
