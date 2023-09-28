@@ -1,0 +1,28 @@
+#activate-account{
+    @include image-bg();
+    overflow: hidden;
+
+    .login-content{
+
+        .logo-container{
+            @include logo();
+        }
+
+        form{
+            .input{
+                @include input();
+                input{
+                    padding: 20px;
+                    height: 65px;
+                }
+            }
+
+            button{
+                @include form-button();
+                height: 65px;
+                margin-top: 5px;
+                font-size: 20px;
+            }
+        }
+    }
+}

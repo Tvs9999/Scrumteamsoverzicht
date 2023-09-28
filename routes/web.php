@@ -40,5 +40,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard
 
 Route::get('/addScrumteam', [ScrumteamController::class, 'addScrumteam'])->name('scrumteam');
 
+Route::get('/users', [AuthController::class, 'users'])->name('users');
+
+
 
 

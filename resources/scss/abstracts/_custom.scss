@@ -174,6 +174,57 @@ i{
     }
 }
 
+@mixin logo(){
+    display: flex;
+    justify-content: center;
+
+    .logo{
+        position: relative;
+        margin-bottom: 30px;
+
+        h1{
+            line-height: 0.85;
+            font-size: 40px;
+            padding-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .bottom{
+            width: 90px;
+            height: 10px;
+            background-color: $accent;
+            bottom: 0;
+            left: 0;
+            position: absolute
+        }
+
+        .left{
+            height: 90px;
+            width: 10px;
+            background-color: $accent;
+            bottom: 0;
+            left: 0;
+            position: absolute
+        }
+    }
+}
+
+@mixin image-bg(){
+    background: url("/resources/img/STO-bg.png") center center no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+
+    .overlay{
+        width: 100%;
+        height: 100%;
+        background-color: rgba($color: #1B2D4D, $alpha: .7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 .success-message {
     position: absolute;
     top: -50px;

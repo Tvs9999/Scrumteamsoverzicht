@@ -12,46 +12,34 @@
 </head>
 <body>
     
-<div class="row justify-content-center mt-5">
-    <div class="col-lg-4">
-        <div class="card">
-            <div class="card-header">
-                <h1 class="card-title">Account activeren</h1>
-            </div>
-            <div class="card-body">
-                @if(Session::has('success'))
+<div id="activate-account">
+    <div class="overlay">
+        @if(Session::has('success'))
                 <div class="alert alert-success" role="alert">
                     {{ Session::get('success') }}
                 </div>
                 @endif
                 <form action="" method="POST">
                     @csrf
-                    <div class="mb-3">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="first_name" class="form-label">Voornaam</label>
-                                <input type="text" name="first_name" class="form-control" id="first_name" placeholder="Voornaam" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="last_name" class="form-label">Achternaam</label>
-                                <input type="text" name="last_name" class="form-control" id="last_name" placeholder="Achternaam" required>
-                            </div>
+                    <div class="input-row">
+                        <div class="input">
+                            <label for="first_name" class="form-label">Voornaam</label>
+                            <input type="text" name="first_name" class="form-control" id="first_name" placeholder="Voornaam" required>
+                        </div>
+                        <div class="input">
+                            <label for="last_name" class="form-label">Achternaam</label>
+                            <input type="text" name="last_name" class="form-control" id="last_name" placeholder="Achternaam" required>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Wachtwoord</label>
-                        <input type="password" name="password" class="form-control" id="password" placeholder="Wachtwoord" required>
+                    <div class="input">
+                        <label for="password">Wachtwoord</label>
+                        <input type="password" name="password" id="password" placeholder="Vul hier je wachtwoord in..." required>
                         @error('password')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="d-grid">
-                        <button class="btn btn-primary">Account activeren</button>
-                    </div>
+                    <button class="btn btn-primary">Account activeren</button>
                 </form>
-
-            </div>
-        </div>
     </div>
 </div>
 </body>
