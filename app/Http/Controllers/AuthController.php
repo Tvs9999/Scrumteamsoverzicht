@@ -23,7 +23,7 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-        ]);
+        ]); //Hij kijkt if de email/password wel geldig is
 
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
@@ -33,7 +33,7 @@ class AuthController extends Controller
             Session::put('user_role', Auth::user()->role);
             Session::put('userid', Auth::user()->id);
             Session::put('studentclassid', Auth::user()->class_id);
-
+            //userrole/userid/classid wordt in de session toegevoegd
             return redirect()->intended(route('Dashboard'));
         }
         #error als de combinatie niet klopt
@@ -124,6 +124,7 @@ class AuthController extends Controller
     {
         Auth::logout();
         Session::flush();
-        return redirect('login'); // Redirect to the desired URL after logout
+        
+        return redirect('login'); // terugsturen naar login pagina
     }
 }

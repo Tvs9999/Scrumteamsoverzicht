@@ -12,6 +12,7 @@ class Classes extends Model
 
     protected $fillable = [
         'name',
+        'created_at',
     ];
 
     public function user(): HasMany 

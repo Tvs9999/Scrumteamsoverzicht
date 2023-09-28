@@ -1,6 +1,6 @@
 @if(!isset($userid))
     <script>
-        window.location.href = '{{ route("login") }}'; // Redirect to the login page
+        window.location.href = '{{ route("login") }}'; // Stuur naar login pagina als de userid niet bestaat
     </script>
 @endif
 
@@ -47,3 +47,13 @@
 </div>
 @endforeach
 @endsection
+
+<script>
+    // previous page should be reloaded when user navigate through browser navigation
+    // for mozilla
+    window.onunload = function(){};
+    // for chrome
+    if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+        location.reload();
+    }
+</script>

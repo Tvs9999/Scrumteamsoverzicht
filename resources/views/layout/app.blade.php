@@ -26,7 +26,7 @@
                 <ul>
                     <li><a class="link" href="/dashboard"><i class="fa-solid fa-table-columns"></i><span>Dashboard</span></a></li>
                     <li><a class="link" href="/workshops"><i class="fa-solid fa-chalkboard-user"></i><span>Workshops</span></a></li>
-                    <li><a class="link" href="/scrumteams"><i class="fa-solid fa-user-group"></i><span>Scrumteams</span></a></li>
+                    <li><a class="link" href="/addScrumteam"><i class="fa-solid fa-user-group"></i><span>Scrumteams</span></a></li>
                     <li><a class="link" href="/gebruikers"><i class="fa-solid fa-user"></i><span>Gebruikers</span></a></li>
                 </ul>
             </div>
