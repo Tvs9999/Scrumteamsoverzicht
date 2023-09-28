@@ -33,12 +33,12 @@
                 @csrf
                 <div class="input-row">
                     <div class="input">
-                        <label for="first_name" class="form-label">Voornaam</label>
-                        <input type="text" name="first_name" class="form-control" id="first_name" placeholder="Voornaam" required>
+                        <label for="first_name">Voornaam</label>
+                        <input type="text" name="first_name" id="first_name" placeholder="Voornaam" required>
                     </div>
                     <div class="input">
-                        <label for="last_name" class="form-label">Achternaam</label>
-                        <input type="text" name="last_name" class="form-control" id="last_name" placeholder="Achternaam" required>
+                        <label for="last_name">Achternaam</label>
+                        <input type="text" name="last_name" id="last_name" placeholder="Achternaam" required>
                     </div>
                 </div>
                 <div class="input">
@@ -48,7 +48,7 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <button class="btn btn-primary">Account activeren</button>
+                <button>Account activeren</button>
             </form>
         </div>
     </div>
