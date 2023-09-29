@@ -23,7 +23,7 @@ $font-text          : 'Raleway', sans-serif;
     grid-template-columns: 80px 1fr;
 }
 
-h1, h2, h3{
+h1, h2, h3, h5{
     font-family: $font-header;
     color: $white;
     margin: 0;
@@ -152,6 +152,7 @@ i{
     font-size: 20px;
 
     &:hover{
+        cursor: pointer;
         background-color: $accent-hover;
     }
 }

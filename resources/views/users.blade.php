@@ -28,7 +28,7 @@
                 </div>
                 @if ($user->role === 0)
                     @if ($user->present === 0)
-                        <div class="not-present">
+                        <div class="absent">
                             <i class="fa-solid fa-xmark"></i>
                         </div>    
                         @else
