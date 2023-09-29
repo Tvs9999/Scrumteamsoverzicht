@@ -4,13 +4,17 @@
     "isEntry": true,
     "src": "resources/css/app.css"
   },
+  "resources/img/STO-bg.svg": {
+    "file": "assets/STO-bg-9793904a.svg",
+    "src": "resources/img/STO-bg.svg"
+  },
   "resources/js/app.js": {
-    "file": "assets/app-38695865.js",
+    "file": "assets/app-2bcf33c1.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-da650b1b.css",
+    "file": "assets/app-a1758d72.css",
     "isEntry": true,
     "src": "resources/scss/app.scss"
   }

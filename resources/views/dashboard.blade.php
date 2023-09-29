@@ -1,9 +1,3 @@
-    <!-- <script>
-        window.location.href = '{{ route("login") }}'; // Stuur naar login pagina als de userid niet bestaat
-    </script> -->
-
-
-
 @extends('layout/app')
 
 @section('content') 
