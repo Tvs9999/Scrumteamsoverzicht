@@ -14,6 +14,7 @@ export default defineConfig({
             input: ['resources/scss/app.scss', 'resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
         }),
+        vue(),
     ], build: { outDir: 'public/js', }, 
     server: {
         port: 3000,

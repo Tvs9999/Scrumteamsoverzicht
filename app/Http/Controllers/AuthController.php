@@ -87,14 +87,15 @@ class AuthController extends Controller
         // Check if the code exists in the database
         $user = User::where('activation_key', $activationCode)->first();
 
-        if (!$user || !empty($user->password)) {
-            // Code not found, handle error (e.g., show an error message)
+        // if (!$user || !empty($user->password)) {
+        //     // Code not found, handle error (e.g., show an error message)
             
-            return;
-        } else {
-            return view('completeRegistration');
-        }
+        //     return;
+        // } else {
+        // }
+        return view('completeRegistration');
     }
+
     public function activate_account(request $request)
     {
         $request->validate([
@@ -126,5 +127,15 @@ class AuthController extends Controller
         Session::flush();
         
         return redirect('login'); // terugsturen naar login pagina
+    }
+
+    public function users(){
+        if(Auth::user()->role !== 1){
+            return redirect('login');
+        }
+
+        $users = User::with('class')->orderBy('role')->get();
+
+        return view('users', compact('users'));
     }
 }

@@ -39,6 +39,9 @@ Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
 
 Route::get('/addScrumteam', [ScrumteamController::class, 'scrumteam'])->name('addScrumteam');
+
+Route::get('/gebruikers', [AuthController::class, 'users'])->name('users');
+
 Route::post('/addScrumteam', [ScrumteamController::class, 'addScrumteamPost'])->name('addScrumteam.post');
 
 
