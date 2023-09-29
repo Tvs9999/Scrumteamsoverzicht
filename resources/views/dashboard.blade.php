@@ -9,12 +9,12 @@
     </div>
   
     <div id="scrumteams">
-      {{-- <scrumteamlist
+      <scrumteamlist
         :classes="{{ $classesJson }}"
         :scrumteams="{{ $scrumteamsJson }}"
         :scrumteamuser="{{ $scrumteamUserJson }}"
         :students="{{ $studentsJson }}"
-      ></scrumteamlist> --}}
+      ></scrumteamlist>
     </div> 
     
     <div class="attendance">
