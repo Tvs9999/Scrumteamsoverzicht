@@ -3,15 +3,15 @@
     <div v-for="classData in classes" :key="classData.id" class="card mb-4">
       <div class="card-header">
         <h2 class="card-title">
-          {{ team.name }}
-          </h2>
+          {{ classData.name }}
+        </h2>
       </div>
       <div :id="'class-' + classData.id" class="collapse">
         <ul class="list-group list-group-flush">
           <li v-for="team in getTeamsByClass(classData.id)" :key="team.id" class="list-group-item">
             <h4 class="card-title">
               {{ team.name }}
-              
+
             </h4>
             <div :id="'team-' + team.id" class="collapse">
               <ul class="list-unstyled">
@@ -33,23 +33,39 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+  name: 'ScrumTeamList',
   props: {
     classes: Array,
     scrumteams: Array,
-    scrumteamUser: Array,
+    scrumteamuser: Array,
     students: Array,
-  },  mounted() {
+  },
+  mounted() {
     console.log('Classes prop:', this.classes);
   },
   methods: {
     getTeamsByClass(classId) {
       // Filter scrum teams based on the class ID
-      return this.scrumteams.filter(team => team.class_id === classId);
+      return this.scrumteams.filter(a => a.class_id === classId);
     },
     getTeamUsers(teamId) {
       // Filter team users based on the team ID
-      return this.scrumteamUser.filter(teamUser => teamUser.team_id === teamId);
-    },
-  }
+      const teamMembers = this.scrumteamuser
+        .filter(user => user.team_id === teamId)
+        .map(user => {
+          // Find the corresponding student data based on user_id
+          const student = this.students.find(student => student.id === user.user_id);
+          return {
+            // Include relevant user and student data in the result
+            user,
+            student,
+          };
+        });
+
+      return teamMembers;
+    }
+    ,
+  },
 });
 </script>
+

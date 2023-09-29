@@ -1,12 +1,8 @@
-@if(!isset($userid))
-    <script>
+    <!-- <script>
         window.location.href = '{{ route("login") }}'; // Stuur naar login pagina als de userid niet bestaat
-    </script>
-@endif
+    </script> -->
 
-<p>User Role: {{ $userRole }}</p>
-<p>userid: {{ $userid }}</p>
-<p>classid: {{ $studentclassid }}</p>
+
 
 @extends('layout/app')
 
@@ -14,13 +10,15 @@
 
 
 <div id="scrumteams">
-  <ScrumTeamList
+  <scrumteamlist
     :classes="{{ $classesJson }}"
     :scrumteams="{{ $scrumteamsJson }}"
-    :scrumteam-user="{{ $scrumteamUserJson }}"
+    :scrumteamuser="{{ $scrumteamUserJson }}"
     :students="{{ $studentsJson }}"
-  ></ScrumTeamList>
+  ></scrumteamlist>
 </div>  
+
+
 @endsection
 
 <script>
@@ -32,3 +30,4 @@
         location.reload();
     }
 </script>
+
