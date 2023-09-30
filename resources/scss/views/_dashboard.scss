@@ -1,0 +1,152 @@
+#dashboard{
+    background-color: $primary;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+
+    h2{
+        font-size: 25px;
+        font-weight: 300;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-content{
+        .content-header{
+            @include content-header();
+        }
+
+        .attendance{
+            padding: 30px;
+
+            h2{
+                margin-bottom: 5px;
+                text-align: left;
+                margin-left: 20px;
+            }
+
+            .team{
+                border: 2px solid $white;
+                border-radius: 10px;
+                padding: 20px 30px;
+
+                .member{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .status{
+                        display: flex;
+                        gap: 10px;
+
+                        .absent, .present{
+                            border: 3px solid $light-gray;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 10px;
+                            height: 40px;
+                            width: 40px;
+    
+                            i{
+                                font-size: 25px;
+                                color: $light-gray;
+                            }
+
+                            &.active{
+                                border-color: $white;
+                                background-color: $white;
+
+                                i{
+                                    color: $primary;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .divider{
+                    width: 95%;
+                    height: 2px;
+                    background-color: $light-gray;
+                    margin: 15px auto;
+                }
+            }
+        }
+    }
+
+    .your-info{
+        padding: 20px 30px;  
+        width: 100%;
+        background-color: $secondary;
+
+        h5{
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        p{
+            color: $light-gray;
+            font-size: 16px;
+        }
+
+        .your-workshops{
+            margin-bottom: 40px;
+
+            .workshop{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+
+                .icon{
+                    width: 50px;
+                    height: 50px;
+                    background-color: $accent;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 10px;
+
+                    i{
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+
+        .divider{
+            width: 80%;
+            height: 1px;
+            background-color: $light-gray;
+            margin: 0 auto 30px auto;
+        }
+
+        .your-questions{
+            margin-bottom: 30px;
+
+            .question{
+                display: flex;
+                gap: 30px;
+                align-items: center;
+                margin-bottom: 5px;
+
+                .icon{
+                    i{
+                        color: $accent;
+                        font-size: 35px;
+                    }
+                }
+            }
+        }
+
+        button{
+            @include blue-button();
+            width: 100%;
+
+            i{
+                margin-left: 10px;
+            }
+        }
+    }
+}
