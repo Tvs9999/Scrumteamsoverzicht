@@ -2,14 +2,14 @@
   <div>
     <div v-for="classData in classes" :key="classData.id" class="card mb-4">
       <div class="card-header">
-        <h2 class="card-title">
+        <h2 class="card-title" data-toggle="collapse" :data-target="'#class-' + classData.id">
           {{ classData.name }}
         </h2>
       </div>
       <div :id="'class-' + classData.id" class="collapse">
         <ul class="list-group list-group-flush">
           <li v-for="team in getTeamsByClass(classData.id)" :key="team.id" class="list-group-item">
-            <h4 class="card-title">
+            <h4 class="card-title" data-toggle="collapse" :data-target="'#team-' + team.id">
               {{ team.name }}
 
             </h4>

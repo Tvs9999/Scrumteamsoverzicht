@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Activation;
 use App\Models\User;
 use App\Models\Classes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use SebastianBergmann\Type\NullType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\Facades\Mail;
 class AuthController extends Controller
 {
     public function showLoginForm()
@@ -73,11 +75,23 @@ class AuthController extends Controller
         $user->present = 0;
         $user->class_id = $class->id;
         $user->activation_key = $guid;
-        // $user->password = Hash::make($request->password);
 
         $user->save();
 
-        return back()->with('succes', 'Register succesful');
+        if($user->rol === 0){
+            $rol = "student";
+        } else {
+            $rol = "docent";
+        }
+
+        try {
+            $this->Sendmail($user->email, $user->activation_key, $rol);
+            Log::info('Email sent successfully to ' . $user->email);
+        } catch (\Exception $e) {
+            Log::error('Email sending failed: ' . $e->getMessage());
+        }        
+
+         return back()->with('succes', 'Register succesful');
     }
     public function display_activationform(Request $request)
     {
@@ -137,5 +151,10 @@ class AuthController extends Controller
         $users = User::with('class')->orderBy('role')->get();
 
         return view('users', compact('users'));
+    }
+
+    public function sendMail($email, $code, $rol){
+
+        Mail::to($email)->send(new Activation($code, $rol));
     }
 }
