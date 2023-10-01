@@ -7,6 +7,7 @@
     <div class="content-header">
         <h1>Dashboard</h1>
     </div>
+
   
     @if (Auth::user()->role === 1)
     <div id="scrumteams">
@@ -23,41 +24,28 @@
       @if (Auth::user()->role === 0)
           <h2>Presentie</h2>
           <div class="team">
+
+          @foreach($scrumteamMembers as $member)
+          
             <div class="member">
-              <p>Tobias van Spnning</p>
-              <div class="status">
-                <form action="">
-                  <div class="present active"><i class="fa-solid fa-check"></i></div>
+              <p>{{ $member['firstname'] }} </p>
+              <div class="status">                
+                <form action="/update-status/{{ $member['id'] }}/{{ $member['present'] == 1 ? '0' : '' }}" method="POST" class="status-form">
+                @csrf 
+                  <div class="present {{ $member['present'] == 1 ? 'active' : '' }}" onclick="submitForm(this)"><i class="fa-solid fa-check"></i></div>
                 </form>
-                <form action="">
-                  <div class="absent"><i class="fa-solid fa-xmark"></i></div>
+                <form action="/update-status/{{ $member['id'] }}/{{ $member['present'] == 0 ? '1' : '' }}" method="POST" class="status-form">
+                @csrf 
+                  <div class="absent {{ $member['present'] == 0 ? 'active' : '' }}" onclick="submitForm(this)"><i class="fa-solid fa-xmark"></i></div>
                 </form>
               </div>
             </div>
+            @if (!$loop->last)
             <div class="divider"></div>
-            <div class="member">
-              <p>Tobias van Spnning</p>
-              <div class="status">
-                <form action="">
-                  <div class="present active"><i class="fa-solid fa-check"></i></div>
-                </form>
-                <form action="">
-                  <div class="absent"><i class="fa-solid fa-xmark"></i></div>
-                </form>
-              </div>
-            </div>
-            <div class="divider"></div>
-            <div class="member">
-              <p>Tobias van Spnning</p>
-              <div class="status">
-                <form action="">
-                  <div class="present"><i class="fa-solid fa-check"></i></div>
-                </form>
-                <form action="">
-                  <div class="absent active"><i class="fa-solid fa-xmark"></i></div>
-                </form>
-              </div>
-            </div>
+            @endif
+          @endforeach
+                      <!-- <div class="absent active"><i class="fa-solid fa-xmark"></i></div> -->
+
           </div>
       @endif
     </div>
@@ -114,6 +102,12 @@
     if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
         location.reload();
     }
+    
+    function submitForm(iconElement) {
+    const formElement = iconElement.closest('.status-form');
+    formElement.submit();
+}
+    
 </script>
 
 <!-- collapse scripts -->

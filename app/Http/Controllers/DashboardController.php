@@ -9,6 +9,7 @@ use App\Models\Scrumteam;
 use App\Models\ScrumteamUser;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -20,6 +21,7 @@ class DashboardController extends Controller
         $classes = Classes::all()->toArray();
         $scrumteams = Scrumteam::all()->toArray();
         $scrumteamUser = ScrumteamUser::all()->toArray();
+
         $questions = Question::whereIn('status', [0])->get()->toArray();
 
         $scrumteamUserIds = ScrumteamUser::pluck('user_id')->toArray();
@@ -30,16 +32,33 @@ class DashboardController extends Controller
         $scrumteamUserJson = json_encode($scrumteamUser);
         $studentsJson = json_encode($students);
 
-    
-        
-        return view('dashboard', compact('classesJson', 'scrumteamsJson', 'scrumteamUserJson', 'studentsJson'));
+
+        if (Auth::user()->role === 1) {
+
+
+            return view('dashboard', compact('classesJson', 'scrumteamsJson', 'scrumteamUserJson', 'studentsJson'));
+        } else {
+            $scrumteamUser = ScrumteamUser::where('user_id', Auth::user()->id)->first();
+
+            if ($scrumteamUser) {
+                $scrumteamId = $scrumteamUser->team_id;
+                $scrumteamMembers = ScrumteamUser::where('team_id', $scrumteamId)
+                    ->pluck('user_id') 
+                    ->toArray();
+            
+                $scrumteamMembers = User::whereIn('id', $scrumteamMembers)->get(); 
+            } else {
+                $scrumteamMembers = []; // You can set this to an empty array or handle it as needed.
+            }
+            
+            return view('dashboard', compact('scrumteamMembers'));
+        }
     }
-    
+
 
     public function dashboardStudent()
     {
         $userRole = session('user_role'); // Retrieve 'user_role' from the session
         return view('dashboard-student', ['userRole' => $userRole]);
     }
-    
 }

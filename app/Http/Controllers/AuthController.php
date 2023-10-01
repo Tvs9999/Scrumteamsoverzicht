@@ -166,4 +166,21 @@ class AuthController extends Controller
 
         Mail::to($email)->send(new Activation($code, $rol));
     }
+
+    public function updateStatus($memberId, $status)
+    {
+        // Find the member by ID
+        $member = User::findOrFail($memberId);
+
+        // Update the status in the database
+        $member->present = $status;
+
+        if (Auth::user()->id != $memberId) {
+            $member->save();
+        }
+
+
+        // Redirect back to the previous page or any other appropriate action
+        return redirect()->back()->with('status?', 'Status updated successfully');
+    }
 }
