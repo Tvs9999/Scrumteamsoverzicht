@@ -8,6 +8,7 @@
         <h1>Dashboard</h1>
     </div>
   
+    @if (Auth::user()->role === 1)
     <div id="scrumteams">
       <scrumteamlist
         :classes="{{ $classesJson }}"
@@ -16,6 +17,7 @@
         :students="{{ $studentsJson }}"
       ></scrumteamlist>
     </div> 
+    @endif
     
     <div class="attendance">
       @if (Auth::user()->role === 0)

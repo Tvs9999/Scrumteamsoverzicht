@@ -13,10 +13,13 @@ use SebastianBergmann\Type\NullType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
+
+use function Laravel\Prompts\error;
+
 class AuthController extends Controller
 {
     public function showLoginForm()
-    {   
+    {
         return view('login');
     }
 
@@ -31,7 +34,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             // Login succes...
             $user = Auth::user();
-            
+
             Session::put('user_role', Auth::user()->role);
             Session::put('userid', Auth::user()->id);
             Session::put('studentclassid', Auth::user()->class_id);
@@ -78,7 +81,7 @@ class AuthController extends Controller
 
         $user->save();
 
-        if($user->rol === 0){
+        if ($user->rol === 0) {
             $rol = "student";
         } else {
             $rol = "docent";
@@ -89,9 +92,9 @@ class AuthController extends Controller
             Log::info('Email sent successfully to ' . $user->email);
         } catch (\Exception $e) {
             Log::error('Email sending failed: ' . $e->getMessage());
-        }        
+        }
 
-         return back()->with('succes', 'Register succesful');
+        return back()->with('succes', 'Register succesful');
     }
     public function display_activationform(Request $request)
     {
@@ -101,13 +104,14 @@ class AuthController extends Controller
         // Check if the code exists in the database
         $user = User::where('activation_key', $activationCode)->first();
 
-        // if (!$user || !empty($user->password)) {
-        //     // Code not found, handle error (e.g., show an error message)
-            
-        //     return;
-        // } else {
-        // }
-        return view('completeRegistration');
+        if (!$user || !empty($user->password)) {
+            // Code not found, handle error (e.g., show an error message)
+
+            return error("GEBRUIKER AL GEACTIVEERD");
+        } else {
+
+            return view('completeRegistration');
+        }
     }
 
     public function activate_account(request $request)
@@ -133,18 +137,22 @@ class AuthController extends Controller
         ]);
 
         auth()->login($user);
+
+        return redirect('dashboard'); // terugsturen naar login pagina
+
     }
 
     public function logout()
     {
         Auth::logout();
         Session::flush();
-        
+
         return redirect('login'); // terugsturen naar login pagina
     }
 
-    public function users(){
-        if(Auth::user()->role !== 1){
+    public function users()
+    {
+        if (Auth::user()->role !== 1) {
             return redirect('login');
         }
 
@@ -153,7 +161,8 @@ class AuthController extends Controller
         return view('users', compact('users'));
     }
 
-    public function sendMail($email, $code, $rol){
+    public function sendMail($email, $code, $rol)
+    {
 
         Mail::to($email)->send(new Activation($code, $rol));
     }
