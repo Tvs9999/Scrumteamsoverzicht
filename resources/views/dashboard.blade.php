@@ -1,52 +1,47 @@
 @extends('layout/app')
 
-@section('content') 
+@section('content')
 
 <div id="dashboard">
   <div class="dashboard-content">
     <div class="content-header">
-        <h1>Dashboard</h1>
+      <h1>Dashboard</h1>
     </div>
 
-  
+
     @if (Auth::user()->role === 1)
     <div id="scrumteams">
-      <scrumteamlist
-        :classes="{{ $classesJson }}"
-        :scrumteams="{{ $scrumteamsJson }}"
-        :scrumteamuser="{{ $scrumteamUserJson }}"
-        :students="{{ $studentsJson }}"
-      ></scrumteamlist>
-    </div> 
+      <scrumteamlist :classes="{{ $classesJson }}" :scrumteams="{{ $scrumteamsJson }}" :scrumteamuser="{{ $scrumteamUserJson }}" :students="{{ $studentsJson }}"></scrumteamlist>
+    </div>
     @endif
-    
+
     <div class="attendance">
       @if (Auth::user()->role === 0)
-          <h2>Presentie</h2>
-          <div class="team">
+      <h2>Presentie</h2>
+      <div class="team">
 
-          @foreach($scrumteamMembers as $member)
-          
-            <div class="member">
-              <p>{{ $member['firstname'] }} </p>
-              <div class="status">                
-                <form action="/update-status/{{ $member['id'] }}/{{ $member['present'] == 1 ? '0' : '' }}" method="POST" class="status-form">
-                @csrf 
-                  <div class="present {{ $member['present'] == 1 ? 'active' : '' }}" onclick="submitForm(this)"><i class="fa-solid fa-check"></i></div>
-                </form>
-                <form action="/update-status/{{ $member['id'] }}/{{ $member['present'] == 0 ? '1' : '' }}" method="POST" class="status-form">
-                @csrf 
-                  <div class="absent {{ $member['present'] == 0 ? 'active' : '' }}" onclick="submitForm(this)"><i class="fa-solid fa-xmark"></i></div>
-                </form>
-              </div>
-            </div>
-            @if (!$loop->last)
-            <div class="divider"></div>
-            @endif
-          @endforeach
-                      <!-- <div class="absent active"><i class="fa-solid fa-xmark"></i></div> -->
+        @foreach($scrumteamMembers as $member)
 
+        <div class="member">
+          <p>{{ $member['firstname'] }} </p>
+          <div class="status">
+          <form action="{{ $member['present'] == 0 ? '/update-status/' . $member['id'] . '/1' : '' }}" method="POST" class="status-form">
+              @csrf
+              <div class="present {{ $member['present'] == 1 ? 'active' : '' }}" onclick="{{ $member['present'] == 0 ? 'submitForm(this)' : '' }}"><i class="fa-solid fa-check"></i></div>
+            </form>
+            <form action="{{ $member['present'] == 1 ? '/update-status/' . $member['id'] . '/0' : '' }}" method="POST" class="status-form">
+                @csrf
+                <div class="absent {{ $member['present'] == 0 ? 'active' : '' }}" onclick="{{ $member['present'] == 1 ? 'submitForm(this)' : '' }}"><i class="fa-solid fa-xmark"></i></div>
+              </form>
           </div>
+        </div>
+        @if (!$loop->last)
+        <div class="divider"></div>
+        @endif
+        @endforeach
+        <!-- <div class="absent active"><i class="fa-solid fa-xmark"></i></div> -->
+
+      </div>
       @endif
     </div>
   </div>
@@ -95,23 +90,20 @@
 @endsection
 
 <script>
-    // previous page should be reloaded when user navigate through browser navigation
-    // for mozilla
-    window.onunload = function(){};
-    // for chrome
-    if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
-        location.reload();
-    }
-    
-    function submitForm(iconElement) {
+  // previous page should be reloaded when user navigate through browser navigation
+  // for mozilla
+  window.onunload = function() {};
+  // for chrome
+  if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+    location.reload();
+  }
+
+  function submitForm(iconElement) {
     const formElement = iconElement.closest('.status-form');
     formElement.submit();
-}
-    
+  }
 </script>
 
 <!-- collapse scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-
