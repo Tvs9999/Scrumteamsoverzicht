@@ -11,35 +11,37 @@
     </div>
 
     @if (count($users) > 0)
-        @foreach ($users as $user)
-            <div class="user">
-                <div class="info">
-                    <p class="name">{{$user->firstname}} {{$user->lastname}}</p>
-                    <div class="divider"></div>
-                    <p>{{$user->email}}</p>
-                    <div class="divider"></div>
-                    @if ($user->role === 0)
-                        <p>Leerling</p>
+        <div class="users">
+            @foreach ($users as $user)
+                <div class="user">
+                    <div class="info">
+                        <p class="name">{{$user->firstname}} {{$user->lastname}}</p>
                         <div class="divider"></div>
-                        <p>{{$user->class->name}}</p>
-                    @else
-                        <p>Leraar</p>
+                        <p>{{$user->email}}</p>
+                        <div class="divider"></div>
+                        @if ($user->role === 0)
+                            <p>Leerling</p>
+                            <div class="divider"></div>
+                            <p>{{$user->class->name}}</p>
+                        @else
+                            <p>Leraar</p>
+                        @endif
+                    </div>
+                    @if ($user->role === 0)
+                        @if ($user->present === 0)
+                            <div class="absent">
+                                <i class="fa-solid fa-xmark"></i>
+                            </div>    
+                            @else
+                            <div class="present">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                        @endif
+                        
                     @endif
                 </div>
-                @if ($user->role === 0)
-                    @if ($user->present === 0)
-                        <div class="absent">
-                            <i class="fa-solid fa-xmark"></i>
-                        </div>    
-                        @else
-                        <div class="present">
-                            <i class="fa-solid fa-check"></i>
-                        </div>
-                    @endif
-                    
-                @endif
-            </div>
-        @endforeach    
+            @endforeach    
+        </div>
     @else
         <div class="no-users">
             <p>Er zijn geen gebruikers gevonden</p>

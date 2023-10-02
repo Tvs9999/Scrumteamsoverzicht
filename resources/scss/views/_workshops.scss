@@ -16,7 +16,8 @@
         grid-template-columns: 1fr 1fr;
         gap: 30px;
         padding: 30px;
-        height: calc(100% - 80px);
+        height: calc(100vh - 70px);
+        overflow: auto;
 
         .workshop{
             background: $secondary;

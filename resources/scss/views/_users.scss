@@ -23,6 +23,12 @@
         }
     }
 
+    .users{
+        height: calc(100vh - 70px);
+        overflow: auto; 
+        scrollbar-gutter: stable both-edges;
+    }
+
     .user{
         display: flex;
         justify-content: space-between;
