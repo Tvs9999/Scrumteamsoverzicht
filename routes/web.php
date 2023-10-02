@@ -51,5 +51,11 @@ Route::post('/addScrumteam', [ScrumteamController::class, 'addScrumteamPost'])->
 
 Route::post('/update-status/{memberId}/{status}', [AuthController::class, 'updateStatus']);
 
+Route::match(['post', 'get'],'/scrumteams', [ScrumteamController::class, 'index'])->name('scrumteams');
+
+Route::match(['post', 'get'],'/archive-scrumteam/{id}', [ScrumteamController::class, 'archiveScrumteam'])->name('archive_scrumteam');
+
+
+
 
 

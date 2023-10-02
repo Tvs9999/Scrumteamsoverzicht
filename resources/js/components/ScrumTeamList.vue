@@ -11,8 +11,11 @@
           <li v-for="team in getTeamsByClass(classData.id)" :key="team.id" class="list-group-item">
             <h4 class="card-title" data-toggle="collapse" :data-target="'#team-' + team.id">
               {{ team.name }}
-
+              <a :href="'/archive-scrumteam/' + team.id">
+                <i class="fa-solid fa-table-columns"></i>
+              </a>
             </h4>
+
             <div :id="'team-' + team.id" class="collapse">
               <ul class="list-unstyled">
                 <li v-for="teamUser in getTeamUsers(team.id)" :key="teamUser.id">
