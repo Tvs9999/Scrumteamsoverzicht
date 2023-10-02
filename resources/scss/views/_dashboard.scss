@@ -174,16 +174,12 @@
                     }
 
                     form{
-                        display: flex;
-                        justify-content: center;
-                        width: 100%;
 
                         button{
                             border: none;
                             background-color: transparent;
                             transition: .3s ease;
                             color: $accent;
-                            margin-top: 7px;
     
                             &:hover{
                                 cursor: pointer;
