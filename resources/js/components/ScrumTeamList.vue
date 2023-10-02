@@ -41,7 +41,7 @@ export default defineComponent({
     students: Array,
   },
   mounted() {
-    console.log('Classes prop:', this.classes);
+    // console.log('Classes prop:', this.classes);
   },
   methods: {
     getTeamsByClass(classId) {

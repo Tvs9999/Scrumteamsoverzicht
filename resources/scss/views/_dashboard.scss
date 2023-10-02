@@ -3,6 +3,7 @@
     min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 400px;
+    position: relative;
 
     h2{
         font-size: 25px;
@@ -16,69 +17,75 @@
             @include content-header();
         }
 
-        .attendance{
+        .dashboard-info{
             padding: 30px;
+        }
 
-            h2{
-                margin-bottom: 5px;
-                text-align: left;
-                margin-left: 20px;
-            }
+        h2{
+            margin-bottom: 5px;
+            text-align: left;
+            margin-left: 20px;
+        }
 
-            .team{
-                border: 2px solid $white;
-                border-radius: 10px;
-                padding: 20px 30px;
+        .team{
+            border: 2px solid $white;
+            border-radius: 10px;
+            padding: 20px 30px;
 
-                .member{
+            .member{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .status{
                     display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                    gap: 10px;
 
-                    .status{
+                    .absent, .present{
+                        border: 3px solid $light-gray;
                         display: flex;
-                        gap: 10px;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 10px;
+                        height: 40px;
+                        width: 40px;
 
-                        .absent, .present{
-                            border: 3px solid $light-gray;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            border-radius: 10px;
-                            height: 40px;
-                            width: 40px;
-    
+                        i{
+                            font-size: 25px;
+                            color: $light-gray;
+                        }
+
+                        &.active{
+                            border-color: $white;
+                            background-color: $white;
+
                             i{
-                                font-size: 25px;
-                                color: $light-gray;
-                            }
-
-                            &.active{
-                                border-color: $white;
-                                background-color: $white;
-
-                                i{
-                                    color: $primary;
-                                }
+                                color: $primary;
                             }
                         }
                     }
                 }
+            }
 
-                .divider{
-                    width: 95%;
-                    height: 2px;
-                    background-color: $light-gray;
-                    margin: 15px auto;
-                }
+            .divider{
+                width: calc(100% - 50px);
+                height: 2px;
+                background-color: $light-gray;
+                margin: 15px auto;
             }
         }
     }
 
     .your-info{
-        padding: 20px 30px;  
+        padding: 20px 30px 30px 30px;  
         width: 100%;
         background-color: $secondary;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
 
         h5{
             font-size: 18px;
@@ -91,61 +98,162 @@
         }
 
         .your-workshops{
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            max-height: calc(50% - 21px);
 
-            .workshop{
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                margin-bottom: 10px;
+            &.student{
+                max-height: calc(40% - 21px);
+            }
+            
+            .workshops{
+                overflow-y: auto;
+                max-height: calc(100% - 57.6px);               
 
-                .icon{
-                    width: 50px;
-                    height: 50px;
-                    background-color: $accent;
+                .workshop{
                     display: flex;
-                    justify-content: center;
                     align-items: center;
-                    border-radius: 10px;
-
-                    i{
-                        font-size: 20px;
+                    gap: 10px;
+                    margin-bottom: 10px;
+    
+                    .icon{
+                        width: 50px;
+                        height: 50px;
+                        background-color: $accent;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 10px;
+    
+                        i{
+                            font-size: 20px;
+                        }
                     }
                 }
             }
         }
 
         .divider{
-            width: 80%;
-            height: 1px;
+            width: calc(100% - 50px);
+            min-height: 1px;
             background-color: $light-gray;
-            margin: 0 auto 30px auto;
+            margin: 0 auto;
         }
 
-        .your-questions{
-            margin-bottom: 30px;
+        .questions-container{
+            margin-top: 20px;
+            flex: 1;
+            overflow: hidden;
 
-            .question{
-                display: flex;
-                gap: 30px;
-                align-items: center;
-                margin-bottom: 5px;
+            &.student{
+                .questions{
+                    margin-bottom: 30px;
+                    overflow-y: auto;
+                    max-height: calc(100% - 131.6px);
+                }
+            }
 
-                .icon{
-                    i{
-                        color: $accent;
-                        font-size: 35px;
+            .questions{
+                overflow-y: auto;
+                max-height: calc(100% - 57.6px);
+    
+                .question{
+                    display: flex;
+                    gap: 30px;
+                    align-items: center;
+                    margin-bottom: 10px;
+    
+                    .icon{
+                        i{
+                            color: $accent;
+                            font-size: 35px;
+                        }
+                    }
+
+                    .question-info{
+                        width: 100%;
+                    }
+
+                    form{
+                        display: flex;
+                        justify-content: center;
+                        width: 100%;
+
+                        button{
+                            border: none;
+                            background-color: transparent;
+                            transition: .3s ease;
+                            color: $accent;
+                            margin-top: 7px;
+    
+                            &:hover{
+                                cursor: pointer;
+                                color: $accent-hover;
+    
+                                i{
+                                    color: $accent-hover;
+                                }
+                            }
+    
+                            i{
+                                color: $accent;
+                                margin-right: 5px;
+                                transition: .3s ease;
+                            }
+                        }
                     }
                 }
             }
+    
+            .ask-question{
+                @include blue-button();
+                width: 100%;
+                position: relative;
+                z-index: 9999;
+    
+                i{
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+}
+
+#question-modal-container{
+    @include modal-bg();
+
+    .question-modal{
+        background: $secondary;
+        padding: 30px;
+        max-height: 500px;
+        width: 600px;
+        border-radius: 10px;
+        position: relative;
+
+        .close-btn{
+            @include close-btn();
         }
 
-        button{
-            @include blue-button();
-            width: 100%;
+        h2{
+            text-align: center;
+            font-size: 30px;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
 
-            i{
-                margin-left: 10px;
+        form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .input{
+                @include input();
+            }
+
+            button{
+                @include form-button();
+                width: auto;
+                padding: 10px 30px;
+                margin-top: 10px;
             }
         }
     }

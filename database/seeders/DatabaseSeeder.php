@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Classes;
 use App\Models\Workshop;
+use App\Models\Question;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,6 +22,6 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);  
 
-        Workshop::factory()->count(10)->create();
+        Question::factory()->count(10)->create();
     }
 }

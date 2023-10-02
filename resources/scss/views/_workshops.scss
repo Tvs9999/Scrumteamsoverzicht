@@ -1,6 +1,7 @@
 #workshops{
     background-color: $primary;
     min-height: 100vh;
+    position: relative;
 
     .content-header{
         @include content-header();
@@ -8,10 +9,6 @@
 
     .add-workshop a{
         @include add-button();
-    }
-
-    .workshops-container{
-        position: relative;
     }
 
     .workshops{
@@ -74,6 +71,7 @@
 
                 h2{
                     font-size: 25px;
+                    font-weight: 500;
                 }
             }
             
@@ -134,18 +132,7 @@
 }
 
 #workshop-modal{
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(2px);
-    z-index: 9998;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include modal-bg();
 
     .applications-container{
         background: $secondary;
@@ -156,23 +143,7 @@
         position: relative;
 
         .close-applications{
-            position: absolute;
-            top: 15px;
-            right: 15px;
-
-            &:hover{
-                cursor: pointer;
-
-                i{
-                    color: $white;
-                }
-            }
-
-            i{
-                color: $light-gray;
-                font-size: 25px;
-                transition: .3s ease;
-            }
+            @include close-btn();
         }
         
         h3{
@@ -211,7 +182,7 @@
             }
 
             .application-divider{
-                width: 90%;
+                width: calc(100% - 50px);
                 height: 1px;
                 background-color: $light-gray;
                 margin: 10px auto;

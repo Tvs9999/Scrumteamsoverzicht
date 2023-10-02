@@ -3,16 +3,16 @@
 @section('content')
     <div id="workshops">
 
+        @if(Session::has('success'))
+            <div class="success-message" id="success-message" role="alert">
+                {{ Session::get('success') }}
+            </div>
+        @endif
         <div class="content-header">
             <h1>Workshops</h1>
         </div>
         <div class="workshops-container">
 
-            @if(Session::has('success'))
-                <div class="success-message" id="success-message" role="alert">
-                    {{ Session::get('success') }}
-                </div>
-            @endif
 
             @if ($workshops->count()>0)
             <div class="workshops">

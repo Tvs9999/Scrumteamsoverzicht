@@ -37,11 +37,14 @@ Route::get('/activateAcc', [AuthController::class, 'display_activationform'])->n
 Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('Activate account');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
+// Route for asking a question using POST
+Route::post('/dashboard/ask', [DashboardController::class, 'askQuestion'])->name('askQuestion');
+
+// Route for completing a question using POST
+Route::post('/dashboard/complete', [DashboardController::class, 'completeQuestion'])->name('completeQuestion');
 
 Route::get('/addScrumteam', [ScrumteamController::class, 'scrumteam'])->name('addScrumteam');
 
 Route::get('/gebruikers', [AuthController::class, 'users'])->name('users');
 
 Route::post('/addScrumteam', [ScrumteamController::class, 'addScrumteamPost'])->name('addScrumteam.post');
-
-
