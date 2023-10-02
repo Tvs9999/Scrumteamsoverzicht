@@ -21,8 +21,9 @@ class DashboardController extends Controller
     public function index()
     {
         if (Auth::user()->role === 1){
-            $classes = Classes::all()->toArray();
-            $scrumteams = Scrumteam::all()->toArray();
+            $scrumteams = Scrumteam::where('status', 0)->get();
+            $classedWithTeams = $scrumteams->pluck('class_id'); 
+            $classes = Classes::whereIn('id', $classedWithTeams)->get()->toArray();
             $scrumteamUser = ScrumteamUser::all()->toArray();
             $questions = Question::whereIn('status', [0])->get()->toArray();
     
