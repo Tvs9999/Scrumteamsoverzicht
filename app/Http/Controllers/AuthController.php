@@ -175,6 +175,10 @@ class AuthController extends Controller
         // Update the status in the database
         $member->present = $status;
 
+        $member->save();
+        
+
+
         // Redirect back to the previous page or any other appropriate action
         return redirect()->back()->with('status?', 'Status updated successfully');
     }
