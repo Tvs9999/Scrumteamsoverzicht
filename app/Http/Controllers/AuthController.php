@@ -42,7 +42,8 @@ class AuthController extends Controller
             return redirect()->intended(route('Dashboard'));
         }
         #error als de combinatie niet klopt
-        return redirect()->route('login')->with('error', 'Log in is mislukt.');
+        return redirect()->route('login')->with('error', 'combinatie van emailadres
+        en wachtwoord is niet bekend bij ons');
     }
 
     public function register()

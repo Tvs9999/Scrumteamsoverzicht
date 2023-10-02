@@ -9,12 +9,18 @@
             </div>
         </div>
       </div>
-      <div class="scrumteam">
-        <ul>
-          <li v-for="team in getTeamsByClass(classData.id)" :key="team.id">
-            <h4 :data-target="'#team-' + team.id">{{ team.name }}</h4>
-            <div :id="'team-' + team.id">
-              <ul>
+      <div :id="'class-' + classData.id" class="collapse">
+        <ul class="list-group list-group-flush">
+          <li v-for="team in getTeamsByClass(classData.id)" :key="team.id" class="list-group-item">
+            <h4 class="card-title" data-toggle="collapse" :data-target="'#team-' + team.id">
+              {{ team.name }}
+              <a :href="'/archive-scrumteam/' + team.id">
+                <i class="fa-solid fa-table-columns"></i>
+              </a>
+            </h4>
+
+            <div :id="'team-' + team.id" class="collapse">
+              <ul class="list-unstyled">
                 <li v-for="teamUser in getTeamUsers(team.id)" :key="teamUser.id">
                   <i
                     :class="{ 'fas fa-check text-success': teamUser.student.present === 1, 'fas fa-times text-danger': teamUser.student.present === 0 }"></i>

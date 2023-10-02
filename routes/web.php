@@ -48,8 +48,16 @@ Route::get('/addScrumteam', [ScrumteamController::class, 'scrumteam'])->name('ad
 Route::get('/gebruikers', [AuthController::class, 'users'])->name('users');
 
 Route::post('/addScrumteam', [ScrumteamController::class, 'addScrumteamPost'])->name('addScrumteam.post');
+Route::get('/fetch-students/{classId}', [ScrumteamController::class,'fetchStudents']);
+
 
 Route::post('/update-status/{memberId}/{status}', [AuthController::class, 'updateStatus']);
+
+Route::match(['post', 'get'],'/scrumteams', [ScrumteamController::class, 'index'])->name('scrumteams');
+
+Route::match(['post', 'get'],'/archive-scrumteam/{id}', [ScrumteamController::class, 'archiveScrumteam'])->name('archive_scrumteam');
+
+
 
 
 
