@@ -20,13 +20,11 @@ class ScrumteamController extends Controller
             
             $user = DB::table('users')->where('class_id',$classid); // usersdata wordt uit de database gehaald    
         }
-        $users = DB::table('users')->where('role','=','0')->get();
+        $users = DB::table('users')->where('role','=','1')->get();
         $scrumteams = DB::table('scrumteams')->get();
         foreach($scrumteams as $scrumteam){
             $scrumteamid = $scrumteam->id;
         }
-        
-        
 
         return view('addScrumteam',compact('classes','users','user','scrumteamid'));
     }
@@ -47,18 +45,27 @@ class ScrumteamController extends Controller
         $scrumteam->name = $request->input('name');
         $scrumteam->class_id = $request->input('class_id');
         $scrumteam->status = 1;
-    
+
+        $selectedUserIds = $request->input('user_id', []);
+
+        // Ensure $selectedUserIds is an array
+        if (!is_array($selectedUserIds)) {
+            $selectedUserIds = [$selectedUserIds];
+        }
+
         if ($scrumteam->save()) {
-            $scrumteamUser = new ScrumteamUser();
-            $scrumteamUser->team_id = $request->input('team_id')+1;
-            $scrumteamUser->user_id = $request->input('user_id');
-            $scrumteamUser->save();
+            foreach ($selectedUserIds as $userId) {
+                $scrumteamUser = new ScrumteamUser();
+                $scrumteamUser->team_id = $request->input('team_id') + 1;
+                $scrumteamUser->user_id = $userId;
+                $scrumteamUser->save();
+            }
+
+            // Move the return statement outside of the loop
             return back()->with('success', 'Scrumteam toegevoegd');
         } else {
             dd($scrumteam->errors());
         }
-
-        
     }
     
 

@@ -47,12 +47,12 @@
                         <div class="modal-body">
                             <input name="findstudent" placeholder="Zoek een leerling"><br>
                             @foreach ($users as $user)
-                            <input type="checkbox" value="{{$user->id}}" name="user_id">{{$user->firstname}} {{$user->lastname}}
+                            <input type="checkbox" value="{{$user->id}}" name="user_id[]">{{$class->name}} {{$user->firstname}} {{$user->lastname}}
                             @endforeach
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Leerlingen selecteren</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Leerling Selecteren</button>
+                            
                         </div>
                         </div>
                     </div>

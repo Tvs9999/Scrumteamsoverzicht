@@ -44,7 +44,20 @@ class DashboardController extends Controller
             $workshops = Application::with(['workshop'])->where('user_id', Auth::user()->id)->get();
             $questions = Question::where('user_id', Auth::user()->id)->where('status', 0)->get();
 
-            return view('dashboard', compact('workshops', 'questions'));
+            $scrumteamUser = ScrumteamUser::where('user_id', Auth::user()->id)->first();
+
+            if ($scrumteamUser) {
+                $scrumteamId = $scrumteamUser->team_id;
+                $scrumteamMembers = ScrumteamUser::where('team_id', $scrumteamId)
+                    ->pluck('user_id') 
+                    ->toArray();
+            
+                $scrumteamMembers = User::whereIn('id', $scrumteamMembers)->get(); 
+            } else {
+                $scrumteamMembers = []; // You can set this to an empty array or handle it as needed.
+            }
+
+            return view('dashboard', compact('workshops', 'questions', 'scrumteamMembers'));
         }
     }
 
@@ -80,13 +93,33 @@ class DashboardController extends Controller
         } else {
             return back()->with('error', 'Vraag niet gevonden');
         }
+
+        if (Auth::user()->role === 1) {
+
+
+            return view('dashboard', compact('classesJson', 'scrumteamsJson', 'scrumteamUserJson', 'studentsJson'));
+        } else {
+            $scrumteamUser = ScrumteamUser::where('user_id', Auth::user()->id)->first();
+
+            if ($scrumteamUser) {
+                $scrumteamId = $scrumteamUser->team_id;
+                $scrumteamMembers = ScrumteamUser::where('team_id', $scrumteamId)
+                    ->pluck('user_id') 
+                    ->toArray();
+            
+                $scrumteamMembers = User::whereIn('id', $scrumteamMembers)->get(); 
+            } else {
+                $scrumteamMembers = []; // You can set this to an empty array or handle it as needed.
+            }
+            
+            return view('dashboard', compact('scrumteamMembers'));
+        }
     }
-    
+
 
     public function dashboardStudent()
     {
         $userRole = session('user_role'); // Retrieve 'user_role' from the session
         return view('dashboard-student', ['userRole' => $userRole]);
     }
-    
 }

@@ -1,6 +1,6 @@
 @extends('layout/app')
 
-@section('content') 
+@section('content')
 
 <div id="dashboard">
   
@@ -14,48 +14,40 @@
     <div class="content-header">
       <h1>Dashboard</h1>
     </div>
+  
+    <div id="scrumteams">
+      <scrumteamlist
+        :classes="{{ $classesJson }}"
+        :scrumteams="{{ $scrumteamsJson }}"
+        :scrumteamuser="{{ $scrumteamUserJson }}"
+        :students="{{ $studentsJson }}"
+      ></scrumteamlist>
+    </div> 
     
     <div class="dashboard-info">
       @if (Auth::user()->role === 0)
         <h2>Presentie</h2>
         <div class="team">
-          <div class="member">
-            <p>Tobias van Spnning</p>
-            <div class="status">
-              <form action="">
-                <div class="present active"><i class="fa-solid fa-check"></i></div>
+          @foreach($scrumteamMembers as $member)
+
+        <div class="member">
+          <p>{{ $member['firstname'] }} </p>
+          <div class="status">
+          <form action="{{ $member['present'] == 0 ? '/update-status/' . $member['id'] . '/1' : '' }}" method="POST" class="status-form">
+              @csrf
+              <div class="present {{ $member['present'] == 1 ? 'active' : '' }}" onclick="{{ $member['present'] == 0 ? 'submitForm(this)' : '' }}"><i class="fa-solid fa-check"></i></div>
+            </form>
+            <form action="{{ $member['present'] == 1 ? '/update-status/' . $member['id'] . '/0' : '' }}" method="POST" class="status-form">
+                @csrf
+                <div class="absent {{ $member['present'] == 0 ? 'active' : '' }}" onclick="{{ $member['present'] == 1 ? 'submitForm(this)' : '' }}"><i class="fa-solid fa-xmark"></i></div>
               </form>
-              <form action="">
-                <div class="absent"><i class="fa-solid fa-xmark"></i></div>
-              </form>
-            </div>
-          </div>
-          <div class="divider"></div>
-          <div class="member">
-            <p>Tobias van Spnning</p>
-            <div class="status">
-              <form action="">
-                <div class="present active"><i class="fa-solid fa-check"></i></div>
-              </form>
-              <form action="">
-                <div class="absent"><i class="fa-solid fa-xmark"></i></div>
-              </form>
-            </div>
-          </div>
-          <div class="divider"></div>
-          <div class="member">
-            <p>Tobias van Spnning</p>
-            <div class="status">
-              <form action="">
-                <div class="present"><i class="fa-solid fa-check"></i></div>
-              </form>
-              <form action="">
-                <div class="absent active"><i class="fa-solid fa-xmark"></i></div>
-              </form>
-            </div>
           </div>
         </div>
-      @elseif (Auth::user()->role === 1)
+        @if (!$loop->last)
+        <div class="divider"></div>
+        @endif
+        @endforeach
+        @elseif (Auth::user()->role === 1)
         <div id="scrumteams">
           <scrumteamlist
             :classes="{{ $classesJson }}"
@@ -63,8 +55,8 @@
             :scrumteamuser="{{ $scrumteamUserJson }}"
             :students="{{ $studentsJson }}"
           ></scrumteamlist>
-        </div> 
-      @endif
+        </div>
+        @endif
     </div>
   </div>
 
@@ -149,6 +141,11 @@
         location.reload();
     }
 
+    function submitForm(iconElement) {
+    const formElement = iconElement.closest('.status-form');
+    formElement.submit();
+  }
+
     $(document).ready(function (){
       $('.ask-question').click(function (){
         $('#question-modal-container').removeClass('d-none');
@@ -160,5 +157,8 @@
     })
 </script>
 
+<!-- collapse scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 

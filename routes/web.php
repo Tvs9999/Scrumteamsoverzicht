@@ -48,3 +48,8 @@ Route::get('/addScrumteam', [ScrumteamController::class, 'scrumteam'])->name('ad
 Route::get('/gebruikers', [AuthController::class, 'users'])->name('users');
 
 Route::post('/addScrumteam', [ScrumteamController::class, 'addScrumteamPost'])->name('addScrumteam.post');
+
+Route::post('/update-status/{memberId}/{status}', [AuthController::class, 'updateStatus']);
+
+
+
