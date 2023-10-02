@@ -19,4 +19,9 @@ class Scrumteam extends Model
     {
         return $this->belongsTo(Classes::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(ScrumteamUser::class);
+    }
 }

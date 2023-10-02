@@ -26,37 +26,48 @@
     
     <div class="dashboard-info">
       @if (Auth::user()->role === 0)
-        <h2>Presentie</h2>
-        <div class="team">
-          @foreach($scrumteamMembers as $member)
-            <div class="member">
-              <p>{{ $member['firstname'] }} </p>
-              <div class="status">
-              <form action="{{ $member['present'] == 0 ? '/update-status/' . $member['id'] . '/1' : '' }}" method="POST" class="status-form">
-                  @csrf
-                  <div class="present {{ $member['present'] == 1 ? 'active' : '' }}" onclick="{{ $member['present'] == 0 ? 'submitForm(this)' : '' }}"><i class="fa-solid fa-check"></i></div>
-                </form>
-                <form action="{{ $member['present'] == 1 ? '/update-status/' . $member['id'] . '/0' : '' }}" method="POST" class="status-form">
-                    @csrf
-                    <div class="absent {{ $member['present'] == 0 ? 'active' : '' }}" onclick="{{ $member['present'] == 1 ? 'submitForm(this)' : '' }}"><i class="fa-solid fa-xmark"></i></div>
-                  </form>
-              </div>
+        @if ($scrumteam)
+          <div class="team-container">
+            <h2>Presentie</h2>
+            <div class="team">
+              @foreach($scrumteam->scrumteam->users as $member)
+                <div class="member">
+                  @php
+                      $member = $member->user;
+                  @endphp
+                  <p>{{ $member['firstname'] }} {{$member->lastname}}</p>
+                  <div class="status">
+                    <form action="{{ $member['present'] == 0 ? '/update-status/' . $member['id'] . '/1' : '' }}" method="POST" class="status-form">
+                      @csrf
+                      <div class="present {{ $member['present'] == 1 ? 'active' : '' }}" onclick="{{ $member['present'] == 0 ? 'submitForm(this)' : '' }}"><i class="fa-solid fa-check"></i></div>
+                    </form>
+                    <form action="{{ $member['present'] == 1 ? '/update-status/' . $member['id'] . '/0' : '' }}" method="POST" class="status-form">
+                      @csrf
+                      <div class="absent {{ $member['present'] == 0 ? 'active' : '' }}" onclick="{{ $member['present'] == 1 ? 'submitForm(this)' : '' }}"><i class="fa-solid fa-xmark"></i></div>
+                    </form>
+                  </div>
+                </div>
+                @if (!$loop->last)
+                  <div class="divider"></div>
+                @endif
+              @endforeach
             </div>
-            @if (!$loop->last)
-              <div class="divider"></div>
-            @endif
-          @endforeach
-        </div>
+          </div>
+        @else
+          <div class="no-team">
+            <p>Geen scrumteam gevonden</p>
+          </div>
+        @endif
 
         @elseif (Auth::user()->role === 1)
-        <div id="scrumteams">
-          <scrumteamlist
-            :classes="{{ $classesJson }}"
-            :scrumteams="{{ $scrumteamsJson }}"
-            :scrumteamuser="{{ $scrumteamUserJson }}"
-            :students="{{ $studentsJson }}"
-          ></scrumteamlist>
-        </div>
+          <div id="scrumteams">
+            <scrumteamlist
+              :classes="{{ $classesJson }}"
+              :scrumteams="{{ $scrumteamsJson }}"
+              :scrumteamuser="{{ $scrumteamUserJson }}"
+              :students="{{ $studentsJson }}"
+            ></scrumteamlist>
+          </div>
         @endif
     </div>
   </div>

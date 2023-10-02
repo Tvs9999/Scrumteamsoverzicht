@@ -44,20 +44,15 @@ class DashboardController extends Controller
             $workshops = Application::with(['workshop'])->where('user_id', Auth::user()->id)->get();
             $questions = Question::where('user_id', Auth::user()->id)->where('status', 0)->get();
 
-            $scrumteamUser = ScrumteamUser::where('user_id', Auth::user()->id)->first();
+            $scrumteam = ScrumteamUser::where('user_id', Auth::user()->id)
+            ->whereHas('scrumteam', function ($query) {
+                // Apply conditions to the 'scrumteam' relationship
+                $query->where('status', '0');
+            })
+            ->with('scrumteam.users.user')
+            ->first();
 
-            if ($scrumteamUser) {
-                $scrumteamId = $scrumteamUser->team_id;
-                $scrumteamMembers = ScrumteamUser::where('team_id', $scrumteamId)
-                    ->pluck('user_id') 
-                    ->toArray();
-            
-                $scrumteamMembers = User::whereIn('id', $scrumteamMembers)->get(); 
-            } else {
-                $scrumteamMembers = []; // You can set this to an empty array or handle it as needed.
-            }
-
-            return view('dashboard', compact('workshops', 'questions', 'scrumteamMembers'));
+            return view('dashboard', compact('workshops', 'questions', 'scrumteam'));
         }
     }
 
