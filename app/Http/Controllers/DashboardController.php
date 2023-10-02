@@ -21,8 +21,9 @@ class DashboardController extends Controller
     public function index()
     {
         if (Auth::user()->role === 1){
-            $classes = Classes::all()->toArray();
-            $scrumteams = Scrumteam::all()->toArray();
+            $scrumteams = Scrumteam::where('status', 0)->get();
+            $classedWithTeams = $scrumteams->pluck('class_id'); 
+            $classes = Classes::whereIn('id', $classedWithTeams)->get()->toArray();
             $scrumteamUser = ScrumteamUser::all()->toArray();
             $questions = Question::whereIn('status', [0])->get()->toArray();
     
@@ -47,8 +48,8 @@ class DashboardController extends Controller
             $scrumteamUser = ScrumteamUser::where('user_id', Auth::user()->id)->first();
 
             if ($scrumteamUser) {
-                $scrumteamId = $scrumteamUser->team_id;
-                $scrumteamMembers = ScrumteamUser::where('team_id', $scrumteamId)
+                $scrumteamId = $scrumteamUser->scrumteam_id;
+                $scrumteamMembers = ScrumteamUser::where('scrumteam_id', $scrumteamId)
                     ->pluck('user_id') 
                     ->toArray();
             
@@ -102,8 +103,8 @@ class DashboardController extends Controller
             $scrumteamUser = ScrumteamUser::where('user_id', Auth::user()->id)->first();
 
             if ($scrumteamUser) {
-                $scrumteamId = $scrumteamUser->team_id;
-                $scrumteamMembers = ScrumteamUser::where('team_id', $scrumteamId)
+                $scrumteamId = $scrumteamUser->scrumteam_id;
+                $scrumteamMembers = ScrumteamUser::where('scrumteam_id', $scrumteamId)
                     ->pluck('user_id') 
                     ->toArray();
             

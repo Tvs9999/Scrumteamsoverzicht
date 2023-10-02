@@ -6,7 +6,7 @@
           {{ classData.name }}
         </h2>
       </div>
-      <div :id="'class-' + classData.id" class="collapse">
+      <div :id="'class-' + classData.id" :class="{ 'collapse': !allMembersPresent(classData.id) }">
         <ul class="list-group list-group-flush">
           <li v-for="team in getTeamsByClass(classData.id)" :key="team.id" class="list-group-item">
             <h4 class="card-title" data-toggle="collapse" :data-target="'#team-' + team.id">
@@ -14,9 +14,10 @@
               <a :href="'/archive-scrumteam/' + team.id">
                 <i class="fa-solid fa-table-columns"></i>
               </a>
+              <i :class="getClassIcon(team.id)"></i>
             </h4>
 
-            <div :id="'team-' + team.id" class="collapse">
+            <div :id="'team-' + team.id" :class="{ 'collapse': !allMembersPresent(team.id) }">
               <ul class="list-unstyled">
                 <li v-for="teamUser in getTeamUsers(team.id)" :key="teamUser.id">
                   <i
@@ -44,9 +45,25 @@ export default defineComponent({
     students: Array,
   },
   mounted() {
-    // console.log('Classes prop:', this.classes);
+    // console.log 'Classes prop:', this.classes
   },
   methods: {
+    allMembersPresent(teamId) {
+      // Get all scrum teams for the current class
+      const memberIds = this.scrumteamuser.filter(team => team.scrumteam_id === teamId);
+
+      // Check if not all members of all scrum teams have present equal to 1
+      const notAllMembersPresent = !memberIds.every(userId => {
+        const user = this.students.find(student => student.id === userId.user_id);
+        return user && user.present === 1;
+      });
+
+      return notAllMembersPresent;
+    },
+    getClassIcon(teamId) {
+      // Determine the icon class based on the check
+      return this.allMembersPresent(teamId) ? 'fa-solid fa-xmark text-danger' : 'fa-solid fa-check-circle text-success';
+    },
     getTeamsByClass(classId) {
       // Filter scrum teams based on the class ID
       return this.scrumteams.filter(a => a.class_id === classId);
@@ -54,7 +71,7 @@ export default defineComponent({
     getTeamUsers(teamId) {
       // Filter team users based on the team ID
       const teamMembers = this.scrumteamuser
-        .filter(user => user.team_id === teamId)
+        .filter(user => user.scrumteam_id === teamId)
         .map(user => {
           // Find the corresponding student data based on user_id
           const student = this.students.find(student => student.id === user.user_id);
@@ -66,9 +83,7 @@ export default defineComponent({
         });
 
       return teamMembers;
-    }
-    ,
+    },
   },
 });
 </script>
-

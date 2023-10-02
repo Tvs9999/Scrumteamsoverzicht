@@ -25,7 +25,8 @@ class ScrumteamController extends Controller
         $scrumteamsQuery = $includeArchived ? Scrumteam::where('status', 1)->get() : Scrumteam::where('status', 0)->get();
         $scrumteams = $scrumteamsQuery->toArray();
 
-        $classes = Classes::all()->toArray();
+        $classedWithTeams = Scrumteam::pluck('class_id'); 
+        $classes = Classes::whereIn('id', $classedWithTeams)->get()->toArray();        
         $scrumteamUser = ScrumteamUser::all()->toArray();
         $scrumteamUserIds = ScrumteamUser::pluck('user_id')->toArray();
         $students = User::whereIn('id', $scrumteamUserIds)->get()->toArray();
@@ -95,7 +96,7 @@ class ScrumteamController extends Controller
         if ($scrumteam->save()) {
             foreach ($selectedUserIds as $userId) {
                 $scrumteamUser = new ScrumteamUser();
-                $scrumteamUser->team_id = $request->input('team_id') + 1;
+                $scrumteamUser->scrumteam_id = $request->input('scrumteam_id') + 1;
                 $scrumteamUser->user_id = $userId;
                 $scrumteamUser->save();
             }
