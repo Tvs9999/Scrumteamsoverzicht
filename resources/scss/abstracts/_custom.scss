@@ -413,6 +413,16 @@ i{
     animation: customFadeInOut 2.5s ease-in-out forwards;
 }
 
+.error-message{
+    padding: 15px 30px;
+    background-color: #de5050;  
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-direction: column; 
+}
+
 @keyframes customFadeInOut {
     20% {
         top: 40px;
