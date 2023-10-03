@@ -86,10 +86,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style>
-/* Define your 'active' class styles here */
-.active {
-  /* Your 'active' class styles */
-}
-</style>
