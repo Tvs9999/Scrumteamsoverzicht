@@ -54,21 +54,63 @@ class ScrumteamController extends Controller
 
     public function scrumteam()
     {
+        //Alle klasnames in een selectoptie
         $classes = DB::table('classes')->get(); // Classesdata wordt uit de database gehaald
-        foreach ($classes as $class) {
-            $classid = $class->id;
-            $classnames = $class->name;
-
-            $user = DB::table('users')->where('class_id', $classid); // usersdata wordt uit de database gehaald    
+        foreach ($classes as $class){
+            $classesid = $class->id;
+            $classesnames = $class->name;
+            $user = DB::table('users')->where('class_id',$classesid); // usersdata wordt uit de database gehaald   
         }
-        $users = DB::table('users')->where('role', '=', '1')->get();
+
+        //studentgegevens van de usertable
+        $users = DB::table('users')->where('role','=','0')->get();
+        foreach($users as $user)
+        {
+            $classid = $user->class_id;
+            $class = DB::table('classes')->where('id','=',$classid)->get(); // Classesdata wordt uit de database gehaald
+            foreach ($class as $classnames)
+                $classnames = $classnames->name;
+
+            }
+
         $scrumteams = DB::table('scrumteams')->get();
-        foreach ($scrumteams as $scrumteam) {
+        if(count($scrumteams) > 0)
+        foreach($scrumteams as $scrumteam){
             $scrumteamid = $scrumteam->id;
+        }else{
+            $scrumteamid = -1;
         }
 
-        return view('addScrumteam', compact('classes', 'users', 'user', 'scrumteamid'));
+        return view('addScrumteam',compact('classes','classnames','users','user','scrumteams','scrumteamid'));
     }
+
+    public function fetchStudents($classId) {
+        // Fetch students based on the $classId
+        $students = DB::table('users')
+            ->where('role', '=', '0')
+            ->where('class_id', '=', $classId)
+            ->get();
+    
+        // Fetch students who are in a scrum team
+        $studentsInScrumTeam = DB::table('scrumteam_user')->pluck('user_id')->toArray();
+    
+        // Generate HTML for the students with a disabled checkbox for those in a scrum team
+        $html = '';
+
+        if (count($students) === 0) {
+            return 'Er zit nog niemand in deze klas';
+        }
+
+        foreach ($students as $student) {
+            $isInScrumTeam = in_array($student->id, $studentsInScrumTeam);
+            $disabledAttribute = $isInScrumTeam ? 'disabled' : '';
+            
+            $html .= '<input type="checkbox" value="'.$student->id.'" name="user_id[]" '.$disabledAttribute.'>'.$student->firstname.' '.$student->lastname.'<br>';
+        }
+    
+        return $html;
+    }    
+
 
     public function addScrumteam()
     {
@@ -96,7 +138,10 @@ class ScrumteamController extends Controller
         if ($scrumteam->save()) {
             foreach ($selectedUserIds as $userId) {
                 $scrumteamUser = new ScrumteamUser();
-                $scrumteamUser->scrumteam_id = $request->input('scrumteam_id') + 1;
+                $scrumteam = DB::table('scrumteams')->get();
+                $lastTeamId = DB::table('scrumteams')->latest('id')->value('id');
+                
+                $scrumteamUser->scrumteam_id = $lastTeamId;
                 $scrumteamUser->user_id = $userId;
                 $scrumteamUser->save();
             }
