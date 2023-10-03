@@ -127,8 +127,8 @@ class DashboardController extends Controller
             $scrumteamUser = ScrumteamUser::where('user_id', Auth::user()->id)->first();
 
             if ($scrumteamUser) {
-                $scrumteamId = $scrumteamUser->team_id;
-                $scrumteamMembers = ScrumteamUser::where('team_id', $scrumteamId)
+                $scrumteamId = $scrumteamUser->scrumteam_id;
+                $scrumteamMembers = ScrumteamUser::where('scrumteam_id', $scrumteamId)
                     ->pluck('user_id') 
                     ->toArray();
             
