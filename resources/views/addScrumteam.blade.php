@@ -25,8 +25,7 @@
                 <div class="input-row">
                     <div class="input">
                         <label for="class">Klas</label>
-                        <select name="class_id" id="klas" required onchange="loadStudents(this.value)">
-                            <option value="" disabled selected>Selecteer een klas</option>
+                        <select name="class_id" id="klas" onchange="loadStudents(this.value)" required>
                             @foreach ($classes as $class)
                             <option value="{{$class->id}}">{{$class->name}}</option>
                             @endforeach

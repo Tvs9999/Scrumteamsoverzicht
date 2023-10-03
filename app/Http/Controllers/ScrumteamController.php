@@ -113,10 +113,17 @@ class ScrumteamController extends Controller
     public function addScrumteamPost(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
-            'class_id' => 'required',
+            'name' => 'required|string',
+            'class_id' => 'required|int',
+            'user_id' => 'required|array|min:1',
+        ], [
+            'name.required' => 'Het teamnaam is verplicht',
+            'class_id.required' => 'Het klas moet geselecteerd worden',
+            'user_id.required' => 'De studenten moeten geselecteerd worden',
+            'user_id.min' => 'De studenten moeten geselecteerd worden', // Custom message for minimum validation
+            '*' => 'Deze velden moeten ingevuld worden',
         ]);
-
+        
         $scrumteam = new Scrumteam();
         $scrumteam->name = $request->input('name');
         $scrumteam->class_id = $request->input('class_id');

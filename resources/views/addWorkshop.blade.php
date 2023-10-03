@@ -51,7 +51,7 @@
             <div class="input-row">
                 <div class="input">
                     <label for="datetime">Datum en tijd</label>
-                    <input type="datetime-local" id="datetime" name="datetime">
+                    <input type="datetime-local" id="datetimePicker" name="datetime">
                     @error('datetime')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -85,3 +85,18 @@
     </div>
 </div>
 @endsection
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Create a date object for the current time with the UTC+2 offset
+  const nowUTCPlus2 = new Date();
+  nowUTCPlus2.setHours(nowUTCPlus2.getHours() + 2);
+
+  // Convert the UTC+2 time to an ISO string without milliseconds
+  const currentDateTimeUTCPlus2ISOString = nowUTCPlus2.toISOString().slice(0, 16);
+
+  // Set the min and value attributes of the input to the current UTC+2 time
+  document.getElementById("datetimePicker").min = currentDateTimeUTCPlus2ISOString;
+  document.getElementById("datetimePicker").value = currentDateTimeUTCPlus2ISOString;
+});
+</script>
