@@ -33,14 +33,14 @@ class DashboardController extends Controller
 
             $classesJson = $classes->toJson();
 
-            $workshops = Workshop::where('user_id', Auth::user()->id)->get();
+            $workshops = Workshop::with(['applications'])->where('user_id', Auth::user()->id)->get();
             $questions = Question::with('user.class')->where('status', 0)->get();
 
             return view('dashboard', compact('classesJson', 'workshops', 'questions'));
         } 
         
         elseif (Auth::user()->role === 0){
-            $workshops = Application::with(['workshop'])->where('user_id', Auth::user()->id)->get();
+            $workshops = Application::with(['workshop.user'])->where('user_id', Auth::user()->id)->get();
             $questions = Question::where('user_id', Auth::user()->id)->where('status', 0)->get();
 
             $scrumteam = ScrumteamUser::where('user_id', Auth::user()->id)

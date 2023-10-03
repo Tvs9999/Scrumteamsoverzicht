@@ -82,10 +82,10 @@
             <div class="info">
               @if (Auth::user()->role === 0)    
                 <h5>{{$workshop->workshop->name}}</h5>
-                <p>locatie - datum en tijd - leraar</p>
+                <p></p>
               @elseif (Auth::user()->role === 1)
                 <h5>{{$workshop->name}}</h5>
-                <p>locatie - datum en tijd - leraar</p>
+                <p>{{$workshop->location}} - {{date('H:m, d-m-Y', strtotime($workshop->date))}} - {{count($workshop->applications)}}/{{$workshop->max_pers}}</p>
               @endif
             </div>
           </div>

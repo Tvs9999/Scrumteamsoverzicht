@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <title>Login</title>
     @vite(['resources/scss/app.scss', 'resources/css/app.css', 'resources/js/app.js'])
@@ -20,20 +20,22 @@
                     <div class="bottom"></div>
                 </div>
             </div>
+            @if ($errors->any())
+                <div class="error-message">
+                    @foreach ($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
             <form action="{{ route('login.post') }}" method="POST">
                 @csrf
-                @if(session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
                 <div class="input">
                     <label for="email">E-mailadres</label>
-                    <input type="email" name="email" id="email" placeholder="Vul hier je e-mailadres in..." required>
+                    <input type="email" name="email" id="email" placeholder="Vul hier je e-mailadres in...">
                 </div>
                 <div class="input">
                     <label for="password">Wachtwoord</label>
-                    <input type="password" name="password" id="password" minlength="8" maxlength="20" placeholder="Vul hier je wachtwoord in..." required>
+                    <input type="password" name="password" id="password" placeholder="Vul hier je wachtwoord in...">
                 </div>
                 <button type="submit">Inloggen</button>
             </form>
