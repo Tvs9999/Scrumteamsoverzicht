@@ -1,5 +1,5 @@
 <template>
-  <div v-for="classData in classes" :key="classData.id" class="class" :class="{ 'active': !areAllUsersPresent('class', classData.id) }" :data-id="classData.id">
+  <div v-for="classData in sortedClasses" :key="classData.id" class="class" :class="{ 'active': !areAllUsersPresent('class', classData.id) }" :data-id="classData.id">
     <div class="top">
       <h2>{{ classData.name }}</h2>
       <div class="buttons">
@@ -51,20 +51,27 @@ export default defineComponent({
   props: {
     classes: Array,
   },
+  data() {
+    return {
+      sortedClasses: [],
+    };
+  },
   mounted(){
-    console.log(this.classes);
-  this.classes.sort((classA, classB) => {
+  this.sortedClasses = this.classes.sort((classA, classB) => {
     const usersPresentInClassA = classA.scrumteams.every(team => this.areAllUsersPresent('scrumteam', team.id));
     const usersPresentInClassB = classB.scrumteams.every(team => this.areAllUsersPresent('scrumteam', team.id));
     
     if (usersPresentInClassA && !usersPresentInClassB) {
-      return -1; // classA should come before classB
+      return 1; // classA should come before classB
     } else if (!usersPresentInClassA && usersPresentInClassB) {
-      return 1; // classB should come before classA
+      return -1; // classB should come before classA
     } else {
       return 0; // No change in order
     }
   });
+
+  console.log(this.classes);
+
   },
   methods: {
     areAllUsersPresent(type, id) {
@@ -101,3 +108,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+/* Define your 'active' class styles here */
+.active {
+  /* Your 'active' class styles */
+}
+</style>
