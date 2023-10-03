@@ -63,9 +63,9 @@
           <div id="scrumteams">
             <scrumteamlist
               :classes="{{ $classesJson }}"
-              :scrumteams="{{ $scrumteamsJson }}"
-              :scrumteamuser="{{ $scrumteamUserJson }}"
-              :students="{{ $studentsJson }}"
+              {{-- :scrumteams="{{ $scrumteamsJson }}" --}}
+              {{-- :scrumteamuser="{{ $scrumteamUserJson }}" --}}
+              {{-- :students="{{ $studentsJson }}" --}}
             ></scrumteamlist>
           </div>
         @endif

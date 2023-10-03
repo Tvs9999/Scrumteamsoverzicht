@@ -27,6 +27,6 @@ class Classes extends Model
 
     public function scrumteams(): HasMany 
     {
-        return $this->hasMany(Scrumteam::class);
+        return $this->hasMany(Scrumteam::class, 'class_id');
     }
 }
