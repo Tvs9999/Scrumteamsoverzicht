@@ -11,6 +11,7 @@
 <div id="scrumteams">
     <scrumteamlist :classes="{{ $classesJson }}" :scrumteams="{{ $scrumteamsJson }}" :scrumteamuser="{{ $scrumteamUserJson }}" :students="{{ $studentsJson }}"></scrumteamlist>
 </div>
+<form action="{{ route('addScrumteam')}}"><button>  </form>
 <div class="add-workshop">
     <a href="/addScrumteam"><i class="fa-solid fa-plus"></i></a>
 </div>

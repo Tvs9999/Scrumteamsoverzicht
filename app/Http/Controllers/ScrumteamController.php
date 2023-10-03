@@ -105,7 +105,7 @@ class ScrumteamController extends Controller
             $isInScrumTeam = in_array($student->id, $studentsInScrumTeam);
             $disabledAttribute = $isInScrumTeam ? 'disabled' : '';
             
-            $html .= '<input type="checkbox" value="'.$student->id.'" name="user_id[]" '.$disabledAttribute.'>'.$student->firstname.' '.$student->lastname.'<br>';
+            $html .= '<input required type="checkbox" value="'.$student->id.'" name="user_id[]" '.$disabledAttribute.'>'.$student->firstname.' '.$student->lastname.'<br>';
         }
     
         return $html;

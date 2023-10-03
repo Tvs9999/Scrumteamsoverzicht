@@ -20,7 +20,7 @@
                 @csrf
                 <div class="input">
                     <label for="name">Naam</label>
-                    <input type="text" id="name" name="name" placeholder="Vul hier het scrumteam in" required>
+                    <input type="text" id="name" name="name" placeholder="Vul hier het scrumteam in" minlength="4" required>
                 </div>
                 <div class="input-row">
                     <div class="input">
