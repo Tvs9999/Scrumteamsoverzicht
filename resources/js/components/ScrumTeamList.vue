@@ -51,6 +51,21 @@ export default defineComponent({
   props: {
     classes: Array,
   },
+  mounted(){
+    console.log(this.classes);
+  this.classes.sort((classA, classB) => {
+    const usersPresentInClassA = classA.scrumteams.every(team => this.areAllUsersPresent('scrumteam', team.id));
+    const usersPresentInClassB = classB.scrumteams.every(team => this.areAllUsersPresent('scrumteam', team.id));
+    
+    if (usersPresentInClassA && !usersPresentInClassB) {
+      return -1; // classA should come before classB
+    } else if (!usersPresentInClassA && usersPresentInClassB) {
+      return 1; // classB should come before classA
+    } else {
+      return 0; // No change in order
+    }
+  });
+  },
   methods: {
     areAllUsersPresent(type, id) {
       if (type === 'class') {
