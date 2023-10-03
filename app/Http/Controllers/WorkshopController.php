@@ -69,48 +69,50 @@ class WorkshopController extends Controller
 
     public function addWorkshop()
     {
-        $classNumbers = Classes::select('id' ,'name')->get();
+        $classNumbers = Classes::select('id', 'name')->get();
 
         return view('addWorkshop', compact('classNumbers'));
     }
 
-    public function addWorkshopPost(Request $request){
-        $validatedData = $request->validate([
-            'class' => 'required',
-            'name' => 'required',
-            'description' => 'required',
-            'datetime' => 'required',
-            'duration' => 'required',
+    public function addWorkshopPost(Request $request)
+    {
+        $request->validate([
+            'class' => 'required|int',
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'datetime' => 'required|date_format:Y-m-d\TH:i',
+            'duration' => 'required|string',
             'minPers' => 'required|numeric',
             'maxPers' => 'required|numeric',
-            'location' => 'required',
+            'location' => 'required|string',
+        ], [
+            '*' => 'Dit veld is verplicht in te vullen.'
         ]);
-        
-        if ($validatedData) {
-            // Attempt to save the workshop
-            $workshop = new Workshop();
-            // Populate and save the workshop data
-        
-            $workshop->class_id = $request->class;
-            $workshop->user_id = Auth::user()->id;
-            $workshop->name = $request->name;
-            $workshop->description = $request->description;
-            $workshop->date = $request->datetime;
-            $workshop->duration = $request->duration;
-            $workshop->min_pers = $request->minPers;
-            $workshop->max_pers = $request->maxPers;
-            $workshop->location = $request->location;
-    
-            if ($workshop->save()) {
-                // Workshop saved successfully
-                return back()->with('success', 'Workshop toegevoegd');
-            } else {
-                // Workshop save failed, log or dump errors
-                dd($workshop->errors());
-            }
 
+
+
+        // Attempt to save the workshopA
+        $workshop = new Workshop();
+        $formattedDateTime = date('Y-m-d H:i:s', strtotime($request->datetime));
+
+        // Populate and save the workshop data
+
+        $workshop->class_id = $request->class;
+        $workshop->user_id = Auth::user()->id;
+        $workshop->name = $request->name;
+        $workshop->description = $request->description;
+        $workshop->date = $formattedDateTime;
+        $workshop->duration = $request->duration;
+        $workshop->min_pers = $request->minPers;
+        $workshop->max_pers = $request->maxPers;
+        $workshop->location = $request->location;
+
+        if ($workshop->save()) {
+            // Workshop saved successfully
+            return back()->with('success', 'Workshop toegevoegd');
         } else {
-            return back()->withErrors($validatedData)->withInput();
+            // Workshop save failed, log or dump errors
+            dd($workshop->errors());
         }
     }
 
@@ -118,8 +120,7 @@ class WorkshopController extends Controller
     {
         $workshops = Workshop::where("user_id", $userId)->get();
 
-        if (!empty($workshops))
-        {
+        if (!empty($workshops)) {
             return $workshops;
         }
 
@@ -130,19 +131,18 @@ class WorkshopController extends Controller
     {
         $workshops = Workshop::where('class_id', $classId)->get();
 
-        if (!empty($workshops))
-        {
+        if (!empty($workshops)) {
             return $workshops;
         }
 
         return false;
     }
 
-    public function getApplications($workshopId){
+    public function getApplications($workshopId)
+    {
         $applications = Application::where('workshop_id', $workshopId)->get();
 
-        if (!empty($applications))
-        {
+        if (!empty($applications)) {
             return $applications;
         }
 
@@ -151,20 +151,20 @@ class WorkshopController extends Controller
 
     public function signUp(Request $request)
     {
-         // Attempt to save the workshop
-         $application = new Application();
-         // Populate and save the workshop data
-     
-         $application->workshop_id = $request->workshopId;
-         $application->user_id = $request->userId;
-         
- 
-         if ($application->save()) {
-             // Workshop saved successfully
-             return back()->with('success', 'Succesvol aangemeld');
-         } else {
-             // Workshop save failed, log or dump errors
-             dd($application->errors());
-         }
+        // Attempt to save the workshop
+        $application = new Application();
+        // Populate and save the workshop data
+
+        $application->workshop_id = $request->workshopId;
+        $application->user_id = $request->userId;
+
+
+        if ($application->save()) {
+            // Workshop saved successfully
+            return back()->with('success', 'Succesvol aangemeld');
+        } else {
+            // Workshop save failed, log or dump errors
+            dd($application->errors());
+        }
     }
 }

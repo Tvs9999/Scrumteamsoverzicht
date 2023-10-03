@@ -22,9 +22,7 @@ class Workshop extends Model
         'location',
     ];
 
-    protected $attributes = [
-        'applications' => [], 
-    ];
+
 
     public function class(): BelongsTo 
     {
