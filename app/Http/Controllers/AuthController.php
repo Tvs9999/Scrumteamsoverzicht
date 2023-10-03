@@ -176,7 +176,7 @@ class AuthController extends Controller
         // Update the status in the database
         $member->present = $status;
 
-            $member->save();
+        $member->save();
         
 
 

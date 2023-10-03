@@ -10,7 +10,7 @@
     width: 80px;
     background: $secondary;
     z-index: 9999;
-    transition: .5s ease .1s;
+    transition: width .5s ease .1s;
     overflow: hidden;
 
     .scrumteamsoverzicht{
@@ -21,7 +21,7 @@
         position: absolute;
         top: 15px;
         left: 15px;
-        transition: .3s ease .1s;
+        transition: opacity .3s ease .1s;
         opacity: 0;
     }
 

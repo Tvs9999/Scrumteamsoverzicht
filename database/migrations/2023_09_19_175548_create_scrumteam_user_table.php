@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('scrumteam_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('team_id');
+            $table->unsignedBigInteger('scrumteam_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

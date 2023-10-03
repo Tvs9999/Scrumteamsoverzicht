@@ -43,7 +43,7 @@
             @yield('content')
         </main>
     </div>
-
+    
     <script>
         $(document).ready(function(){
            // Get the current path (URL without the domain)

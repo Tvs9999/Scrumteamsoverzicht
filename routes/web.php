@@ -7,6 +7,11 @@ use App\Http\Controllers\WorkshopController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ScrumteamController;
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\StudentMiddleware;
+
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,37 +23,56 @@ use App\Http\Controllers\ScrumteamController;
 |
 */
 
+// Main router
+Route::get('/', function () {
+    // if (Auth::user()){
+    //     redirect()->route('dashboard');
+    // } else {
+    //     redirect()->route('login');
+    // }
+    return view('login');
+});
 
-// Routes for displaying the login form and handling the login request
+// Routes for not logged in users
+// Route::group(['middleware' => 'guest'], function () {
+// });
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'registerPost'])->name('register');
-
-Route::get('/workshops', [WorkshopController::class, 'workshops'])->name('workshops');
-Route::post('/workshops', [WorkshopController::class, 'signUp'])->name('workshops');
-Route::get('/workshops/applications/{workshopId}', [WorkshopController::class, 'showApplications'])->name('showApplications');
-Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('addWorkshop');
-Route::post('/addWorkshop', [WorkshopController::class, 'addWorkshopPost'])->name('addWorkshop');
 
 Route::get('/activateAcc', [AuthController::class, 'display_activationform'])->name('Activate account');
 Route::post('/activateAcc', [AuthController::class, 'activate_account'])->name('Activate account');
 
+// Routes for logged in users
+// Route::group(['middleware' => 'auth'], function () {
+// });
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');
-// Route for asking a question using POST
-Route::post('/dashboard/ask', [DashboardController::class, 'askQuestion'])->name('askQuestion');
+Route::get('/workshops', [WorkshopController::class, 'workshops'])->name('workshops');
 
-// Route for completing a question using POST
-Route::post('/dashboard/complete', [DashboardController::class, 'completeQuestion'])->name('completeQuestion');
+// Routes for logged in teachers
+Route::group(['middleware' => AdminMiddleware::class], function () {
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/register', [AuthController::class, 'registerPost'])->name('register');
 
-Route::get('/addScrumteam', [ScrumteamController::class, 'scrumteam'])->name('addScrumteam');
+    Route::post('/dashboard/complete', [DashboardController::class, 'completeQuestion'])->name('completeQuestion');
 
-Route::get('/gebruikers', [AuthController::class, 'users'])->name('users');
+    Route::get('/addWorkshop', [WorkshopController::class, 'addWorkshop'])->name('addWorkshop');
+    Route::post('/addWorkshop', [WorkshopController::class, 'addWorkshopPost'])->name('addWorkshop');
+    Route::get('/workshops/applications/{workshopId}', [WorkshopController::class, 'showApplications'])->name('showApplications');
 
-Route::post('/addScrumteam', [ScrumteamController::class, 'addScrumteamPost'])->name('addScrumteam.post');
-Route::get('/fetch-students/{classId}', [ScrumteamController::class,'fetchStudents']);
+    Route::get('/addScrumteam', [ScrumteamController::class, 'scrumteam'])->name('addScrumteam');
+
+    Route::get('/gebruikers', [AuthController::class, 'users'])->name('users');
+
+    Route::post('/addScrumteam', [ScrumteamController::class, 'addScrumteamPost'])->name('addScrumteam.post');
+    Route::get('/fetch-students/{classId}', [ScrumteamController::class,'fetchStudents']);
+});
+
+// Routes for logged in students
+Route::group(['middleware' => StudentMiddleware::class], function () {
+    Route::post('/workshops', [WorkshopController::class, 'signUp'])->name('workshops');
+    Route::post('/dashboard/ask', [DashboardController::class, 'askQuestion'])->name('askQuestion');
+});
 
 
 Route::post('/update-status/{memberId}/{status}', [AuthController::class, 'updateStatus']);

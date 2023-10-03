@@ -1,16 +1,9 @@
 #dashboard{
     background-color: $primary;
-    min-height: 100vh;
+    height: 100vh;
     display: grid;
     grid-template-columns: 1fr 400px;
     position: relative;
-
-    h2{
-        font-size: 25px;
-        font-weight: 300;
-        text-align: center;
-        margin-bottom: 20px;
-    }
 
     .dashboard-content{
         .content-header{
@@ -18,13 +11,162 @@
         }
 
         .dashboard-info{
-            padding: 30px;
-        }
+            .no-team{
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+        
+                p{
+                    color: $light-gray;
+                    font-style: italic;
+                }
+            }
+            
+            #scrumteams{
+                max-height: calc(100vh - 70px);
+                overflow: auto;
+                scrollbar-gutter: stable both-edges;
 
-        h2{
-            margin-bottom: 5px;
-            text-align: left;
-            margin-left: 20px;
+                h2{
+                    font-weight: 300;
+                    font-size: 30px;
+                }
+
+                .top{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 10px 0px;
+
+                    .buttons{
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+                    }
+
+                    .absent, .present{
+                        border: 3px solid;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 10px;
+                        height: 40px;
+                        width: 40px;
+
+                        i{
+                            font-size: 25px;
+                        }
+                    }
+
+                    .absent{
+                        border-color: $light-gray;
+
+                        i{
+                            color: $light-gray;
+                        }
+                    }
+
+                    .present{
+                        border-color: $white;
+                        background-color: $white;
+
+                        i{
+                            color: $primary;
+                        }
+                    }
+
+                    .fold-btn{
+                        transition: transform .3s ease;
+
+                        i{
+                            font-size: 25px;
+                        }
+
+                        &.active{
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
+
+                .class{
+                    border-bottom: 2px solid $white;
+                    padding: 5px 25px;
+
+                    &.active{
+                        .scrumteams{
+                            max-height: 500px;
+                        }
+                    }
+
+                    .scrumteams{
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: .3s ease;
+                    }
+
+                    .scrumteam{
+                        border-radius: 10px;
+                        background-color: $secondary;
+                        margin: 0 20px 20px 20px;
+                        padding: 5px 25px;
+                        
+                        &.active{
+                            .members{
+                                max-height: 500px;
+                            }
+                        }
+  
+                        h3{
+                            font-weight: 300;
+                            font-size: 25px;
+                        }
+                        
+                        .members{
+                            max-height: 0;
+                            overflow: hidden;
+                            transition: .3s ease;
+
+                            .member{
+                                padding: 10px 15px;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+
+                                &.absent{
+                                    p{
+                                        color: $light-gray;
+                                    }
+
+                                    i{
+                                        color: $light-gray;
+                                    }
+                                }
+                            }
+    
+                            .divider{
+                                width: calc(100%);
+                                height: 1px;
+                                background-color: $light-gray;
+                                margin: 0 auto;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        .team-container{
+            h2{
+                margin-bottom: 5px;
+                text-align: left;
+                margin-left: 20px;
+                font-weight: 300;
+                font-size: 25px;
+            }
+
+            padding: 30px;
         }
 
         .team{
@@ -87,6 +229,13 @@
         display: flex;
         flex-direction: column;
 
+        h2{
+            font-size: 25px;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         h5{
             font-size: 18px;
             font-weight: 300;
@@ -107,7 +256,7 @@
             
             .workshops{
                 overflow-y: auto;
-                max-height: calc(100% - 57.6px);               
+                max-height: calc(100% - 50px);               
 
                 .workshop{
                     display: flex;

@@ -1,37 +1,49 @@
 <template>
-  <div>
-    <div v-for="classData in classes" :key="classData.id" class="card mb-4">
-      <div class="card-header">
-        <h2 class="card-title" data-toggle="collapse" :data-target="'#class-' + classData.id">
-          {{ classData.name }}
-        </h2>
+  <div v-for="classData in classes" :key="classData.id" class="class" :class="{'active': !areAllUsersPresent('class', classData.id) || classStates[classData.id]}">
+    <div class="top">
+      <h2>{{ classData.name }}</h2>
+      <div class="buttons">
+        <div :class="{ 'present': areAllUsersPresent('class', classData.id), 'absent': !areAllUsersPresent('class', classData.id) }">
+          <i :class="{ 'fa-solid fa-check': areAllUsersPresent('class', classData.id), 'fa-solid fa-xmark': !areAllUsersPresent('class', classData.id) }"></i>
+        </div>
+        <!-- Bind click event to toggleClassCollapse method for classes -->
+        <div class="fold-btn" :class="{ 'active': classStates[classData.id] }" @click="toggleClassCollapse('class', classData.id)">
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
       </div>
-      <div :id="'class-' + classData.id" :class="{ 'collapse': !allMembersPresent(classData.id) }">
-        <ul class="list-group list-group-flush">
-          <li v-for="team in getTeamsByClass(classData.id)" :key="team.id" class="list-group-item">
-            <h4 class="card-title" data-toggle="collapse" :data-target="'#team-' + team.id">
-              {{ team.name }}
-              <a :href="'/archive-scrumteam/' + team.id">
-                <i class="fa-solid fa-table-columns"></i>
-              </a>
-              <i :class="getClassIcon(team.id)"></i>
-            </h4>
-
-            <div :id="'team-' + team.id" :class="{ 'collapse': !allMembersPresent(team.id) }">
-              <ul class="list-unstyled">
-                <li v-for="teamUser in getTeamUsers(team.id)" :key="teamUser.id">
-                  <i
-                    :class="{ 'fas fa-check text-success': teamUser.student.present === 1, 'fas fa-times text-danger': teamUser.student.present === 0 }"></i>
-                  {{ teamUser.student.firstname }}
-                </li>
-              </ul>
+    </div>
+    <div class="scrumteams">
+      <div v-for="team in classData.scrumteams" :key="team.id" class="scrumteam" :class="{'active': !areAllUsersPresent('scrumteam', team.id) || scrumteamStates[classData.id][team.id]}">
+        <div class="top">
+          <h3>{{ team.name }}</h3>
+          <div class="buttons">
+            <div :class="{ 'present': areAllUsersPresent('scrumteam', team.id), 'absent': !areAllUsersPresent('scrumteam', team.id) }">
+              <i :class="{ 'fa-solid fa-check': areAllUsersPresent('class', classData.id), 'fa-solid fa-xmark': !areAllUsersPresent('class', classData.id) }"></i>
             </div>
-          </li>
-        </ul>
+            <!-- Bind click event to toggleClassCollapse method for scrumteams -->
+            <div class="fold-btn" :class="{ 'active': scrumteamStates[classData.id][team.id] }" @click="toggleClassCollapse('scrumteam', team.id, classData.id)">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+        </div>
+        <div class="members">
+          <div v-for="(teamUser, userIndex) in team.users" :key="teamUser.id">
+            <div class="member" :class="{ 'absent': teamUser.user.present === 0}">
+              <i
+                :class="{ 'fas fa-check': teamUser.user.present === 1, 'fas fa-times': teamUser.user.present === 0 }"
+              ></i>
+              <p>{{ teamUser.user.firstname }}</p>
+            </div>
+            <!-- Conditionally render the divider if this is not the last teamUser -->
+            <div v-if="userIndex < team.users.length - 1" class="divider"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
+
 
 <script>
 import { defineComponent } from 'vue';
@@ -40,50 +52,83 @@ export default defineComponent({
   name: 'ScrumTeamList',
   props: {
     classes: Array,
-    scrumteams: Array,
-    scrumteamuser: Array,
-    students: Array,
+    // scrumteams: Array,
+    // scrumteamuser: Array,
+    // students: Array,
+  },
+  data() {
+    return {
+      classStates: {},
+      scrumteamStates: {},
+    };
   },
   mounted() {
-    // console.log 'Classes prop:', this.classes
+    if (this.classes) {
+      this.classes.forEach(classData => {
+        console.log('classData:', classData); // Log classData to check its structure
+        this.classStates[classData.id] = false; // Initially closed
+
+        // Initialize scrumteamStates for each class
+        this.scrumteamStates[classData.id] = {};
+        classData.scrumteams.forEach(team => {
+          console.log('team:', team); // Log team to check its structure
+          this.scrumteamStates[classData.id][team.id] = false; // Initially closed for each scrum team
+        });
+      });
+    }
   },
   methods: {
-    allMembersPresent(teamId) {
-      // Get all scrum teams for the current class
-      const memberIds = this.scrumteamuser.filter(team => team.scrumteam_id === teamId);
+    areAllUsersPresent(type, id) {
+      if (type === 'class') {
+        const classData = this.classes.find(classData => classData.id === id);
+        if (classData) {
+          return classData.scrumteams.every(scrumTeam =>
+            scrumTeam.users.every(user => user.user.present === 1)
+          ); 
+        }
+      } else if (type === 'scrumteam') {
+        const scrumTeam = this.classes
+          .flatMap(classData => classData.scrumteams)
+          .find(team => team.id === id);
 
-      // Check if not all members of all scrum teams have present equal to 1
-      const notAllMembersPresent = !memberIds.every(userId => {
-        const user = this.students.find(student => student.id === userId.user_id);
-        return user && user.present === 1;
-      });
+        if (scrumTeam) {
+          return scrumTeam.users.every(user => user.user.present === 1);
+        }
+      }
 
-      return notAllMembersPresent;
+      return false;
     },
-    getClassIcon(teamId) {
-      // Determine the icon class based on the check
-      return this.allMembersPresent(teamId) ? 'fa-solid fa-xmark text-danger' : 'fa-solid fa-check-circle text-success';
-    },
-    getTeamsByClass(classId) {
-      // Filter scrum teams based on the class ID
-      return this.scrumteams.filter(a => a.class_id === classId);
-    },
-    getTeamUsers(teamId) {
-      // Filter team users based on the team ID
-      const teamMembers = this.scrumteamuser
-        .filter(user => user.scrumteam_id === teamId)
-        .map(user => {
-          // Find the corresponding student data based on user_id
-          const student = this.students.find(student => student.id === user.user_id);
-          return {
-            // Include relevant user and student data in the result
-            user,
-            student,
-          };
-        });
 
-      return teamMembers;
+
+    // ... other methods ...
+    toggleClassCollapse(type, id, classId) {
+      console.log('Toggle clicked for', type, id);
+      if (type === 'class') {
+        // Toggle the class state
+        this.classStates[id] = !this.classStates[id];
+      } else if (type === 'scrumteam') {
+        // Toggle the scrumteam state for the specific class and team
+        this.scrumteamStates[classId][id] = !this.scrumteamStates[classId][id];
+      }
+      console.log('Updated classStates:', this.classStates);
+      console.log('Updated scrumteamStates:', this.scrumteamStates);
     },
-  },
+  }
+
+
+    //   return notAllMembersPresent;
+    // },
+    // getClassIcon(teamId) {
+    //   // Determine the icon class based on the check
+    //   return this.allMembersPresent(teamId) ? 'fa-solid fa-xmark text-danger' : 'fa-solid fa-check-circle text-success';
+    // },
+    // getTeamsByClass(classId) {
+    //   // Filter scrum teams based on the class ID
+    //   return this.scrumteams.filter(a => a.class_id === classId);
+    // },
+    // getTeamUsers(teamId) {
+    //   // Filter team users based on the team ID
+    //   return this.scrumteamuser.filter(user => user.scrumteam_id === teamId);
+    // },
 });
 </script>

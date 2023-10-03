@@ -17,7 +17,7 @@ class ScrumteamUser extends Model
         'user_id',
     ];
 
-    public function class(): BelongsTo 
+    public function scrumteam(): BelongsTo 
     {
         return $this->belongsTo(Scrumteam::class);
     }
