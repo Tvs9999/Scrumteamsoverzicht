@@ -20,6 +20,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        if(!isset(Auth::user()->role))
+        {
+            return redirect('login');
+        }
         if (Auth::user()->role === 1){
             // $scrumteams = Scrumteam::where('status', 0)->get();
             // $classedWithTeams = $scrumteams->pluck('class_id'); 

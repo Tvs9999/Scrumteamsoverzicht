@@ -34,11 +34,11 @@
                 <div class="input-row">
                     <div class="input">
                         <label for="first_name">Voornaam</label>
-                        <input type="text" name="first_name" id="first_name" placeholder="Voornaam" required>
+                        <input type="text" name="first_name" id="first_name" placeholder="Voornaam" minlength="2" required>
                     </div>
                     <div class="input">
                         <label for="last_name">Achternaam</label>
-                        <input type="text" name="last_name" id="last_name" placeholder="Achternaam" required>
+                        <input type="text" name="last_name" id="last_name" placeholder="Achternaam" minlength="2" required>
                     </div>
                 </div>
                 <div class="input">
