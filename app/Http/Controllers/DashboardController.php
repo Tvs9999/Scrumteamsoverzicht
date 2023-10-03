@@ -25,48 +25,13 @@ class DashboardController extends Controller
             return redirect('login');
         }
         if (Auth::user()->role === 1){
-            // $scrumteams = Scrumteam::where('status', 0)->get();
-            // $classedWithTeams = $scrumteams->pluck('class_id'); 
-            // $classes = Classes::whereIn('id', $classedWithTeams)->get()->toArray();
-            // $scrumteamUser = ScrumteamUser::all()->toArray();
-    
-            // $scrumteamUserIds = ScrumteamUser::pluck('user_id')->toArray();
-            // $students = User::whereIn('id', $scrumteamUserIds)->get()->toArray();
-    
-            // $classesJson = json_encode($classes);
-            // $scrumteamsJson = json_encode($scrumteams);
-            // $scrumteamUserJson = json_encode($scrumteamUser);
-            // $studentsJson = json_encode($students);
-
-            // $scrumteams = Scrumteam::where('status', 0)->get();
-            // $classIds = $scrumteams->pluck('class_id')->toArray();
-
-            // Get classes that have scrum teams
-            // $classes = Classes::whereIn('id', $classIds)->get();
-
-            // Get all scrum team users
-            // $scrumteamUser = ScrumteamUser::with('user')->get();
-
-            // Get user IDs of all scrum team users
-            // $scrumteamUserIds = $scrumteamUser->pluck('user_id')->toArray();
-
-            // Get student users
-            // $students = User::whereIn('id', $scrumteamUserIds)->get();
-
             $classes = Classes::whereHas('scrumteams', function ($query) {
                 $query->where('status', 0);
             })
             ->with('scrumteams.users.user')
             ->get();
 
-            // echo '<pre>';
-            // print_r($classes);
-            // echo '</pre>';
-            // die;
             $classesJson = $classes->toJson();
-            // $scrumteamsJson = $scrumteams->toJson();
-            // $scrumteamUserJson = $scrumteamUser->toJson();
-            // $studentsJson = $students->toJson();
 
             $workshops = Workshop::where('user_id', Auth::user()->id)->get();
             $questions = Question::with('user.class')->where('status', 0)->get();

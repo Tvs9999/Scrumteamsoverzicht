@@ -60,7 +60,7 @@
         @endif
 
         @elseif (Auth::user()->role === 1)
-          <div id="scrumteams">
+          <div id="scrumteamsList">
             <scrumteamlist
               :classes="{{ $classesJson }}"
               {{-- :scrumteams="{{ $scrumteamsJson }}" --}}

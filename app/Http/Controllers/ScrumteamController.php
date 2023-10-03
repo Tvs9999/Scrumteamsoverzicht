@@ -22,21 +22,15 @@ class ScrumteamController extends Controller
             $includeArchived = true;
         }
 
-        $scrumteamsQuery = $includeArchived ? Scrumteam::where('status', 1)->get() : Scrumteam::where('status', 0)->get();
-        $scrumteams = $scrumteamsQuery->toArray();
-
-        $classedWithTeams = Scrumteam::pluck('class_id'); 
-        $classes = Classes::whereIn('id', $classedWithTeams)->get()->toArray();        
-        $scrumteamUser = ScrumteamUser::all()->toArray();
-        $scrumteamUserIds = ScrumteamUser::pluck('user_id')->toArray();
-        $students = User::whereIn('id', $scrumteamUserIds)->get()->toArray();
+        $classes = Classes::whereHas('scrumteams', function ($query) {
+            $query->where('status', 0);
+        })
+        ->with('scrumteams.users.user')
+        ->get();
 
         $classesJson = json_encode($classes);
-        $scrumteamsJson = json_encode($scrumteams);
-        $scrumteamUserJson = json_encode($scrumteamUser);
-        $studentsJson = json_encode($students);
 
-        return view('scrumgroepen', compact('classesJson', 'scrumteamsJson', 'scrumteamUserJson', 'studentsJson'));
+        return view('scrumgroepen', compact('classesJson'));
     }
 
     public function archiveScrumteam($id)

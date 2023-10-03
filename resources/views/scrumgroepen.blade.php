@@ -9,22 +9,26 @@
 @endif
 
 <div id="scrumteams">
-    <scrumteamlist :classes="{{ $classesJson }}" :scrumteams="{{ $scrumteamsJson }}" :scrumteamuser="{{ $scrumteamUserJson }}" :students="{{ $studentsJson }}"></scrumteamlist>
-</div>
-<form action="{{ route('addScrumteam')}}"><button>  </form>
-<div class="add-workshop">
-    <a href="/addScrumteam"><i class="fa-solid fa-plus"></i></a>
-</div>
+    <div class="content-header">
+        <h1>Scrumteams</h1>
+    </div>
+    <div id="scrumteamsList">
+        <scrumteamlist :classes="{{ $classesJson }}"></scrumteamlist>
+    </div>
+
+    <div class="add-scrumteam">
+        <a href="/addScrumteam"><i class="fa-solid fa-plus"></i></a>
+    </div>
 </div>
 
-<form method="GET" action="{{ route('scrumteams') }}">
+{{-- <form method="GET" action="{{ route('scrumteams') }}">
     @csrf
     <button type="submit" name="actief_button">Actief</button>
 </form>
 <form method="GET" action="{{ route('scrumteams') }}">
     @csrf
     <button type="submit" name="archive_button">Archief</button>
-</form>
+</form> --}}
 
 @endsection
 

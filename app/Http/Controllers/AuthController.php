@@ -153,10 +153,6 @@ class AuthController extends Controller
 
     public function users()
     {
-        if (Auth::user()->role !== 1) {
-            return redirect('login');
-        }
-
         $users = User::with('class')->orderBy('role')->get();
 
         return view('users', compact('users'));
