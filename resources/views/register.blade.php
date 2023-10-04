@@ -15,7 +15,7 @@
             @csrf
             <div class="input">
                 <label for="email">Email address</label>
-                <input type="email" name="email" id="email" placeholder="Vul hier het e-mailadres in..." required>
+                <input type="email" name="email" id="email" placeholder="Vul hier het e-mailadres in..." maxlength="40" required>
             </div>
             @error('email')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -47,7 +47,7 @@
             @enderror
             <div class="input d-none" id="new-class-input">
                 <label for="new_class_number">Nieuw Klasnummer</label>
-                <input type="text" name="new_class_number" id="new_class_number" placeholder="Enter new class number">
+                <input type="text" name="new_class_number" id="new_class_number" placeholder="Enter new class number" maxlength="15">
             </div>
             
             <button>Account aanmaken</button>
