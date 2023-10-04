@@ -16,14 +16,14 @@
             @csrf
             <div class="input">
                 <label for="name">Naam</label>
-                <input type="text" id="name" name="name" placeholder="Vul hier de naam van de workshop in...">
+                <input type="text" id="name" name="name" placeholder="Vul hier de naam van de workshop in..." maxlength="30">
                 @error('name')
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="input">
                 <label for="description">Beschrijving</label>
-                <textarea id="description" name="description" placeholder="Geef de workshop een beschrijving..."></textarea>
+                <textarea id="description" name="description" placeholder="Geef de workshop een beschrijving..." maxlength="50"></textarea>
                 @error('description')
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
@@ -42,7 +42,7 @@
                 </div>
                 <div class="input">
                     <label for="location">Locatie</label>
-                    <input type="text" id="location" name="location" placeholder="Vul hier de locatie van de workshop in...">
+                    <input type="text" id="location" name="location" placeholder="Vul hier de locatie van de workshop in..." maxlength="15">
                     @error('location')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -58,7 +58,7 @@
                 </div>
                 <div class="input">
                     <label for="duration">Duur</label>
-                    <input type="text" id="duration" name="duration" placeholder="Vul hier de duur van de workshop in...">
+                    <input type="text" id="duration" name="duration" placeholder="Vul hier de duur van de workshop in..." maxlength="15">
                     @error('duration')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -67,14 +67,14 @@
             <div class="input-row">
                 <div class="input">
                     <label for="minPers">Min. aanmeldingen</label>
-                    <input type="number" id="minPers" name="minPers" placeholder="1">
+                    <input type="number" id="minPers" name="minPers" placeholder="1" min="0" max="30">
                     @error('minPers')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="input">
                     <label for="maxPers">Max. aanmeldingen</label>
-                    <input type="number" id="maxPers" name="maxPers" placeholder="2">
+                    <input type="number" id="maxPers" name="maxPers" placeholder="2" max="50">
                     @error('maxPers')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
