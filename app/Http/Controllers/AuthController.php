@@ -26,14 +26,13 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'password' => 'required|string|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/', // Example validation rule for password (minimum 8 characters)
             // Add any other validation rules for your fields here
         ], [
             'email.required' => 'Het e-mailveld is verplicht',
             'password.required' => 'Het wachtwoordveld is verplicht',
             'password.regex' => 'Het wachtwoord moet ten minste 8 tekens bevatten, waaronder minimaal 1 kleine letter, 1 hoofdletter, 1 cijfer en 1 speciaal teken',
-            '*' => 'Gegevens zijn onjuist',
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -48,7 +47,7 @@ class AuthController extends Controller
             return redirect()->intended(route('Dashboard'));
         }
         #error als de combinatie niet klopt
-        return back()->with('error', 'Gegevens zijn onjuist');
+        return back()->withErrors(['error' => 'Gegevens zijn onjuist']);
     }
 
     public function register()
