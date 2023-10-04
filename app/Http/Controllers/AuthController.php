@@ -65,9 +65,20 @@ class AuthController extends Controller
 
         $validatedData = $request->validate([
             'email' => 'required|email|unique:users', // Example validation rules for email
+            'rol' => 'required',
             'klas' => 'required',
+        ], [
+            'email.required' => 'Het e-mailadres is verplicht',
+            'rol.required' => 'De rol moet geselecteerd worden',
+            'klas.required' => 'De klas moeten nog geselecteerd worden',
+            'new_class_number.required' => 'Nieuwe klasnummer moet nog toegevoegd worden',
+            '*' => 'Deze velden moeten ingevuld worden',
         ]);
+
+
+        
         $classNumber = $validatedData['klas'];
+
         $class = Classes::firstOrNew(['name' => $classNumber]);
         if (!$class->exists) {
             $class->name = $request->new_class_number;
@@ -85,22 +96,28 @@ class AuthController extends Controller
         $user->class_id = $class->id;
         $user->activation_key = $guid;
 
-        $user->save();
-
-        if ($user->rol === 0) {
-            $rol = "student";
-        } else {
-            $rol = "docent";
+        if($user->save()){
+            if ($user->rol === 0) {
+                $rol = "student";
+            } else {
+                $rol = "docent";
+            }
+        
+            try {
+                $this->Sendmail($user->email, $user->activation_key, $rol);
+                Log::info('Email sent successfully to ' . $user->email);
+        
+                return back()->with('success', 'Er is een account gemaakt, degene krijgt een mail waar hij zijn account kan activeren!');
+            } catch (\Exception $e) {
+                Log::error('Email sending failed: ' . $e->getMessage());
+        
+                return back()->with('error', 'Er is een account gemaakt, maar er is een fout opgetreden bij het versturen van de activatiemail.');
+            }
+        }else {
+            dd($user->errors());
         }
-
-        try {
-            $this->Sendmail($user->email, $user->activation_key, $rol);
-            Log::info('Email sent successfully to ' . $user->email);
-        } catch (\Exception $e) {
-            Log::error('Email sending failed: ' . $e->getMessage());
-        }
-
-        return back()->with('succes', 'Register succesful');
+        
+        
     }
     public function display_activationform(Request $request)
     {
