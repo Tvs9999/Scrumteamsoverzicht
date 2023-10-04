@@ -82,7 +82,7 @@
             <div class="info">
               @if (Auth::user()->role === 0)    
                 <h5>{{$workshop->workshop->name}}</h5>
-                <p></p>
+                <p>{{$workshop->workshop->location}} - {{date('H:m, d-m-Y', strtotime($workshop->workshop->date))}} - {{count($workshop->workshop->applications)}}/{{$workshop->workshop->max_pers}}</p>
               @elseif (Auth::user()->role === 1)
                 <h5>{{$workshop->name}}</h5>
                 <p>{{$workshop->location}} - {{date('H:m, d-m-Y', strtotime($workshop->date))}} - {{count($workshop->applications)}}/{{$workshop->max_pers}}</p>
