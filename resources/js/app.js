@@ -8,6 +8,8 @@ if (scrumteams){
 const app = createApp({});
 
 app.component('scrumteamlist', ScrumTeamList);
-
 app.mount('#scrumteamsList');
+
+// app.component('archivedScrumteamlist', ScrumTeamList);
+// app.mount('#archivedScrumteamsList');
 }

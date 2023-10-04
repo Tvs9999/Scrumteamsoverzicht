@@ -11,13 +11,16 @@
         @include add-button();
     }
 
+    .workshops-container{
+        height: calc(100vh - 70px);
+        overflow: auto;
+        padding: 30px;
+    }
+
     .workshops{
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 30px;
-        padding: 30px;
-        height: calc(100vh - 70px);
-        overflow: auto;
 
         .workshop{
             background: $secondary;

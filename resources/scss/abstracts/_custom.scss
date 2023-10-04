@@ -284,6 +284,17 @@ i{
             display: flex;
             align-items: center;
             gap: 20px;
+
+            form{
+                button{
+                    background-color: transparent;
+                    border: none;
+
+                    i{
+                        font-size: 35px;
+                    }
+                }
+            }
         }
 
         .absent, .present{
@@ -326,6 +337,10 @@ i{
 
             &.active{
                 transform: rotate(180deg);
+            }
+
+            &:hover{
+                cursor: pointer;
             }
         }
     }

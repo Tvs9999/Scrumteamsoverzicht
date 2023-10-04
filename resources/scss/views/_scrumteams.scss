@@ -7,13 +7,35 @@
     }
 
     #scrumteamsList{
-        max-height: calc(100vh - 70px);
+        height: calc(100vh - 70px);
         overflow: auto;
         scrollbar-gutter: stable both-edges;
+        position: relative;
     
         h2{
             font-weight: 300;
             font-size: 30px;
+        }
+
+        .activeClasses, .archivedClasses{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            
+            
+            &.active{
+                display: block;
+            }
+        }
+
+        .activeClasses{
+            background-color: red;
+        }
+
+        .archivedClasses{
+            background-color: blue;
         }
     
         @include scrumteamList();

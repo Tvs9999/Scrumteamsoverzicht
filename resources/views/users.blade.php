@@ -13,6 +13,7 @@
     @if (count($users) > 0)
         <div class="users">
             @foreach ($users as $user)
+            @if (!empty($user->password))
                 <div class="user">
                     <div class="info">
                         <p class="name">{{$user->firstname}} {{$user->lastname}}</p>
@@ -40,6 +41,14 @@
                         
                     @endif
                 </div>
+            @else
+                <div class="user">
+                    <p>Test@gmail.com</p>
+                    <div class="clock">
+                        <i class="fa-regular fa-clock"></i>
+                    </div> 
+                </div>
+            @endif
             @endforeach    
         </div>
     @else

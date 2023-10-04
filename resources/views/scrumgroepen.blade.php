@@ -13,22 +13,26 @@
         <h1>Scrumteams</h1>
     </div>
     <div id="scrumteamsList">
-        <scrumteamlist :classes="{{ $classesJson }}"></scrumteamlist>
+        
+        <div class="activeClasses">
+
+            <scrumteamlist 
+                :classes="{{ $activeClassesJson }}" 
+                {{-- :archive="{{ $archive }}" --}}
+            ></scrumteamlist>
+        </div>
+        <div class="archivedClasses">
+            <scrumteamlist 
+                :classes="{{ $archivedClassesJson }}" 
+                {{-- :archive="{{ $archive }}" --}}
+            ></scrumteamlist>
+        </div>
     </div>
 
     <div class="add-scrumteam">
         <a href="/addScrumteam"><i class="fa-solid fa-plus"></i></a>
     </div>
 </div>
-
-{{-- <form method="GET" action="{{ route('scrumteams') }}">
-    @csrf
-    <button type="submit" name="actief_button">Actief</button>
-</form>
-<form method="GET" action="{{ route('scrumteams') }}">
-    @csrf
-    <button type="submit" name="archive_button">Archief</button>
-</form> --}}
 
 @endsection
 

@@ -16,21 +16,29 @@ class ScrumteamController extends Controller
     {
         $includeArchived = false;
 
-        // Check if the "archive" button is pressed
-        if ($request->has('archive_button')) {
-            // Include archived scrum teams
-            $includeArchived = true;
-        }
-
-        $classes = Classes::whereHas('scrumteams', function ($query) {
+        $activeClasses = Classes::whereHas('scrumteams', function ($query) {
             $query->where('status', 0);
         })
         ->with('scrumteams.users.user')
         ->get();
 
-        $classesJson = json_encode($classes);
+        $archivedClasses = Classes::whereHas('scrumteams', function ($query) {
+            $query->where('status', 1);
+        })
+        ->with('scrumteams.users.user')
+        ->get();
 
-        return view('scrumgroepen', compact('classesJson'));
+        $activeClassesJson = json_encode($activeClasses);
+
+        
+        $archivedClassesJson = json_encode($archivedClasses);
+        // echo '<pre>';
+        // print_r($archivedClassesJson);
+        // echo '</pre>';
+        // die;
+        $archive = true;
+
+        return view('scrumgroepen', compact('activeClassesJson', 'archivedClassesJson', 'archive'));
     }
 
     public function archiveScrumteam($id)
@@ -40,10 +48,14 @@ class ScrumteamController extends Controller
 
         // Archive the scrum team
         $scrumteam->status = 1;
-        $scrumteam->save();
+        if($scrumteam->save()){
+            // Redirect back to the scrum teams page with a success message
+            return redirect()->route('scrumteams')->with('success', 'Scrum team archived successfully.');
+        }
 
-        // Redirect back to the scrum teams page with a success message
-        return redirect()->route('scrumteams')->with('status', 'Scrum team archived successfully.');
+        return back()->with('error', 'Scrumteam archiveren mislukt');
+        
+
     }
 
     public function scrumteam()
