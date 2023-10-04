@@ -32,13 +32,8 @@ class ScrumteamController extends Controller
 
         
         $archivedClassesJson = json_encode($archivedClasses);
-        // echo '<pre>';
-        // print_r($archivedClassesJson);
-        // echo '</pre>';
-        // die;
-        $archive = true;
 
-        return view('scrumgroepen', compact('activeClassesJson', 'archivedClassesJson', 'archive'));
+        return view('scrumgroepen', compact('activeClassesJson', 'archivedClassesJson'));
     }
 
     public function archiveScrumteam($id)
@@ -50,7 +45,7 @@ class ScrumteamController extends Controller
         $scrumteam->status = 1;
         if($scrumteam->save()){
             // Redirect back to the scrum teams page with a success message
-            return redirect()->route('scrumteams')->with('success', 'Scrum team archived successfully.');
+            return redirect()->route('scrumteams')->with('success', 'Scrumteam gearchiveerd.');
         }
 
         return back()->with('error', 'Scrumteam archiveren mislukt');

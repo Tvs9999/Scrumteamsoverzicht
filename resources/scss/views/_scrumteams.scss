@@ -4,11 +4,54 @@
 
     .content-header{
         @include content-header();
+        display: flex;
+        justify-content: space-between;
+
+        .tabs{
+            display: flex;
+            align-items: center;
+
+            .divider{
+                height: 30px;
+                width: 1px;
+                background-color: $light-gray;
+                margin: 0 20px;
+            }
+
+            .tab{
+                color: $white;
+                font-family: "Raleway", sans-serif;
+                font-size: 18px;
+                position: relative;
+
+                &::after{
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    left: -7px;
+                    bottom: -3px;
+                    height: 1px;
+                    background-color: $accent;
+                    transition: width .3s ease;
+                }
+
+                &.active{
+                    &::after{
+                        width: calc(100% + 14px);
+                    }
+                }
+
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+        }
     }
 
     #scrumteamsList{
         height: calc(100vh - 70px);
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
         scrollbar-gutter: stable both-edges;
         position: relative;
     
@@ -17,25 +60,18 @@
             font-size: 30px;
         }
 
-        .activeClasses, .archivedClasses{
+        .content{
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 9999;
-            
+            display: none;
+            animation: fade 1s ease;
             
             &.active{
                 display: block;
             }
-        }
-
-        .activeClasses{
-            background-color: red;
-        }
-
-        .archivedClasses{
-            background-color: blue;
         }
     
         @include scrumteamList();
@@ -43,5 +79,16 @@
 
     .add-scrumteam{
         @include add-button();
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+        left: 20px;
+    }
+    to {
+        opacity: 1;
+        left: 0;
     }
 }
