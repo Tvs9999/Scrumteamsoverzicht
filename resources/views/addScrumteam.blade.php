@@ -26,6 +26,7 @@
                     <div class="input">
                         <label for="class">Klas</label>
                         <select name="class_id" id="klas" onchange="loadStudents(this.value)" required>
+                            <option value="" disabled selected>Selecteer een klas</option>
                             @foreach ($classes as $class)
                             <option value="{{$class->id}}">{{$class->name}}</option>
                             @endforeach
@@ -38,7 +39,7 @@
                     <div class="input">
                         <label for="students">Leerlingen</label>
                     </div>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="addStudentsButton" disabled>
                         Voeg leerlingen toe
                     </button>
                     @error('user_id')
@@ -53,7 +54,6 @@
                                 <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Voeg leerlingen toe</h5>
                             </div>
                             <div class="modal-body">
-                                <input name="findstudent" placeholder="Zoek een leerling"><br><br>
                                 @foreach ($users as $user)
                                 <input type="checkbox" value="{{$user->id}}" name="user_id[]"> {{$user->firstname}} {{$user->lastname}}<br>
                                 @endforeach
@@ -78,7 +78,9 @@
 <script>
     function loadStudents(classId) {
         // Send an AJAX request to fetch students based on classId
-        $.ajax({
+        if (classId) {
+            document.getElementById("addStudentsButton").removeAttribute("disabled");
+            $.ajax({
             type: 'GET',
             url: '/fetch-students/' + classId, // Replace with the actual URL to fetch students
             success: function(data) {
@@ -86,5 +88,9 @@
                 $('.modal-body').html(data);
             }
         });
+        } else {
+            document.getElementById("addStudentsButton").setAttribute("disabled", "disabled");
+        }
+        
     }
 </script>
