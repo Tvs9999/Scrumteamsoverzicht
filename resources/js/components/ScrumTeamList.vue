@@ -17,7 +17,8 @@
         <div class="top">
           <h3>{{ team.name }}</h3>
           <div class="buttons">
-            <form v-if="archive" action="{{ route('archive-scrumteam') }}">
+            <form v-if="archive" :action="'/archive-scrumteam/' + team.id" method="POST">
+              <input type="hidden" name="_token" :value="csrf">
               <input type="hidden" :value="team.id">
               <button type="submit"><i class="fa-solid fa-boxes-packing"></i></button>
             </form>
@@ -59,6 +60,7 @@ export default defineComponent({
   data() {
     return {
       sortedClasses: [],
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     };
   },
   mounted(){
@@ -113,10 +115,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style>
-/* Define your 'active' class styles here */
-.active {
-  /* Your 'active' class styles */
-}
-</style>
