@@ -31,6 +31,9 @@
                             @endforeach
                         </select>
                     </div></div>
+                    @error('class_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                     <input hidden value="{{$scrumteamid}}" name="team_id">
                     <div class="input">
                         <label for="students">Leerlingen</label>
@@ -38,6 +41,9 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                         Voeg leerlingen toe
                     </button>
+                    @error('user_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                     
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

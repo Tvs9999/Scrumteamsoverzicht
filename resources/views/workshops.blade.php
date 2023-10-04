@@ -42,7 +42,7 @@
                                         <div class="divider"></div>
                                         <p>{{ date('H:m, d-m-Y', strtotime($workshop->date))}}</p>
                                         <div class="divider"></div>
-                                        <p>aantal personen</p>
+                                        <p>{{count($workshop->applications)}}/{{$workshop->max_pers}}</p>
                                     </div>
                                 </div>
                             </div>

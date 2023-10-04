@@ -65,8 +65,16 @@ class AuthController extends Controller
 
         $validatedData = $request->validate([
             'email' => 'required|email|unique:users', // Example validation rules for email
+            'rol' => 'required',
             'klas' => 'required',
+
+        ], [
+            'email.required' => 'Het e-mailadres is verplicht',
+            'rol.required' => 'De rol moet geselecteerd worden',
+            'klas.required' => 'De klas moeten nog geselecteerd worden',
+            '*' => 'Deze velden moeten ingevuld worden',
         ]);
+        
         $classNumber = $validatedData['klas'];
         $class = Classes::firstOrNew(['name' => $classNumber]);
         if (!$class->exists) {
