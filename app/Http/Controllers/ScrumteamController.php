@@ -57,7 +57,7 @@ class ScrumteamController extends Controller
         }
 
         //studentgegevens van de usertable
-        $users = DB::table('users')->where('role','=','0')->get();
+        $users = DB::table('users')->where('role','=','0')->where('password','!=','Null')->get();
         foreach($users as $user)
         {
             $classid = $user->class_id;
@@ -82,6 +82,7 @@ class ScrumteamController extends Controller
         // Fetch students based on the $classId
         $students = DB::table('users')
             ->where('role', '=', '0')
+            ->where('password','!=','Null')
             ->where('class_id', '=', $classId)
             ->get();
     
