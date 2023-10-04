@@ -124,7 +124,7 @@
           @endforeach
         @else
           <div class="no-info">
-            <p>Geen workshops gevonden</p>
+            <p>Geen vragen gevonden</p>
           </div>
         @endif
       </div>

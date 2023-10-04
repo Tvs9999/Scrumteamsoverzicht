@@ -77,15 +77,23 @@ class WorkshopController extends Controller
     public function addWorkshopPost(Request $request)
     {
         $request->validate([
-            'class' => 'required|int',
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'datetime' => 'required|date_format:Y-m-d\TH:i',
-            'duration' => 'required|string',
-            'minPers' => 'required|numeric',
-            'maxPers' => 'required|numeric',
-            'location' => 'required|string',
+            'class' => 'required|numeric|exists:classes,id',
+            'name' => 'required|max:255',
+            'datetime' => 'required|date_format:Y-m-d\TH:i|after_or_equal:now',
+            'duration' => 'required|max:255',
+            'minPers' => 'required|numeric|min:1',
+            'maxPers' => 'required|numeric|gte:minPers|min:1',
+            'location' => 'required|max:255',
         ], [
+            'datetime.date_format' => 'Onjuist format',
+            'datetime.after_or_equal' => 'Vul een datum in de toekomst in',
+            'minPers.min' => 'maxVul 1 of hoger in',
+            'minPers.min' => 'Vul 1 of hoger in',
+            'class.exists' => 'Deze klas bestaat niet',
+            'maxPers.gte' => 'Max. aanmeldingen moet meer zijn dan Min. aanmeldingen',
+            'name.max' => 'Maximaal 255 karakters',
+            'duration.max' => 'Maximaal 255 karakters',
+            'location.max' => 'Maximaal 255 karakters',
             '*' => 'Dit veld is verplicht in te vullen.'
         ]);
 
