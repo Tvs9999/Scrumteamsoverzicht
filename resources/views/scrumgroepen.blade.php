@@ -13,7 +13,10 @@
         <h1>Scrumteams</h1>
     </div>
     <div id="scrumteamsList">
-        <scrumteamlist :classes="{{ $classesJson }}"></scrumteamlist>
+        <scrumteamlist 
+            :classes="{{ $classesJson }}" 
+            :archive="{{ $archive }}"
+        ></scrumteamlist>
     </div>
 
     <div class="add-scrumteam">

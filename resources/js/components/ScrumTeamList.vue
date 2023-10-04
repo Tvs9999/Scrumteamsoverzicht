@@ -17,6 +17,10 @@
         <div class="top">
           <h3>{{ team.name }}</h3>
           <div class="buttons">
+            <form v-if="archive" action="{{ route('archive-scrumteam') }}">
+              <input type="hidden" :value="team.id">
+              <button type="submit"><i class="fa-solid fa-boxes-packing"></i></button>
+            </form>
             <div :class="{ 'present': areAllUsersPresent('scrumteam', team.id), 'absent': !areAllUsersPresent('scrumteam', team.id) }">
               <i :class="{ 'fa-solid fa-check': areAllUsersPresent('class', classData.id), 'fa-solid fa-xmark': !areAllUsersPresent('class', classData.id) }"></i>
             </div>
@@ -50,6 +54,7 @@ export default defineComponent({
   name: 'ScrumTeamList',
   props: {
     classes: Array,
+    archive: Boolean,
   },
   data() {
     return {

@@ -29,8 +29,9 @@ class ScrumteamController extends Controller
         ->get();
 
         $classesJson = json_encode($classes);
+        $archive = true;
 
-        return view('scrumgroepen', compact('classesJson'));
+        return view('scrumgroepen', compact('classesJson', 'archive'));
     }
 
     public function archiveScrumteam($id)

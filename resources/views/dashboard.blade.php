@@ -76,20 +76,26 @@
     <div class="your-workshops {{ Auth::user()->role === 0 ? 'student' : 'docent' }}">
       <h2>Jouw workshops</h2>
       <div class="workshops">
-        @foreach ($workshops as $workshop)
-          <div class="workshop">
-            <div class="icon"><i class="fa-solid fa-chalkboard-user"></i></div>
-            <div class="info">
-              @if (Auth::user()->role === 0)    
-                <h5>{{$workshop->workshop->name}}</h5>
-                <p></p>
-              @elseif (Auth::user()->role === 1)
-                <h5>{{$workshop->name}}</h5>
-                <p>{{$workshop->location}} - {{date('H:m, d-m-Y', strtotime($workshop->date))}} - {{count($workshop->applications)}}/{{$workshop->max_pers}}</p>
-              @endif
+        @if (count($workshops) > 0)
+          @foreach ($workshops as $workshop)
+            <div class="workshop">
+              <div class="icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+              <div class="info">
+                @if (Auth::user()->role === 0)    
+                  <h5>{{$workshop->workshop->name}}</h5>
+                  <p></p>
+                @elseif (Auth::user()->role === 1)
+                  <h5>{{$workshop->name}}</h5>
+                  <p>{{$workshop->location}} - {{date('H:m, d-m-Y', strtotime($workshop->date))}} - {{count($workshop->applications)}}/{{$workshop->max_pers}}</p>
+                @endif
+              </div>
             </div>
-          </div>
-        @endforeach
+          @endforeach    
+        @else
+            <div class="no-info">
+              <p>Geen workshops gevonden</p>
+            </div>
+        @endif
       </div>
     </div>
     <div class="divider"></div>
@@ -100,24 +106,30 @@
         <h2>Openstaande vragen</h2>
       @endif
       <div class="questions">
-        @foreach ($questions as $question)
-          <div class="question">
-            <div class="icon"><i class="fa-solid fa-question"></i></div>
-            <div class="question-info">
-              <h5>{{$question->question}}</h5>
-              @if (Auth::user()->role === 0)
-                <p>Onafgerond</p>  
-              @elseif (Auth::user()->role === 1)
-                <p>{{$question->user->firstname}} {{$question->user->lastname}} - {{$question->user->class->name}}</p>  
-                <form action="{{ route('completeQuestion') }}" method="POST">
-                  @csrf
-                  <input name="questionId" id="questionId" type="hidden" value="{{$question->id}}">
-                  <button><i class="fa-solid fa-check"></i>Afronden</button>
-                </form>
-              @endif
+        @if (count($questions) > 0)
+          @foreach ($questions as $question)
+            <div class="question">
+              <div class="icon"><i class="fa-solid fa-question"></i></div>
+              <div class="question-info">
+                <h5>{{$question->question}}</h5>
+                @if (Auth::user()->role === 0)
+                  <p>Onafgerond</p>  
+                @elseif (Auth::user()->role === 1)
+                  <p>{{$question->user->firstname}} {{$question->user->lastname}} - {{$question->user->class->name}}</p>  
+                  <form action="{{ route('completeQuestion') }}" method="POST">
+                    @csrf
+                    <input name="questionId" id="questionId" type="hidden" value="{{$question->id}}">
+                    <button><i class="fa-solid fa-check"></i>Afronden</button>
+                  </form>
+                @endif
+              </div>
             </div>
+          @endforeach
+        @else
+          <div class="no-info">
+            <p>Geen workshops gevonden</p>
           </div>
-        @endforeach
+        @endif
       </div>
       @if (Auth::user()->role === 0)  
         <button class="ask-question">Stel een vraag<i class="fa-solid fa-message"></i></button>

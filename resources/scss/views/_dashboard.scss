@@ -110,6 +110,16 @@
         display: flex;
         flex-direction: column;
 
+        .no-info{
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+
+            p{
+                font-style: italic;
+            }
+        }
+
         h2{
             font-size: 25px;
             font-weight: 300;
