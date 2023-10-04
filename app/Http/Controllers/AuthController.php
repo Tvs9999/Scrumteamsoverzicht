@@ -76,7 +76,7 @@ class AuthController extends Controller
         ]);
 
 
-        
+
         $classNumber = $validatedData['klas'];
 
         $class = Classes::firstOrNew(['name' => $classNumber]);
@@ -96,28 +96,26 @@ class AuthController extends Controller
         $user->class_id = $class->id;
         $user->activation_key = $guid;
 
-        if($user->save()){
+        if ($user->save()) {
             if ($user->rol === 0) {
                 $rol = "student";
             } else {
                 $rol = "docent";
             }
-        
+
             try {
                 $this->Sendmail($user->email, $user->activation_key, $rol);
                 Log::info('Email sent successfully to ' . $user->email);
-        
+
                 return back()->with('success', 'Er is een account gemaakt, degene krijgt een mail waar hij zijn account kan activeren!');
             } catch (\Exception $e) {
                 Log::error('Email sending failed: ' . $e->getMessage());
-        
+
                 return back()->with('error', 'Er is een account gemaakt, maar er is een fout opgetreden bij het versturen van de activatiemail.');
             }
-        }else {
+        } else {
             dd($user->errors());
         }
-        
-        
     }
     public function display_activationform(Request $request)
     {
@@ -175,8 +173,28 @@ class AuthController extends Controller
 
     public function users()
     {
-        $users = User::with('class')->orderBy('role')->get();
+        // Retrieve users with role 0 and order them by role
+        $role0Users = User::with('class')
+            ->where('role', 0)
+            ->whereNotNull('password')
+            ->orderBy('role')
+            ->get();
 
+        // Retrieve users with role 1 and order them by role
+        $role1Users = User::with('class')
+            ->where('role', 1)
+            ->whereNotNull('password')
+            ->orderBy('role')
+            ->get();
+
+        // Retrieve users with empty passwords and order them by role
+        $emptyPasswordUsers = User::with('class')
+            ->whereNull('password')
+            ->orderBy('role')
+            ->get();
+
+        // Concatenate the results in the desired order
+        $users = $role0Users->concat($role1Users)->concat($emptyPasswordUsers);
         return view('users', compact('users'));
     }
 
@@ -195,7 +213,7 @@ class AuthController extends Controller
         $member->present = $status;
 
         $member->save();
-        
+
 
 
         // Redirect back to the previous page or any other appropriate action

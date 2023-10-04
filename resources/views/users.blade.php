@@ -43,7 +43,7 @@
                 </div>
             @else
                 <div class="user">
-                    <p>Test@gmail.com</p>
+                    <p>{{ $user['email'] }}</p>
                     <div class="clock">
                         <i class="fa-regular fa-clock"></i>
                     </div> 
