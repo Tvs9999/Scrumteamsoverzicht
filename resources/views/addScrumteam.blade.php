@@ -15,6 +15,11 @@
         @error('name')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
+        @if($errors->has('error'))
+        <div class="alert alert-danger">
+            {{ $errors->first('error') }}
+        </div>
+        @endif
         <div class="add-form">
         <form action="{{ route('addScrumteam.post') }}" method="POST">
                 @csrf
