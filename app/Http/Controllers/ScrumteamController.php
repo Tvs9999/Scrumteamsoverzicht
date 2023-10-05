@@ -86,33 +86,54 @@ class ScrumteamController extends Controller
     }
 
     public function fetchStudents($classId) {
-        // Fetch students based on the $classId
-        $students = DB::table('users')
-            ->where('role', '=', '0')
-            ->where('password','!=','Null')
+        // Haal alle studenten uit de user die geselecteerd zijn door de gebruiker, op basis van 
+        // dat het wachtwoord niet null is (al geactiveerd) 
+        $students = User::where('role', '=', '0')
+            ->where('password', '!=', 'Null')
             ->where('class_id', '=', $classId)
             ->get();
     
-        // Fetch students who are in a scrum team
-        $studentsInScrumTeam = DB::table('scrumteam_user')->pluck('user_id')->toArray();
+        // studenten met of zonder actief scrumteam in array
+        $studentsWithoutScrumTeam = [];
+        $studentsWithScrumTeam = [];
     
-        // Generate HTML for the students with a disabled checkbox for those in a scrum team
-        $html = '';
-
-        if (count($students) === 0) {
-            return 'Er zit nog niemand in deze klas';
-        }
-
         foreach ($students as $student) {
-            $isInScrumTeam = in_array($student->id, $studentsInScrumTeam);
-            $disabledAttribute = $isInScrumTeam ? 'disabled' : '';
-            
-            $html .= '<input required type="checkbox" value="'.$student->id.'" name="user_id[]" '.$disabledAttribute.'>'.$student->firstname.' '.$student->lastname.'<br>';
+            $inScrumTeam = ScrumteamUser::where('user_id', $student->id)
+                ->whereHas('scrumteam', function ($query) {
+                    $query->where('status', 0);
+                })
+                ->count() > 0;
+    
+            if ($inScrumTeam) {
+                // Voeg studenten met actief scrumteam in array
+                $studentsWithScrumTeam[] = $student;
+            } else {
+                // Voeg studenten zonder actief scrumteam toe in array
+                $studentsWithoutScrumTeam[] = $student;
+            }
+        }
+    
+        $html = '';
+    
+        // Als er geen studenten in die klas zitten
+        if (empty($studentsWithoutScrumTeam) && empty($studentsWithScrumTeam)) {
+            $html .= 'Er zit nog niemand in deze klas';
+        } else {
+            //  studenten zonder actief scrumteam
+            foreach ($studentsWithoutScrumTeam as $student) {
+                $html .= '<div>';
+                $html .= '<input type="checkbox" value="' . $student->id . '" name="user_id[]">' . $student->firstname . ' ' . $student->lastname;
+                $html .= '</div>';
+            }
+    
+            // Daarna studenten met actief scrumteam
+            foreach ($studentsWithScrumTeam as $student) {
+                $html .= '<div class="clock">' . $student->firstname . ' ' . $student->lastname . ' <i class="fa-solid fa-lock"></i></div>';
+            }
         }
     
         return $html;
-    }    
-
+    }
 
     public function addScrumteam()
     {
@@ -128,7 +149,7 @@ class ScrumteamController extends Controller
             'name.required' => 'Het teamnaam is verplicht',
             'class_id.required' => 'Het klas moet geselecteerd worden',
             'user_id.required' => 'De studenten moeten nog geselecteerd worden',
-            'user_id.min' => 'De studenten moeten geselecteerd worden', // Custom message for minimum validation
+            'user_id.min' => 'Minimaal een student moet geselecteerd worden', // minimaal een student moet geselecteerd worden
             '*' => 'Deze velden moeten ingevuld worden',
         ]);
         
@@ -136,30 +157,43 @@ class ScrumteamController extends Controller
         $scrumteam = new Scrumteam();
         $scrumteam->name = $request->input('name');
         $scrumteam->class_id = $request->input('class_id');
-        $scrumteam->status = 1;
+        $scrumteam->status = 0;
 
         $selectedUserIds = $request->input('user_id', []);
 
-        // Ensure $selectedUserIds is an array
+        // geselecteerd studenten zijn meer dan een
         if (!is_array($selectedUserIds)) {
             $selectedUserIds = [$selectedUserIds];
         }
 
-        if ($scrumteam->save()) {
-            foreach ($selectedUserIds as $userId) {
-                $scrumteamUser = new ScrumteamUser();
-                $scrumteam = DB::table('scrumteams')->get();
-                $lastTeamId = DB::table('scrumteams')->latest('id')->value('id');
-                
-                $scrumteamUser->scrumteam_id = $lastTeamId;
-                $scrumteamUser->user_id = $userId;
-                $scrumteamUser->save();
-            }
+        // check of alle van de geselexteerde gebruikers al in een actief scrumteam zit
+        $usersInActiveScrumTeams = ScrumteamUser::whereIn('user_id', $selectedUserIds)
+        ->whereHas('scrumteam', function ($query) {
+            $query->where('status', 0);
+        })
+        ->pluck('user_id')
+        ->toArray();
 
-            // Move the return statement outside of the loop
-            return back()->with('success', 'Scrumteam toegevoegd');
+        //error als er een student die geselecteerd zijn al in een actief scrumteam zit
+        if (!empty($usersInActiveScrumTeams)) {
+        $firstnames = User::whereIn('id', $usersInActiveScrumTeams)->pluck('firstname')->implode(', ');
+        return back()->withErrors(['error' => "Deze student(en) zit/zitten al in een actief scrumteam: $firstnames"]);
+        }
+
+        if ($scrumteam->save()) {
+        foreach ($selectedUserIds as $userId) {
+            $scrumteamUser = new ScrumteamUser();
+            $scrumteam = DB::table('scrumteams')->get();
+            $lastTeamId = DB::table('scrumteams')->latest('id')->value('id');
+
+            $scrumteamUser->scrumteam_id = $lastTeamId;
+            $scrumteamUser->user_id = $userId;
+            $scrumteamUser->save();
+        }
+
+        return back()->with('success', 'Scrumteam toegevoegd');
         } else {
-            dd($scrumteam->errors());
+        dd($scrumteam->errors());
         }
     }
 
