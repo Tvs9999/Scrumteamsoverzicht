@@ -31,12 +31,14 @@
             <scrumteamlist 
                 :classes="{{ $activeClassesJson }}" 
                 :active="true"
+                :dashboard="false"
             ></scrumteamlist>
         </div>
         <div class="content" id="archived-content">
             <scrumteamlist 
                 :classes="{{ $archivedClassesJson }}"
                 :active="false"
+                :dashboard="false"
             ></scrumteamlist>
         </div>
     </div>
@@ -61,9 +63,7 @@
     }
 
     $(document).ready(function () {
-        $(".tab").click(function () {
-            console.log('clicked');
-            
+        $(".tab").click(function () {            
             // Remove 'active' class from all tabs
             $(this).siblings(".tab").removeClass("active");
             

@@ -58,19 +58,24 @@ class DashboardController extends Controller
     public function askQuestion(Request $request)
     {
         // Attempt to save the workshop
-        $question = new Question();
         // Populate and save the workshop data
     
-        $question->user_id = Auth::user()->id;
-        $question->question = $request->question;
-        $question->status = 0;
-
-        if ($question->save()) {
-            // Workshop saved successfully
-            return back()->with('success', 'Vraag gesteld');
+        if (isset($request->question) && strlen($request->question) <= 255){
+            $question = new Question();
+         
+            $question->user_id = Auth::user()->id;
+            $question->question = $request->question;
+            $question->status = 0;
+            
+            if ($question->save()) {
+                // Workshop saved successfully
+                return back()->with('success', 'Vraag gesteld');
+            } else {
+                // Workshop save failed, log or dump errors
+                return back()->with('error', 'Vraag stellen mislukt');
+            }
         } else {
-            // Workshop save failed, log or dump errors
-            return back()->with('error', 'Vraag stellen mislukt');
+            return back()->with('error', 'Vul een vraag in');
         }
     }
 

@@ -34,16 +34,22 @@
                 <div class="input-row">
                     <div class="input">
                         <label for="first_name">Voornaam</label>
-                        <input type="text" name="first_name" id="first_name" placeholder="Voornaam" minlength="2" maxlength="20"required>
+                        <input type="text" name="first_name" id="first_name" placeholder="Voornaam" minlength="2">
+                        @error('first_name')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="input">
                         <label for="last_name">Achternaam</label>
-                        <input type="text" name="last_name" id="last_name" placeholder="Achternaam" minlength="2" maxlength="20" required>
+                        <input type="text" name="last_name" id="last_name" placeholder="Achternaam" minlength="2">
+                        @error('last_name')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="input">
                     <label for="password">Wachtwoord</label>
-                    <input type="password" name="password" id="password" placeholder="Vul hier je wachtwoord in..." maxlength="20" required>
+                    <input type="password" name="password" id="password" placeholder="Vul hier je wachtwoord in...">
                     @error('password')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror

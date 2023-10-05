@@ -20,12 +20,12 @@
                 @csrf
                 <div class="input">
                     <label for="name">Naam</label>
-                    <input type="text" id="name" name="name" placeholder="Vul hier het scrumteam in" minlength="4" required>
+                    <input type="text" id="name" name="name" placeholder="Vul hier het scrumteam in">
                 </div>
                 <div class="input-row">
                     <div class="input">
                         <label for="class">Klas</label>
-                        <select name="class_id" id="klas" onchange="loadStudents(this.value)" required>
+                        <select name="class_id" id="klas" onchange="loadStudents(this.value)">
                             <option value="" disabled selected>Selecteer een klas</option>
                             @foreach ($classes as $class)
                             <option value="{{$class->id}}">{{$class->name}}</option>

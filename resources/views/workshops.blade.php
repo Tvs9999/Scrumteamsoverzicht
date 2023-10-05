@@ -42,7 +42,7 @@
                                         <div class="divider"></div>
                                         <p>{{ date('H:m, d-m-Y', strtotime($workshop->date))}}</p>
                                         <div class="divider"></div>
-                                        <p>{{count($workshop->applications)}}/{{$workshop->max_pers}}</p>
+                                        <p class="{{ count($workshop->applications) < $workshop->min_pers ? 'text-danger' : 'text-success'}}">{{count($workshop->applications)}}/{{$workshop->min_pers}}</p>
                                     </div>
                                 </div>
                             </div>

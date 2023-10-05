@@ -23,8 +23,9 @@
                         @if ($user->role === 0)
                             <p>Leerling</p>
                             <div class="divider"></div>
+                            
                             <p>{{$user->class->name}}</p>
-                        @else
+                        @elseif ($user->role === 1)
                             <p>Leraar</p>
                         @endif
                     </div>
@@ -43,7 +44,15 @@
                 </div>
             @else
                 <div class="user">
-                    <p>{{ $user['email'] }}</p>
+                    <div class="info">
+                        <p>{{ $user['email'] }}</p>
+                        <div class="divider"></div>
+                        @if ($user->role === 0)
+                            <p>Leerling</p>
+                        @elseif ($user->role === 1)
+                            <p>Leraar</p>
+                        @endif
+                    </div>
                     <div class="clock">
                         <i class="fa-regular fa-clock"></i>
                     </div> 

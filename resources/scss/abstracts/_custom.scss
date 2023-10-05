@@ -274,6 +274,19 @@ i{
 }
 
 @mixin scrumteamList(){
+    .no-scrumteams{
+        height: calc(100vh - 70px);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        p{
+            color: $light-gray;
+            font-style: italic;
+        }
+    }
+
     .top{
         display: flex;
         justify-content: space-between;
@@ -329,7 +342,7 @@ i{
         }
 
         .fold-btn{
-            transition: transform .3s ease;
+            transition: transform .3s ease .1s;
 
             i{
                 font-size: 25px;
@@ -337,6 +350,7 @@ i{
 
             &.active{
                 transform: rotate(180deg);
+                transition: transform .3s ease;
             }
 
             &:hover{
@@ -351,14 +365,14 @@ i{
 
         &.active{
             .scrumteams{
-                max-height: 500px;
+                max-height: 100vh;
             }
         }
 
         .scrumteams{
             max-height: 0;
             overflow: hidden;
-            transition: .3s ease;
+            transition: .5s ease;
         }
 
         .scrumteam{
@@ -381,7 +395,7 @@ i{
             .members{
                 max-height: 0;
                 overflow: hidden;
-                transition: .3s ease;
+                transition: .5s ease;
 
                 .member{
                     padding: 10px 15px;

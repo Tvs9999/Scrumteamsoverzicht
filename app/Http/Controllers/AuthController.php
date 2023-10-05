@@ -31,8 +31,10 @@ class AuthController extends Controller
             // Add any other validation rules for your fields here
         ], [
             'email.required' => 'Het e-mailveld is verplicht',
+            'email.email' => 'Vul een geldig e-mailadres in',
             'password.required' => 'Het wachtwoordveld is verplicht',
             'password.regex' => 'Het wachtwoord moet ten minste 8 tekens bevatten, waaronder minimaal 1 kleine letter, 1 hoofdletter, 1 cijfer en 1 speciaal teken',
+            'password.min' => 'Het wachtwoord moet ten minste 8 tekens bevatten, waaronder minimaal 1 kleine letter, 1 hoofdletter, 1 cijfer en 1 speciaal teken',
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -52,7 +54,7 @@ class AuthController extends Controller
 
     public function register()
     {
-        $classNumbers = Classes::pluck('name')->toArray(); // Assuming 'number' is the column name
+        $classNumbers = Classes::all(); // Assuming 'number' is the column name
 
         return view('register', compact('classNumbers'));
     }
@@ -65,38 +67,60 @@ class AuthController extends Controller
         $validatedData = $request->validate([
             'email' => 'required|email|unique:users', // Example validation rules for email
             'rol' => 'required',
-            'klas' => 'required',
         ], [
+            'email.unique' => 'Er is al een account met dit e-mailadres',
+            'email.email' => 'Vul een geldig e-mailadres in',
             'email.required' => 'Het e-mailadres is verplicht',
             'rol.required' => 'De rol moet geselecteerd worden',
-            'klas.required' => 'De klas moeten nog geselecteerd worden',
-            'new_class_number.required' => 'Nieuwe klasnummer moet nog toegevoegd worden',
             '*' => 'Deze velden moeten ingevuld worden',
         ]);
 
-
-
-        $classNumber = $validatedData['klas'];
-
-        $class = Classes::firstOrNew(['name' => $classNumber]);
-        if (!$class->exists) {
-            $class->name = $request->new_class_number;
-            // The class doesn't exist, so save it
-            $class->save();
-        }
         $user = new User([
             'email' => $validatedData['email'],
-            'class_id' => $class->id,
         ]);
+
+        if ($request->rol == 1){
+            if (isset($request->klas) || isset($request->new_class_number)){
+                return back()->withErrors(['error' => 'Vul alleen de benodigde gegevens in voor een docent']);
+            }
+        } elseif ($request->rol == 0) {
+            if (isset($request->new_class_number)){
+                $classNumber = $request->new_class_number;
+        
+                $class = Classes::firstOrNew(['name' => $classNumber]);
+                if (!$class->exists) {
+                    $class->name = $request->new_class_number;
+                    // The class doesn't exist, so save it
+                    $class->save();
+                } else {
+                    return back()->withErrors(['error' => 'Deze klas bestaat al']);
+                }
+                $user->class_id = $class->id;
+            } else{
+                $class = Classes::where('id', $request->klas)->first();
+
+                if ($class) {
+                    $user->class_id = $class->id;
+                } else {
+                    return back()->withErrors(['error' => 'Deze klas bestaat niet']);
+                }
+            }
+
+            
+
+
+        } else{
+            return back()->withErrors(['error' => 'Gebruiker niet aan kunnen maken']);
+        }
+        
 
         $user->email = $request->email;
         $user->role = $request->rol;
         $user->present = 0;
-        $user->class_id = $class->id;
         $user->activation_key = $guid;
 
         if ($user->save()) {
-            if ($user->rol === 0) {
+            if ($user->role == 0) {
                 $rol = "student";
             } else {
                 $rol = "docent";
@@ -106,7 +130,7 @@ class AuthController extends Controller
                 $this->Sendmail($user->email, $user->activation_key, $rol);
                 Log::info('Email sent successfully to ' . $user->email);
 
-                return back()->with('success', 'Er is een account gemaakt, degene krijgt een mail waar hij zijn account kan activeren!');
+                return back()->with('success', 'Er is een account gemaakt, en er is geprobeerd een mail te versturen naar ' . $user->email);
             } catch (\Exception $e) {
                 Log::error('Email sending failed: ' . $e->getMessage());
 
@@ -137,12 +161,15 @@ class AuthController extends Controller
     public function activate_account(request $request)
     {
         $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|min:2|max:255',
+            'last_name' => 'required|string|min:2|max:255',
             'password' => 'required|string|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/', // Example validation rule for password (minimum 8 characters)
             // Add any other validation rules for your fields here
         ], [
             'password' => 'Het wachtwoord moet ten minste 8 tekens bevatten, waaronder minimaal 1 kleine letter, 1 hoofdletter, 1 cijfer en 1 speciaal teken',
+            'first_name.min' => 'Minimaal 2 karakters',
+            'last_name.min' => 'Minimaal 2 karakters',
+            '*.required' => 'Dit veld is verplicht',
         ]);
         // Get the activation code from the query parameters
         $activationCode = $request->query('code');
@@ -150,15 +177,17 @@ class AuthController extends Controller
         // Check if the code exists in the database
         $user = User::where('activation_key', $activationCode)->first();
 
-        $user->update([
+        if ($user->update([
             'firstname' => $request->input('first_name'),
             'lastname' => $request->input('last_name'),
             'password' => Hash::make($request->input('password')), // Hash the new password
-        ]);
+        ])){
+            auth()->login($user);
 
-        auth()->login($user);
-
-        return redirect('dashboard'); // terugsturen naar login pagina
+            return redirect('dashboard'); // terugsturen naar login pagina
+        }
+        
+        return back()->withErrors('Account bevestigen mislukt');
 
     }
 
@@ -199,7 +228,6 @@ class AuthController extends Controller
 
     public function sendMail($email, $code, $rol)
     {
-
         Mail::to($email)->send(new Activation($code, $rol));
     }
 
