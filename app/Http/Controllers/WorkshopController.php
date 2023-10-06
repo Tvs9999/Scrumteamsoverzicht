@@ -167,12 +167,20 @@ class WorkshopController extends Controller
         $application->user_id = $request->userId;
 
 
-        if ($application->save()) {
-            // Workshop saved successfully
-            return back()->with('success', 'Succesvol aangemeld');
+        $currentApplicants = Application::where('workshop_id', $request->workshopId)->count();
+        $ApplicantsLimit = Workshop::where('id', $request->workshopId)->first()->max_pers;
+
+
+        if ($currentApplicants < $ApplicantsLimit) {
+            if ($application->save()) {
+                // Workshop saved successfully
+                return back()->with('success', 'Succesvol aangemeld' . $ApplicantsLimit);
+            } else {
+                // Workshop save failed, log or dump errors
+                dd($application->errors());
+            }
         } else {
-            // Workshop save failed, log or dump errors
-            dd($application->errors());
+            return back()->with('error', 'Workshop zit vol, helaas.');
         }
     }
 }

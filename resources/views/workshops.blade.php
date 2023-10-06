@@ -8,6 +8,11 @@
                 {{ Session::get('success') }}
             </div>
         @endif
+        @if(Session::has('error'))
+            <div class="error-popup" id="error-message" role="alert">
+                {{ Session::get('error') }}
+            </div>
+        @endif
         <div class="content-header">
             <h1>Workshops</h1>
         </div>
@@ -63,7 +68,7 @@
                                                 @if ($application->user_id === Auth::user()->id)
                                                     <button class="signed-up"><i class="fa-solid fa-check"></i>Aangemeld</button>
                                                 @else
-                                                    <form action="{{ route('signUp') }}" method="POST">
+                                                    <form action="{{ route('workshops') }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="workshopId" value="{{ $workshop->id }}">
                                                         <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
