@@ -50,7 +50,7 @@
             </div>
             <div class="input-row">
                 <div class="input">
-                    <label for="datetime">Datum en tijd</label>
+                    <label for="datetimePicker">Datum en tijd</label>
                     <input type="datetime-local" id="datetimePicker" name="datetime">
                     @error('datetime')
                     <div class="alert alert-danger">{{ $message }}</div>

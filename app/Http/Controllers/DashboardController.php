@@ -60,7 +60,11 @@ class DashboardController extends Controller
         // Attempt to save the workshop
         // Populate and save the workshop data
     
-        if (isset($request->question) && strlen($request->question) <= 255){
+        if (isset($request->question)){
+            if (strlen($request->question) >= 255){
+                return back()->with('error', 'Maximaal 255 karakters');
+            }
+
             $question = new Question();
          
             $question->user_id = Auth::user()->id;
@@ -92,33 +96,5 @@ class DashboardController extends Controller
         } else {
             return back()->with('error', 'Vraag niet gevonden');
         }
-
-        if (Auth::user()->role === 1) {
-
-
-            return view('dashboard', compact('classesJson', 'scrumteamsJson', 'scrumteamUserJson', 'studentsJson'));
-        } else {
-            $scrumteamUser = ScrumteamUser::where('user_id', Auth::user()->id)->first();
-
-            if ($scrumteamUser) {
-                $scrumteamId = $scrumteamUser->scrumteam_id;
-                $scrumteamMembers = ScrumteamUser::where('scrumteam_id', $scrumteamId)
-                    ->pluck('user_id') 
-                    ->toArray();
-            
-                $scrumteamMembers = User::whereIn('id', $scrumteamMembers)->get(); 
-            } else {
-                $scrumteamMembers = []; // You can set this to an empty array or handle it as needed.
-            }
-            
-            return view('dashboard', compact('scrumteamMembers'));
-        }
-    }
-
-
-    public function dashboardStudent()
-    {
-        $userRole = session('user_role'); // Retrieve 'user_role' from the session
-        return view('dashboard-student', ['userRole' => $userRole]);
     }
 }

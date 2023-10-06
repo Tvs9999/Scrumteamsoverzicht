@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\Activation;
 use App\Models\User;
 use App\Models\Classes;
+use App\Models\Scrumteam;
+use App\Models\ScrumteamUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -27,9 +29,10 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email|max:255',
-            'password' => 'required|string|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/', // Example validation rule for password (minimum 8 characters)
+            'password' => 'required|string|min:8|max:255|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/', // Example validation rule for password (minimum 8 characters)
             // Add any other validation rules for your fields here
         ], [
+            '*.max' => 'Maximaal 255 karakters',
             'email.required' => 'Het e-mailveld is verplicht',
             'email.email' => 'Vul een geldig e-mailadres in',
             'password.required' => 'Het wachtwoordveld is verplicht',
@@ -234,16 +237,40 @@ class AuthController extends Controller
     public function updateStatus($memberId, $status)
     {
         // Find the member by ID
-        $member = User::findOrFail($memberId);
+        $member = User::find($memberId);
 
-        // Update the status in the database
-        $member->present = $status;
+        if ($member && $member->id != Auth::user()->id){
+            // dd($member);
 
-        $member->save();
+            $loggedInUserId = Auth::id(); // Assuming you are using Laravel's authentication
+            $memberInScrumteam = ScrumteamUser::where('user_id', $member->id)
+                ->whereHas('scrumteam', function ($query) use ($loggedInUserId) {
+                    // Apply conditions to the 'scrumteam' relationship
+                    $query->where('status', 0)
+                        ->whereHas('users', function ($subquery) use ($loggedInUserId) {
+                            // Check if the logged-in user is also a member of the same Scrum team
+                            $subquery->where('user_id', $loggedInUserId);
+                        });
+                })
+                ->exists();
 
+            if(!$memberInScrumteam){
+                return back()->with('error', 'Gebruiker zit niet in jou team');
+            }
+        }
 
+        if($member && ($status == 0 || $status == 1)){
+            // Update the status in the database
+            $member->present = $status;
 
-        // Redirect back to the previous page or any other appropriate action
-        return redirect()->back()->with('status?', 'Status updated successfully');
+            if($member->save()){
+                // Redirect back to the previous page or any other appropriate action
+                return back()->with('success', 'Presentie succesvol aangepast');       
+            } else {
+                return back()->with('error', 'Presentie aangeven is mislukt');
+            } 
+        } else {
+            return back()->with('error', 'Presentie aangeven is mislukt');
+        }
     }
 }

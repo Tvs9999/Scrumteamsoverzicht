@@ -20,7 +20,6 @@
             <div class="buttons">
               <form v-if="active && !dashboard" :action="'/archive-scrumteam/' + team.id" method="POST">
                 <input type="hidden" name="_token" :value="csrf">
-                <input type="hidden" :value="team.id">
                 <button type="submit"><i class="fa-solid fa-boxes-packing"></i></button>
               </form>
               <div v-if="active" :class="{ 'present': areAllUsersPresent('scrumteam', team.id), 'absent': !areAllUsersPresent('scrumteam', team.id) }">
@@ -34,7 +33,7 @@
           </div>
           <div class="members">
             <div v-for="(teamUser, userIndex) in team.users" :key="teamUser.id">
-              <div class="member" :class="{ 'absent': teamUser.user.present === 0}">
+              <div class="member" :class="{ 'absent': active && teamUser.user.present === 0}">
                 <i v-if="active"
                   :class="{ 'fas fa-check': teamUser.user.present === 1, 'fas fa-times': teamUser.user.present === 0 }"
                 ></i>
@@ -70,7 +69,6 @@ export default defineComponent({
     };
   },
   mounted(){
-    console.log(this.dashboard)
     this.sortedClasses = this.classes.sort((classA, classB) => {
     const usersPresentInClassA = classA.scrumteams.every(team => this.areAllUsersPresent('scrumteam', team.id));
     const usersPresentInClassB = classB.scrumteams.every(team => this.areAllUsersPresent('scrumteam', team.id));

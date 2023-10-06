@@ -31,11 +31,11 @@
                 @csrf
                 <div class="input">
                     <label for="email">E-mailadres</label>
-                    <input type="email" name="email" id="email" placeholder="Vul hier je e-mailadres in..." maxlength="40">
+                    <input type="email" name="email" id="email" placeholder="Vul hier je e-mailadres in...">
                 </div>
                 <div class="input">
                     <label for="password">Wachtwoord</label>
-                    <input type="password" name="password" id="password" placeholder="Vul hier je wachtwoord in..." maxlength="40">
+                    <input type="password" name="password" id="password" placeholder="Vul hier je wachtwoord in...">
                 </div>
                 <button type="submit">Inloggen</button>
             </form>

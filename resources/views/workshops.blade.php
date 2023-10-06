@@ -19,6 +19,12 @@
                     @foreach ($workshops as $workshop)
                         <div class="workshop">
                             <div class="top">
+                                <div class="title">
+                                    <div class="icon">
+                                        <i class="fa-solid fa-chalkboard-user"></i>
+                                    </div>
+                                    <h2>{{Str::ucfirst($workshop->name)}}</h2>
+                                </div>
                                 <div class="icons">
                                     <div class="duration">
                                         <i class="fa-solid fa-clock-rotate-left"></i>
@@ -29,21 +35,15 @@
                                         <p>{{$workshop->max_pers}}</p>
                                     </div>
                                 </div>
-                                <div class="title">
-                                    <div class="icon">
-                                        <i class="fa-solid fa-chalkboard-user"></i>
-                                    </div>
-                                    <h2>{{Str::ucfirst($workshop->name)}}</h2>
-                                </div>
-                                <p class="description">{{$workshop->description}}</p>
-                                <div class="info-container">
-                                    <div class="info">
-                                        <p>{{$workshop->location}}</p>
-                                        <div class="divider"></div>
-                                        <p>{{ date('H:m, d-m-Y', strtotime($workshop->date))}}</p>
-                                        <div class="divider"></div>
-                                        <p class="{{ count($workshop->applications) < $workshop->min_pers ? 'text-danger' : 'text-success'}}">{{count($workshop->applications)}}/{{$workshop->min_pers}}</p>
-                                    </div>
+                            </div>
+                            <p class="description">{{$workshop->description}}</p>
+                            <div class="info-container">
+                                <div class="info">
+                                    <p>{{$workshop->location}}</p>
+                                    <div class="divider"></div>
+                                    <p>{{ date('H:m, d-m-Y', strtotime($workshop->date))}}</p>
+                                    <div class="divider"></div>
+                                    <p class="{{ count($workshop->applications) < $workshop->min_pers ? 'text-danger' : 'text-success'}}">{{count($workshop->applications)}}/{{$workshop->min_pers}}</p>
                                 </div>
                             </div>
                             <div class="blue-button">
@@ -120,49 +120,56 @@
                         if (response.applications.length > 0) {
                             displayWorkshopModal(response);
                         } else {
-                            console.log('No applications found');
                             // Handle the case when no applications are found
+                            displayNoApplicationsModal(response.workshop_name);
                         }
                     },
                     error: function (error) {
-                        console.error('Error:', error);
+                        displayNoApplicationsModal(false);
                         // Handle any errors that occur during the AJAX request
                     }
                 });
             });
 
-
             // Function to display the modal with applications data
             function displayWorkshopModal(applicationsData) {
-                // Access and parse the JSON data
-
-                // Construct the HTML content for the modal using applications data
                 var modalHeader = '<h3>' + applicationsData.workshop_name + ' | Aanmeldingen</h3>';
                 var modalContent = '';
                 var i = 0;
                 applicationsData.applications.forEach(function (application) {
-                    if (i > 0){
+                    if (i > 0) {
                         modalContent += '<div class="application-divider"></div>';
-                    };
+                    }
                     modalContent += '<div class="application">';
                     modalContent += '<p>' + application.first_name + ' ' + application.last_name + '</p>';
                     modalContent += '<div class="info-divider"></div>';
                     modalContent += '<p class="class">' + application.class_name + '</p>';
                     modalContent += '</div>';
-                    i++
+                    i++;
                 });
 
-                // Display the modal content
                 $('.modal-title').html(modalHeader);
                 $('.applications').html(modalContent);
-
-                // Show the modal (you may need to implement your own modal display logic)
                 $('#workshop-modal').removeClass('d-none');
             }
 
-            $('.close-applications').click(function (){
+            // Function to display a message when no applications are found
+            function displayNoApplicationsModal(workshopName) {
+                if (workshopName == false){
+                    var modalHeader = '<h3>Foutmelding</h3>';                    
+                } else {
+                    var modalHeader = '<h3>' + workshopName + ' | Aanmeldingen</h3>';
+                }
+                var noApplicationsMessage = '<p>Geen aanmeldingen gevonden</p>';
+
+                $('.modal-title').html(modalHeader);
+                $('.applications').html(noApplicationsMessage);
+                $('#workshop-modal').removeClass('d-none');
+            }
+
+            $('.close-applications').click(function () {
                 $('#workshop-modal').addClass('d-none')
-            })
+            });
         });
     </script>
 @endsection

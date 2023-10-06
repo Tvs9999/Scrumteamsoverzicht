@@ -9,6 +9,12 @@
         {{ Session::get('success') }}
     </div>
   @endif
+
+  @if(Session::has('error'))
+    <div class="error-popup" id="error-message" role="alert">
+        {{ Session::get('error') }}
+    </div>
+  @endif
   
   <div class="dashboard-content">
     <div class="content-header">
@@ -105,11 +111,7 @@
       @elseif (Auth::user()->role === 1)
         <h2>Openstaande vragen</h2>
       @endif
-      @if(Session::has('error'))
-        <div class="error-message" id="error-message" role="alert">
-            {{ Session::get('error') }}
-        </div>
-      @endif
+      
       <div class="questions">
         @if (count($questions) > 0)
           @foreach ($questions as $question)

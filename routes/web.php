@@ -25,12 +25,11 @@ use Illuminate\Support\Facades\Auth;
 
 // Main router
 Route::get('/', function () {
-    // if (Auth::user()){
-    //     redirect()->route('dashboard');
-    // } else {
-    //     redirect()->route('login');
-    // }
-    return view('login');
+    if (Auth::check()) {
+        return redirect()->route('Dashboard');
+    } else {
+        return redirect()->route('login');
+    }
 });
 
 // Routes for not logged in users

@@ -82,7 +82,7 @@ class WorkshopController extends Controller
             'datetime' => 'required|date_format:Y-m-d\TH:i|after_or_equal:now',
             'duration' => 'required|max:255',
             'minPers' => 'required|numeric|min:1',
-            'maxPers' => 'required|numeric|gte:minPers|min:1',
+            'maxPers' => 'required|numeric|gt:minPers|min:1',
             'location' => 'required|max:255',
         ], [
             'datetime.date_format' => 'Onjuist format',
@@ -90,7 +90,7 @@ class WorkshopController extends Controller
             'minPers.min' => 'maxVul 1 of hoger in',
             'minPers.min' => 'Vul 1 of hoger in',
             'class.exists' => 'Deze klas bestaat niet',
-            'maxPers.gte' => 'Max. aanmeldingen moet meer zijn dan Min. aanmeldingen',
+            'maxPers.gt' => 'Max. aanmeldingen moet meer zijn dan Min. aanmeldingen',
             'name.max' => 'Maximaal 255 karakters',
             'duration.max' => 'Maximaal 255 karakters',
             'location.max' => 'Maximaal 255 karakters',

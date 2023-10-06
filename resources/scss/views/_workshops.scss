@@ -31,12 +31,18 @@
             flex-direction: column;
             justify-content: space-between;
 
+            .top{
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+
             .icons{
-                position: absolute;
-                top: 15px;
-                right: 15px;
                 display: flex;
                 gap: 15px;
+                top: -5px;
+                position: relative;
+                flex-shrink: 0;
 
                 .duration, .maxPers{
                     display: flex;
@@ -60,6 +66,7 @@
                 margin-bottom: 15px;
 
                 .icon{
+                    flex-shrink: 0;
                     width: 50px;
                     height: 50px;
                     display: flex;
@@ -76,6 +83,7 @@
                 h2{
                     font-size: 25px;
                     font-weight: 500;
+                    flex-grow: 1;
                 }
             }
             
