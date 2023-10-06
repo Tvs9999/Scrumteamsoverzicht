@@ -7,7 +7,7 @@
     </div>
     <div class="register">
         @if(Session::has('success'))
-        <div class="alert alert-success" role="alert">
+        <div class="success-message" role="alert">
             {{ Session::get('success') }}
         </div>
         @endif
@@ -53,8 +53,8 @@
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
             <div class="input d-none" id="new-class-input">
-                <label for="new_class_number">Nieuw Klasnummer</label>
-                <input type="text" name="new_class_number" id="new_class_number" placeholder="Enter new class number" maxlength="15">
+                <label for="new_class_number">Nieuwe klas</label>
+                <input type="text" name="new_class_number" id="new_class_number" placeholder="Voer naam klas in" maxlength="255">
             </div>
             
             <button>Account aanmaken</button>
@@ -79,6 +79,11 @@
     const newClassNumberInput = $('#new_class_number')
 
     $(document).ready(function () {
+        if(klas.val() == "new"){
+            klasInput.removeClass('d-none');
+            newClassNumberInput.attr('required', true);
+        }
+
     rol.on("change", function () {
         if (rol.val() == 1){
             klasSelect.addClass('d-none');

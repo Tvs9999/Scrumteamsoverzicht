@@ -16,10 +16,10 @@
         <div class="content-header">
             <h1>Workshops</h1>
         </div>
+        @if ($workshops->count()>0)
         <div class="workshops-container">
 
 
-            @if ($workshops->count()>0)
             <div class="workshops">
                     @foreach ($workshops as $workshop)
                         <div class="workshop">
@@ -90,12 +90,12 @@
                         </div>       
                     @endforeach
                 </div>
-                @else 
-                    <div class="no-workshops">
-                        <p>Er zijn geen workshops gevonden</p>
-                    </div>
-                @endif
-        </div>
+            </div>
+        @else 
+            <div class="no-workshops">
+                <p>Er zijn geen workshops gevonden</p>
+            </div>
+        @endif
         
         @if(Auth::user()->role === 1)
             <div class="add-workshop">
