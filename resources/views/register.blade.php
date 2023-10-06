@@ -11,11 +11,18 @@
             {{ Session::get('success') }}
         </div>
         @endif
+        @if ($errors->any())
+            <div class="error-message">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
         <form action="{{ route('register') }}" method="POST">
             @csrf
             <div class="input">
-                <label for="email">Email address</label>
-                <input type="email" name="email" id="email" placeholder="Vul hier het e-mailadres in..." maxlength="40" required>
+                <label for="email">E-mailadres</label>
+                <input type="email" name="email" id="email" placeholder="Vul hier het e-mailadres in..." maxlength="255" required>
             </div>
             @error('email')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -34,9 +41,9 @@
                 <label for="klas">Klas</label>
                 <select name="klas" id="klas" required>
                     @foreach ($classNumbers as $class)
-                      <option value="{{ $class }}">{{ $class }}</option>
+                      <option value="{{ $class->id }}">{{ $class->name }}</option>
                     @endforeach
-                    <option value="new">Nieuwe Klas</option>
+                    <option value="new">Naam nieuwe klas</option>
                 </select>
             </div>
             @error('klas')

@@ -9,6 +9,12 @@
         {{ Session::get('success') }}
     </div>
   @endif
+
+  @if(Session::has('error'))
+    <div class="error-popup" id="error-message" role="alert">
+        {{ Session::get('error') }}
+    </div>
+  @endif
   
   <div class="dashboard-content">
     <div class="content-header">
@@ -63,6 +69,8 @@
           <div id="scrumteamsList">
             <scrumteamlist
               :classes="{{ $classesJson }}"
+              :active="true"
+              :dashboard="true"
             ></scrumteamlist>
           </div>
         @endif
@@ -70,6 +78,7 @@
   </div>
 
   <div class="your-info">
+    
     <div class="your-workshops {{ Auth::user()->role === 0 ? 'student' : 'docent' }}">
       <h2>Jouw workshops</h2>
       <div class="workshops">
@@ -80,7 +89,7 @@
               <div class="info">
                 @if (Auth::user()->role === 0)    
                   <h5>{{$workshop->workshop->name}}</h5>
-                  <p></p>
+                  <p>{{$workshop->workshop->location}} - {{date('H:m, d-m-Y', strtotime($workshop->workshop->date))}} - {{$workshop->workshop->user->firstname}} {{$workshop->workshop->user->lastname}}</p>
                 @elseif (Auth::user()->role === 1)
                   <h5>{{$workshop->name}}</h5>
                   <p>{{$workshop->location}} - {{date('H:m, d-m-Y', strtotime($workshop->date))}} - {{count($workshop->applications)}}/{{$workshop->max_pers}}</p>
@@ -102,6 +111,7 @@
       @elseif (Auth::user()->role === 1)
         <h2>Openstaande vragen</h2>
       @endif
+      
       <div class="questions">
         @if (count($questions) > 0)
           @foreach ($questions as $question)
@@ -140,7 +150,9 @@
     <div class="close-btn"><i class="fa-solid fa-xmark"></i></div>
     <form action="{{ route('askQuestion') }}" method="POST">
       @csrf
-      <div class="input"><input type="text" name="question" id="question" placeholder="Vul hier je vraag in..."></div>
+      <div class="input">
+        <input type="text" name="question" id="question" placeholder="Vul hier je vraag in...">
+      </div>
       <button type="submit">Versturen</button>
     </form>
 </div>

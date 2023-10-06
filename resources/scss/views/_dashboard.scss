@@ -86,6 +86,10 @@
                                 color: $primary;
                             }
                         }
+
+                        &:hover{
+                            cursor: pointer;
+                        }
                     }
                 }
             }

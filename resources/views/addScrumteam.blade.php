@@ -25,12 +25,12 @@
                 @csrf
                 <div class="input">
                     <label for="name">Naam</label>
-                    <input type="text" id="name" name="name" placeholder="Vul hier het scrumteam in" minlength="4" required>
+                    <input type="text" id="name" name="name" placeholder="Vul hier het scrumteam in">
                 </div>
                 <div class="input-row">
                     <div class="input">
                         <label for="class">Klas</label>
-                        <select name="class_id" id="klas" onchange="loadStudents(this.value)" required>
+                        <select name="class_id" id="klas" onchange="loadStudents(this.value)">
                             <option value="" disabled selected>Selecteer een klas</option>
                             @foreach ($classes as $class)
                             <option value="{{$class->id}}">{{$class->name}}</option>
@@ -59,9 +59,7 @@
                                 <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Voeg leerlingen toe</h5>
                             </div>
                             <div class="modal-body">
-                                @foreach ($users as $user)
-                                <input type="checkbox" value="{{$user->id}}" name="user_id[]"> {{$user->firstname}} {{$user->lastname}}<br>
-                                @endforeach
+                                <!--Studenten worden bijgehaald zodra de gebruiker op een klas klikt-->
                             </div>
                             <div class="modal-footer">
                                 <button type="button" data-dismiss="modal">Leerling Selecteren</button>

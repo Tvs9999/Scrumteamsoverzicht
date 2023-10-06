@@ -50,7 +50,7 @@
             </div>
             <div class="input-row">
                 <div class="input">
-                    <label for="datetime">Datum en tijd</label>
+                    <label for="datetimePicker">Datum en tijd</label>
                     <input type="datetime-local" id="datetimePicker" name="datetime">
                     @error('datetime')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -67,14 +67,14 @@
             <div class="input-row">
                 <div class="input">
                     <label for="minPers">Min. aanmeldingen</label>
-                    <input type="number" id="minPers" name="minPers" placeholder="1">
+                    <input type="number" id="minPers" name="minPers" placeholder="Vul het minimum aantal aanmeldingen in...">
                     @error('minPers')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="input">
                     <label for="maxPers">Max. aanmeldingen</label>
-                    <input type="number" id="maxPers" name="maxPers" placeholder="2">
+                    <input type="number" id="maxPers" name="maxPers" placeholder="Vul het maximum aantal aanmeldingen in...">
                     @error('maxPers')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror

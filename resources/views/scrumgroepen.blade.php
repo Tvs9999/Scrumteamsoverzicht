@@ -8,6 +8,12 @@
 </div>
 @endif
 
+@if(Session::has('error'))
+<div class="error-popup" id="error-message" role="alert">
+    {{ Session::get('error') }}
+</div>
+@endif
+
 @if ($errors->any())
     <div class="error-message">
         @foreach ($errors->all() as $error)
@@ -31,12 +37,14 @@
             <scrumteamlist 
                 :classes="{{ $activeClassesJson }}" 
                 :active="true"
+                :dashboard="false"
             ></scrumteamlist>
         </div>
         <div class="content" id="archived-content">
             <scrumteamlist 
                 :classes="{{ $archivedClassesJson }}"
                 :active="false"
+                :dashboard="false"
             ></scrumteamlist>
         </div>
     </div>
@@ -61,9 +69,7 @@
     }
 
     $(document).ready(function () {
-        $(".tab").click(function () {
-            console.log('clicked');
-            
+        $(".tab").click(function () {            
             // Remove 'active' class from all tabs
             $(this).siblings(".tab").removeClass("active");
             

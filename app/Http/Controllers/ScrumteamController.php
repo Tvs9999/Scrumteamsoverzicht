@@ -39,16 +39,21 @@ class ScrumteamController extends Controller
     public function archiveScrumteam($id)
     {
         // Find the scrum team by ID
-        $scrumteam = Scrumteam::findOrFail($id);
+        $scrumteam = Scrumteam::find($id);
 
-        // Archive the scrum team
-        $scrumteam->status = 1;
-        if($scrumteam->save()){
-            // Redirect back to the scrum teams page with a success message
-            return redirect()->route('scrumteams')->with('success', 'Scrumteam gearchiveerd.');
+        if($scrumteam){
+            // Archive the scrum team
+            $scrumteam->status = 1;
+            if($scrumteam->save()){
+                // Redirect back to the scrum teams page with a success message
+                return redirect()->route('scrumteams')->with('success', 'Scrumteam gearchiveerd.');
+            }
+    
+            return back()->with('error', 'Scrumteam archiveren mislukt');
+        } else {
+            return back()->with('error', 'Scrumteam niet gevonden');
         }
 
-        return back()->with('error', 'Scrumteam archiveren mislukt');
         
 
     }
