@@ -1,6 +1,7 @@
 @extends('layout/app')
 
 @section('content')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <div id="addWorkshop">
         <div class="content-header">
             <h1>Scrumteam toevoegen</h1>
@@ -58,6 +59,7 @@
                             </div>
                             <div class="modal-body">
                                 <!--Studenten worden bijgehaald zodra de gebruiker op een klas geselecteerde-->
+                                Selecteer eerst een klas
                             </div>
                             <div class="modal-footer">
                                 <button type="button" data-dismiss="modal">Leerling Selecteren</button>

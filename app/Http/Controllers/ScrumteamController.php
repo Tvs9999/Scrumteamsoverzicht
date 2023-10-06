@@ -175,6 +175,16 @@ class ScrumteamController extends Controller
             return back()->withErrors(['user_id' => "Deze student(en) bestaat/bestaan niet."]);
         }
 
+
+        // Check of de geselecteerde userid in de klas zit
+        $usersnietinclass = User::whereIn('id', $selectedUserIds)
+        ->where('class_id', '!=', $request->input('class_id'))
+        ->pluck('firstname')->implode(', ');
+
+        if (!empty($usersnietinclass)) {
+            return back()->withErrors(['user_id' => "Deze student(en) zit niet in deze klas"]);
+        }
+
         // verder met opslaan scrumteam en scrumteamuser
         if ($scrumteam->save()) {
             foreach ($selectedUserIds as $userId) {
