@@ -166,6 +166,16 @@ class WorkshopController extends Controller
         $application->workshop_id = $request->workshopId;
         $application->user_id = $request->userId;
 
+        $workshop = Workshop::find($request->workshopId);
+
+        if (!$workshop) {
+            // Workshop with the given ID does not exist
+            return back()->with('error', 'Workshop niet gevonden.');
+        }
+
+        if ($workshop->class_id != Auth::user()->class_id){
+            return back()->with('error', 'Workshop is niet voor jouw klas.');
+        }
 
         $currentApplicants = Application::where('workshop_id', $request->workshopId)->count();
         $ApplicantsLimit = Workshop::where('id', $request->workshopId)->first()->max_pers;
