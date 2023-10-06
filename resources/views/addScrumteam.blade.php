@@ -1,7 +1,6 @@
 @extends('layout/app')
 
 @section('content')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <div id="addWorkshop">
         <div class="content-header">
             <h1>Scrumteam toevoegen</h1>
