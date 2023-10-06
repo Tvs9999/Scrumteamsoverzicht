@@ -40,7 +40,6 @@
                     @error('class_id')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                    <input hidden value="{{$scrumteamid}}" name="team_id">
                     <div class="input">
                         <label for="students">Leerlingen</label>
                     </div>
@@ -59,7 +58,7 @@
                                 <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Voeg leerlingen toe</h5>
                             </div>
                             <div class="modal-body">
-                                <!--Studenten worden bijgehaald zodra de gebruiker op een klas klikt-->
+                                <!--Studenten worden bijgehaald zodra de gebruiker op een klas geselecteerde-->
                             </div>
                             <div class="modal-footer">
                                 <button type="button" data-dismiss="modal">Leerling Selecteren</button>

@@ -154,11 +154,10 @@ class ScrumteamController extends Controller
             'name.required' => 'Het teamnaam is verplicht',
             'class_id.required' => 'Het klas moet geselecteerd worden',
             'user_id.required' => 'De studenten moeten nog geselecteerd worden',
-            'user_id.min' => 'Minimaal een student moet geselecteerd worden', // minimaal een student moet geselecteerd worden
+            'user_id.min' => 'Minimaal een student moet geselecteerd worden',
             '*' => 'Deze velden moeten ingevuld worden',
         ]);
-        
-        
+
         $scrumteam = new Scrumteam();
         $scrumteam->name = $request->input('name');
         $scrumteam->class_id = $request->input('class_id');
@@ -166,41 +165,31 @@ class ScrumteamController extends Controller
 
         $selectedUserIds = $request->input('user_id', []);
 
-        // geselecteerd studenten zijn meer dan een
-        if (!is_array($selectedUserIds)) {
-            $selectedUserIds = [$selectedUserIds];
+        // Check of de geselecteerde userid bestaat in user
+        $bestaatUserIds = User::whereIn('id', $selectedUserIds)->pluck('id')->toArray();
+        
+        // Check of alle geselecteerde userids bestaan in user
+        if (count($selectedUserIds) !== count($bestaatUserIds)) {
+            $nietbestaatUserIds = array_diff($selectedUserIds, $bestaatUserIds);
+            $nietbestaatUsername = User::whereIn('id', $nietbestaatUserIds)->pluck('firstname')->implode(', ');
+            return back()->withErrors(['user_id' => "Deze student(en) bestaat/bestaan niet."]);
         }
 
-        // check of alle van de geselexteerde gebruikers al in een actief scrumteam zit
-        $usersInActiveScrumTeams = ScrumteamUser::whereIn('user_id', $selectedUserIds)
-        ->whereHas('scrumteam', function ($query) {
-            $query->where('status', 0);
-        })
-        ->pluck('user_id')
-        ->toArray();
-
-        //error als er een student die geselecteerd zijn al in een actief scrumteam zit
-        if (!empty($usersInActiveScrumTeams)) {
-        $firstnames = User::whereIn('id', $usersInActiveScrumTeams)->pluck('firstname')->implode(', ');
-        return back()->withErrors(['error' => "Deze student(en) zit/zitten al in een actief scrumteam: $firstnames"]);
-        }
-
+        // verder met opslaan scrumteam en scrumteamuser
         if ($scrumteam->save()) {
-        foreach ($selectedUserIds as $userId) {
-            $scrumteamUser = new ScrumteamUser();
-            $scrumteam = DB::table('scrumteams')->get();
-            $lastTeamId = DB::table('scrumteams')->latest('id')->value('id');
+            foreach ($selectedUserIds as $userId) {
+                $scrumteamUser = new ScrumteamUser();
+                $scrumteamUser->scrumteam_id = $scrumteam->id;
+                $scrumteamUser->user_id = $userId;
+                $scrumteamUser->save();
+            }
 
-            $scrumteamUser->scrumteam_id = $lastTeamId;
-            $scrumteamUser->user_id = $userId;
-            $scrumteamUser->save();
-        }
-
-        return back()->with('success', 'Scrumteam toegevoegd');
+            return back()->with('success', 'Scrumteam toegevoegd');
         } else {
-        dd($scrumteam->errors());
+            dd($scrumteam->errors());
         }
     }
+
 
 
     public function getScrumteams($userId)
