@@ -59,9 +59,7 @@
                                 <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Voeg leerlingen toe</h5>
                             </div>
                             <div class="modal-body">
-                                @foreach ($users as $user)
-                                <input type="checkbox" value="{{$user->id}}" name="user_id[]"> {{$user->firstname}} {{$user->lastname}}<br>
-                                @endforeach
+                                <!--Studenten worden bijgehaald zodra de gebruiker op een klas klikt-->
                             </div>
                             <div class="modal-footer">
                                 <button type="button" data-dismiss="modal">Leerling Selecteren</button>
