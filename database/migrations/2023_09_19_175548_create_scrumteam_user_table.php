@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Define the foreign key constraint
-            $table->foreign('team_id')->references('id')->on('scrumteams');
+            $table->foreign('scrumteam_id')->references('id')->on('scrumteams');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
