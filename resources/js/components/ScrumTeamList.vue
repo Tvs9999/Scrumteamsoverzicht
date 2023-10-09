@@ -1,6 +1,6 @@
 <template>
   <div v-if="sortedClasses.length > 0">
-    <div v-for="classData in sortedClasses" :key="classData.id" :ref="`class_${classData.id}`" class="class" :class="{ 'active': !areAllUsersPresent('class', classData.id) && active }" :data-id="classData.id">
+    <div v-for="classData in sortedClasses" :key="classData.id" :ref="`class_${classData.id}`" class="class" :class="{ 'active': !areAllUsersPresent('class', classData.id) && active }" :data-id="classData.id" :data-active="active">
       <div class="top">
         <h2>{{ classData.name }}</h2>
         <div class="buttons">
@@ -8,13 +8,13 @@
             <i :class="{ 'fa-solid fa-check': areAllUsersPresent('class', classData.id), 'fa-solid fa-xmark': !areAllUsersPresent('class', classData.id) }"></i>
           </div>
           <!-- Bind click event to toggle 'active' class for classes -->
-          <div class="fold-btn" @click="toggleClass('class', classData.id)" :class="{ 'active': !areAllUsersPresent('class', classData.id) && active }">
+          <div class="fold-btn" @click="toggleClass('class', classData.id, active)" :class="{ 'active': !areAllUsersPresent('class', classData.id) && active }">
             <i class="fa-solid fa-chevron-down"></i>
           </div>
         </div>
       </div>
       <div class="scrumteams">
-        <div v-for="team in classData.scrumteams" :key="team.id" :ref="`class_${classData.id}`" class="scrumteam" :class="{ 'active': !areAllUsersPresent('scrumteam', team.id) && active }" :data-id="team.id">
+        <div v-for="team in classData.scrumteams" :key="team.id" :ref="`class_${classData.id}`" class="scrumteam" :class="{ 'active': !areAllUsersPresent('scrumteam', team.id) && active }" :data-id="team.id" :data-active="active">
           <div class="top">
             <h3>{{ team.name }}</h3>
             <div class="buttons">
@@ -23,10 +23,10 @@
                 <button type="submit"><i class="fa-solid fa-boxes-packing"></i></button>
               </form>
               <div v-if="active" :class="{ 'present': areAllUsersPresent('scrumteam', team.id), 'absent': !areAllUsersPresent('scrumteam', team.id) }">
-                <i :class="{ 'fa-solid fa-check': areAllUsersPresent('class', classData.id), 'fa-solid fa-xmark': !areAllUsersPresent('class', classData.id) }"></i>
+                <i :class="{ 'fa-solid fa-check': areAllUsersPresent('scrumteam', team.id), 'fa-solid fa-xmark': !areAllUsersPresent('class', classData.id) }"></i>
               </div>
               <!-- Bind click event to toggle 'active' class for scrumteams -->
-              <div class="fold-btn" @click="toggleClass('scrumteam', team.id)" :class="{ 'active': !areAllUsersPresent('class', classData.id) && active }">
+              <div class="fold-btn" @click="toggleClass('scrumteam', team.id, active)" :class="{ 'active': !areAllUsersPresent('scrumteam', team.id) && active }">
                 <i class="fa-solid fa-chevron-down"></i>
               </div>
             </div>
@@ -105,13 +105,13 @@ export default defineComponent({
 
       return false;
     },
-    toggleClass(type, id) {
+    toggleClass(type, id, active) {
       const clickedButton = event.target.closest('.fold-btn');
       if (clickedButton) {
         clickedButton.classList.toggle('active');
       }
 
-      const element = document.querySelector(`.${type}[data-id="${id}"]`);
+      const element = document.querySelector(`.${type}[data-id="${id}"][data-active="${active}"]`);
       if (element) {
         element.classList.toggle('active');
       }

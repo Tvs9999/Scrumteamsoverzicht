@@ -18,15 +18,15 @@ class ScrumteamController extends Controller
 
         $activeClasses = Classes::whereHas('scrumteams', function ($query) {
             $query->where('status', 0);
-        })
-        ->with('scrumteams.users.user')
-        ->get();
+        })->with(['scrumteams' => function ($query) {
+            $query->where('status', 0)->with('users.user');
+        }])->get();
 
         $archivedClasses = Classes::whereHas('scrumteams', function ($query) {
             $query->where('status', 1);
-        })
-        ->with('scrumteams.users.user')
-        ->get();
+        })->with(['scrumteams' => function ($query) {
+            $query->where('status', 1)->with('users.user');
+        }])->get();
 
         $activeClassesJson = json_encode($activeClasses);
 

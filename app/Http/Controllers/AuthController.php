@@ -83,9 +83,9 @@ class AuthController extends Controller
         ]);
 
         if ($request->rol == 1){
-            if (isset($request->klas) || isset($request->new_class_number)){
-                return back()->withErrors(['error' => 'Vul alleen de benodigde gegevens in voor een docent']);
-            }
+            // if (isset($request->klas) || isset($request->new_class_number)){
+            //     return back()->withErrors(['error' => 'Vul alleen de benodigde gegevens in voor een docent']);
+            // }
         } elseif ($request->rol == 0) {
             if (isset($request->new_class_number)){
                 $classNumber = $request->new_class_number;
