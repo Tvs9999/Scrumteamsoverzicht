@@ -34,7 +34,7 @@ Route::get('/', function () {
 
 // Routes for not logged in users
 Route::group(['middleware' => 'guest'], function () {
-
+    
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     
